@@ -27,8 +27,7 @@ dependencies {
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    // This dependency is used by the application.
-    implementation(libs.guava)
+    implementation("org.hibernate.orm:hibernate-core:6.5.2.Final")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
