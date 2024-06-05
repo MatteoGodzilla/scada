@@ -37,8 +37,10 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.Test">
   <children>
@@ -83,7 +85,12 @@
     </MenuBar>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
-            <Button layoutX="179.0" layoutY="124.0" mnemonicParsing="false" onAction="#switchToSecond" prefHeight="126.0" prefWidth="283.0" text="Button" />
+            <Button layoutX="179.0" layoutY="233.0" mnemonicParsing="false" onAction="#switchToSecond" prefHeight="126.0" prefWidth="283.0" text="Button" />
+            <TextField fx:id="textField" layoutX="140.0" layoutY="106.0" onAction="#textFieldAction" prefHeight="26.0" prefWidth="360.0" promptText="Write Something">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </TextField>
          </children>
     </AnchorPane>
   </children>
