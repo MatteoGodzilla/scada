@@ -27,7 +27,7 @@ I tecnici possono esegure le seguenti operazioni nel sistema:
 - Visualizzazione degli interventi richiesti e non già assegnati ad altri, con la possibilità di prendersene carico
 - Visualizzazione degli interventi di cui si è già incaricati
 - Una volta in sito, possibilità di segnalare agli addetti SCADA che tecnici sono presenti all'interno dell'impianto
-- Possibilità di poter fermare/riavviare un macchinario specifico, per effettuare l'intervento in sicurezza
+- Possibilità di poter fermare/riavviare un macchinario specifico, per effettuare l'intervento in sicurezza (viene fatto direttamente dal tecnico, forzando)
 - Segnalazione agli addetti SCADA di fine intervento
 - Invio della conferma al responsabile di regione dopo aver concluso un intervento, con la possibilità di scrivere note aggiuntive
 
