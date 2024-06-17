@@ -1,13 +1,19 @@
 package scada.gui;
 
+import java.io.IOException;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 public class Addetto extends GuiController{
 
     public Button strButton;
     public Button stpButton;
     public Button weatherButton;
-    public Button reporButton;
+    public Button reportButton;
     public Button refreshButton;
 
     //this static method cannot be moved in GuiController
@@ -32,11 +38,17 @@ public class Addetto extends GuiController{
         strButton.setDisable(false);
     }
 
-    public void weather() {
-        //TODO: Apre una nuova finestra che mostra il meteo
+    public void weather(String impianto) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("meteo.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
+        //TODO: La nuova finestra mostra il meteo dell'impianto selezionato
+        //NON HO IDEA DI COME CAPIRE CHE IMPIANTO SELEZIONO (SEMPRE CHE SIA UNA COSA POSSIBILE DA FARE)
     }
 
-    public void generateReport() {
+    public void generateReport(String impianto) {
         //TODO: Genera un file csv con le statistiche degli impianti
     }
 

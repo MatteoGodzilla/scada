@@ -7,7 +7,9 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 <?import javafx.stage.Stage?>
 
@@ -36,14 +38,14 @@
                                                             </font>
                                                          </Label>
                                                          <Button fx:id="srtButton1_1" layoutX="490.0" layoutY="10.0" mnemonicParsing="false" onAction="#startMacchinario" text="START" textFill="#08c03f" />
-                                                         <Button fx:id="stpButton1_1" disable="true" layoutX="542.0" layoutY="10.0" mnemonicParsing="false" onAction="#stopMacchinario" text="STOP" textFill="#dd0505" />
+                                                         <Button fx:id="stpButton1_1" disable="true" layoutX="542.0" layoutY="10.0" mnemonicParsing="false" onAction="#stopmacchinario" text="STOP" textFill="#dd0505" />
                                                          <Label fx:id="labelMacchinario1_2" layoutX="14.0" layoutY="43.0" text="NomeMacchinario2">
                                                             <font>
                                                                <Font name="System Bold" size="12.0" />
                                                             </font>
                                                          </Label>
                                                          <Button fx:id="srtButton1_2" layoutX="489.0" layoutY="39.0" mnemonicParsing="false" onAction="#startMacchinario" text="START" textFill="#08c03f" />
-                                                         <Button fx:id="stpButton1_2" disable="true" layoutX="542.0" layoutY="39.0" mnemonicParsing="false" onAction="#stopMacchinario" text="STOP" textFill="#dd0505" />
+                                                         <Button fx:id="stpButton1_2" disable="true" layoutX="542.0" layoutY="39.0" mnemonicParsing="false" onAction="#stopmacchinario" text="STOP" textFill="#dd0505" />
                                                       </children>
                                                    </AnchorPane>
                                                </content>
@@ -65,14 +67,14 @@
                                                             </font>
                                                          </Label>
                                                          <Button fx:id="srtButton2_1" layoutX="490.0" layoutY="10.0" mnemonicParsing="false" onAction="#startMacchinario" text="START" textFill="#08c03f" />
-                                                         <Button fx:id="stpButton2_1" disable="true" layoutX="542.0" layoutY="10.0" mnemonicParsing="false" onAction="#stopMacchinario" text="STOP" textFill="#dd0505" />
+                                                         <Button fx:id="stpButton2_1" disable="true" layoutX="542.0" layoutY="10.0" mnemonicParsing="false" onAction="#stopmacchinario" text="STOP" textFill="#dd0505" />
                                                          <Label fx:id="labelMacchinario2_2" layoutX="14.0" layoutY="43.0" text="NomeMacchinario2">
                                                             <font>
                                                                <Font name="System Bold" size="12.0" />
                                                             </font>
                                                          </Label>
                                                          <Button fx:id="srtButton2_2" layoutX="489.0" layoutY="39.0" mnemonicParsing="false" onAction="#startMacchinario" text="START" textFill="#08c03f" />
-                                                         <Button fx:id="stpButton2_2" disable="true" layoutX="542.0" layoutY="39.0" mnemonicParsing="false" onAction="#stopMacchinario" text="STOP" textFill="#dd0505" />
+                                                         <Button fx:id="stpButton2_2" disable="true" layoutX="542.0" layoutY="39.0" mnemonicParsing="false" onAction="#stopmacchinario" text="STOP" textFill="#dd0505" />
                                                       </children>
                                                    </AnchorPane>
                                                </content>
@@ -88,13 +90,13 @@
                                                 <content>
                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="360.0" prefWidth="607.0">
                                                       <children>
-                                                         <Label fx:id="labelMacchinario3_1" layoutX="14.0" layoutY="14.0" text="NomeMacchinario">
+                                                         <Label fx:id="labelMacchinario2_1" layoutX="14.0" layoutY="14.0" text="NomeMacchinario">
                                                             <font>
                                                                <Font name="System Bold" size="12.0" />
                                                             </font>
                                                          </Label>
-                                                         <Button fx:id="srtButton3_1" layoutX="490.0" layoutY="10.0" mnemonicParsing="false" onAction="#startMacchinario" text="START" textFill="#08c03f" />
-                                                         <Button fx:id="stpButton3_1" disable="true" layoutX="542.0" layoutY="10.0" mnemonicParsing="false" onAction="#stopMacchinario" text="STOP" textFill="#dd0505" />
+                                                         <Button fx:id="srtButton2_1" layoutX="490.0" layoutY="10.0" mnemonicParsing="false" onAction="#startMacchinario" text="START" textFill="#08c03f" />
+                                                         <Button fx:id="stpButton2_1" disable="true" layoutX="542.0" layoutY="10.0" mnemonicParsing="false" onAction="#stopmacchinario" text="STOP" textFill="#dd0505" />
                                                       </children>
                                                    </AnchorPane>
                                                </content>
@@ -143,13 +145,33 @@
                      </AnchorPane>
                  </content>
                </ScrollPane>
-               <TilePane fx:id="tilePanel" alignment="CENTER" layoutY="651.3333333333334" prefColumns="3" prefHeight="46.0" prefRows="1" prefWidth="641.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="651.0">
+               <GridPane layoutY="579.0" prefHeight="35.0" prefWidth="669.0">
+                 <columnConstraints>
+                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                 </columnConstraints>
+                 <rowConstraints>
+                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                 </rowConstraints>
                   <children>
-                     <Button fx:id="weatherButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#weather" text="Meteo" />
-                     <Button fx:id="reportButton" alignment="CENTER" mnemonicParsing="false" onAction="#generateReport" prefWidth="200.0" text="Reportistica" />
-                     <Button fx:id="refreshButton" mnemonicParsing="false" onAction="#refresh" prefWidth="200.0" text="refresh" textAlignment="CENTER" textFill="#2811d4" underline="true" />
+                     <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                        <children>
+                           <Button fx:id="weatherButton" layoutX="86.0" layoutY="5.0" mnemonicParsing="false" onAction="#weather" text="Meteo" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        </children>
+                     </AnchorPane>
+                     <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+                        <children>
+                           <Button fx:id="reportButton" layoutX="86.0" layoutY="5.0" mnemonicParsing="false" onAction="#generateReport" text="Reportistica" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        </children>
+                     </AnchorPane>
+                     <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
+                        <children>
+                           <Button fx:id="refreshButton" layoutX="86.0" layoutY="5.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" textFill="#0e0ee6" underline="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        </children>
+                     </AnchorPane>
                   </children>
-               </TilePane>
+               </GridPane>
             </children></AnchorPane>
         </Scene>
     </scene>
