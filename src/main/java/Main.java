@@ -1,13 +1,12 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
-import scada.gui.Test;
+import scada.gui.Login;
 
 public class Main extends Application {
     @Override
     public void start(Stage stage) {
-        var inst = Test.newInstance();
-        stage.setScene(inst.getScene());
-        stage.show();
+        Login l = Login.newInstance();
+        l.getStage().show();
     }
 
 }

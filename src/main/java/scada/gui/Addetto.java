@@ -7,8 +7,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import scada.gui.fxml.GuiConstructor;
+import scada.gui.fxml.StageController;
 
-public class Addetto extends GuiController{
+public class Addetto extends StageController{
 
     public Button strButton;
     public Button stpButton;
@@ -19,7 +21,9 @@ public class Addetto extends GuiController{
     //this static method cannot be moved in GuiController
     //because static methods can be generic, but not with the generic type defined by the class
     public static Addetto newInstance(){
-        return GuiConstructor.createInstance("/addetto.fxml");
+        return GuiConstructor.createInstance("/addetto.fxml",(Addetto instance, Stage stage)->{
+            instance.stage = stage;
+        });
     }
 
     /**
@@ -46,6 +50,16 @@ public class Addetto extends GuiController{
         stage.show();
         //TODO: La nuova finestra mostra il meteo dell'impianto selezionato
         //NON HO IDEA DI COME CAPIRE CHE IMPIANTO SELEZIONO (SEMPRE CHE SIA UNA COSA POSSIBILE DA FARE)
+
+        /*
+        Teoricamente dovrebbe bastare una cosa del genere
+
+        Meteo m = Meteo.newInstance();
+        m.getStage().show();
+
+        Poi avendo accesso al controller puoi passargli i parametri che serve
+
+        */
     }
 
     public void generateReport(String impianto) {
