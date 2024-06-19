@@ -6,7 +6,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import scada.gui.fxml.GuiConstructor;
 import scada.gui.fxml.StageController;
-import java.sql.Connection;
+
+import at.favre.lib.crypto.bcrypt.BCrypt;
+import at.favre.lib.crypto.bcrypt.BCrypt.Result;
 
 public class Login extends StageController {
     public ComboBox<String> type;
@@ -27,7 +29,22 @@ public class Login extends StageController {
     //Event Handlers
 
     public void submit(){
-        //send to database
-        
+        String hash = "<get from database>";
+        Result r = BCrypt.verifyer().verify(password.getText().toCharArray(), hash);
+        // if(r.verified){
+            switch (type.getSelectionModel().getSelectedIndex()) {
+                case 0:
+                    //open window Tecnici
+                    break;
+                case 1:
+                    //open window Addetti
+                    Addetto newWindow = Addetto.newInstance();
+                    newWindow.getStage().show();
+                    break;
+                case 2:
+                    //open window Responsabili
+                    break;
+            }
+        // }
     }
 }

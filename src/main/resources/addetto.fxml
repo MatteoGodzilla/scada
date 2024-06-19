@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.stage.Stage?>
 
-<Stage fx:id="stageAddetto" onCloseRequest="#close" title="Addetto SCADA" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<Stage fx:id="stageAddetto" onCloseRequest="#close" title="Addetto SCADA" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.Addetto">
     <scene>
         <Scene fx:id="sceneAddetto">
             <AnchorPane prefHeight="561.0" prefWidth="670.0">

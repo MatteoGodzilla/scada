@@ -27,7 +27,11 @@ dependencies {
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    implementation("org.hibernate.orm:hibernate-core:6.5.2.Final")
+    //Used to load dotenv files
+    implementation("io.github.cdimascio:dotenv-java:3.0.0")
+
+    //Used for passwords 
+    implementation("at.favre.lib:bcrypt:0.10.2")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
