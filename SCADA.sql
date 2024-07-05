@@ -24,7 +24,7 @@ use SCADA;
 
 create table USR_ADDETTO (
      username varchar(32) not null,
-     password varchar(64) not null,
+     password varchar(128) not null,
      nome varchar(64) not null,
      cognome varchar(64) not null,
      regione varchar(21) not null,
@@ -156,7 +156,7 @@ create table PROVINCIA (
 
 create table USR_RESPONSABILE (
      username varchar(32) not null,
-     password varchar(64) not null,
+     password varchar(128) not null,
      nome varchar(64) not null,
      cognome varchar(64) not null,
      regione varchar(21) not null,
@@ -185,7 +185,7 @@ create table TIPOLOGIA (
 
 create table USR_TECNICO (
      username varchar(32) not null,
-     password varchar(64) not null,
+     password varchar(128) not null,
      nome varchar(64) not null,
      cognome varchar(64) not null,
      siglaProvincia char(2) not null,
