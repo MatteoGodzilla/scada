@@ -30,8 +30,12 @@ dependencies {
     //Used to load dotenv files
     implementation("io.github.cdimascio:dotenv-java:3.0.0")
 
-    //Used for passwords 
+    //Used for passwords
     implementation("at.favre.lib:bcrypt:0.10.2")
+
+    //Used to actually connect to the mysql database
+    // https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
+    implementation("com.mysql:mysql-connector-j:9.0.0")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

@@ -1,11 +1,18 @@
 package scada.gui;
 
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import scada.dao.DAO;
+import scada.dao.SQLLogin;
 import scada.gui.fxml.GuiConstructor;
 import scada.gui.fxml.StageController;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import at.favre.lib.crypto.bcrypt.BCrypt.Result;
@@ -14,6 +21,7 @@ public class Login extends StageController {
     public ComboBox<String> type;
     public TextField username;
     public PasswordField password;
+    public Label error;
 
     public void initialize(){
         type.getItems().addAll("Tecnico","Addetto", "Responsabile");
@@ -28,10 +36,26 @@ public class Login extends StageController {
 
     //Event Handlers
 
-    public void submit(){
-        String hash = "<get from database>";
+    public void submit() throws SQLException{
+        PreparedStatement statement = null;
+        switch(type.getSelectionModel().getSelectedIndex()){
+            default:
+            case 0:
+                statement = DAO.getDB().prepareStatement(SQLLogin.LOGIN_TECNICI);
+                break;
+            case 1:
+                statement = DAO.getDB().prepareStatement(SQLLogin.LOGIN_ADDETTI);
+                break;
+            case 2:
+                statement = DAO.getDB().prepareStatement(SQLLogin.LOGIN_RESPONSABILI);
+                break;
+        }
+        statement.setString(1, username.getText());
+        ResultSet hashResponse = statement.executeQuery();
+        hashResponse.next();
+        String hash = hashResponse.getString("password");
         Result r = BCrypt.verifyer().verify(password.getText().toCharArray(), hash);
-        // if(r.verified){
+        if(r.verified){
             switch (type.getSelectionModel().getSelectedIndex()) {
                 case 0:
                     //open window Tecnici
@@ -45,6 +69,8 @@ public class Login extends StageController {
                     //open window Responsabili
                     break;
             }
-        // }
+        } else {
+            error.setText("Username/Password invalida");
+        }
     }
 }
