@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 public class GuiConstructor {
     public static <T extends GuiController, U> T createInstance(String path, BiConsumer<T,U> callback){
         var res = GuiConstructor.class.getResource(path);
+        System.out.println(res);
         FXMLLoader loader = new FXMLLoader(res);
         try {
             //the following lines must be in this specific order

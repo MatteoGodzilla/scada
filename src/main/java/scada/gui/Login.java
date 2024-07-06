@@ -36,41 +36,54 @@ public class Login extends StageController {
 
     //Event Handlers
 
-    public void submit() throws SQLException{
-        PreparedStatement statement = null;
-        switch(type.getSelectionModel().getSelectedIndex()){
-            default:
-            case 0:
-                statement = DAO.getDB().prepareStatement(SQLLogin.LOGIN_TECNICI);
-                break;
-            case 1:
-                statement = DAO.getDB().prepareStatement(SQLLogin.LOGIN_ADDETTI);
-                break;
-            case 2:
-                statement = DAO.getDB().prepareStatement(SQLLogin.LOGIN_RESPONSABILI);
-                break;
-        }
-        statement.setString(1, username.getText());
-        ResultSet hashResponse = statement.executeQuery();
-        hashResponse.next();
-        String hash = hashResponse.getString("password");
-        Result r = BCrypt.verifyer().verify(password.getText().toCharArray(), hash);
-        if(r.verified){
-            switch (type.getSelectionModel().getSelectedIndex()) {
+    public void submit(){
+        try {
+            PreparedStatement statement = null;
+            switch(type.getSelectionModel().getSelectedIndex()){
+                default:
                 case 0:
-                    //open window Tecnici
+                    statement = DAO.getDB().prepareStatement(SQLLogin.LOGIN_TECNICI);
                     break;
                 case 1:
-                    //open window Addetti
-                    Addetto newWindow = Addetto.newInstance();
-                    newWindow.getStage().show();
+                    statement = DAO.getDB().prepareStatement(SQLLogin.LOGIN_ADDETTI);
                     break;
                 case 2:
-                    //open window Responsabili
+                    statement = DAO.getDB().prepareStatement(SQLLogin.LOGIN_RESPONSABILI);
                     break;
             }
-        } else {
-            error.setText("Username/Password invalida");
+            statement.setString(1, username.getText());
+            ResultSet hashResponse = statement.executeQuery();
+            hashResponse.next();
+            String hash = hashResponse.getString("password");
+            Result r = BCrypt.verifyer().verify(password.getText().toCharArray(), hash);
+            if(r.verified){
+                switch (type.getSelectionModel().getSelectedIndex()) {
+                    case 0:
+                        //open window Tecnici
+                        TecniciMain tecnici = TecniciMain.newInstance(username.getText());
+                        tecnici.getStage().show();
+                        break;
+                    case 1:
+                        //open window Addetti
+                        Addetto newWindow = Addetto.newInstance();
+                        newWindow.getStage().show();
+                        break;
+                    case 2:
+                        //open window Responsabili
+                        break;
+                }
+                stage.hide();
+            } else {
+                error.setText("Username/Password invalida");
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
         }
+    }
+
+    public void openSignup(){
+        Signup signup = Signup.newInstance();
+        signup.getStage().show();
     }
 }

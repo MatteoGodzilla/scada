@@ -18,9 +18,9 @@ public class DAO {
         String username = dotenv.get("DB_USER");
         String password = dotenv.get("DB_PASSWORD");
         dbConnection = DriverManager.getConnection(address, username, password);
+        dbConnection.setAutoCommit(false);
 
         PreparedStatement statement = dbConnection.prepareStatement("USE SCADA;");
-        System.out.println(statement);
         statement.execute();
     }
 
