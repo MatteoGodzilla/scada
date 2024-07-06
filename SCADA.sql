@@ -96,6 +96,7 @@ create table INT_TIPO (
 create table INTERVENTO (
      codice int not null auto_increment,
      note varchar(1024),
+     completato boolean not null default 0
      usernameResponsabile varchar(32) not null,
      usernameTecnico varchar(32),
      tipo int not null,
