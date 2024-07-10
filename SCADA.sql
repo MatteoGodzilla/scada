@@ -72,7 +72,7 @@ create table MACCHINARIO (
      tipologia int not null,
      azienda varchar(64) not null,
      nomeModello varchar(32) not null,
-     durataGaranzia int not null,
+     durataGaranzia smallint not null,
      status int not null,
      constraint ID_MACCHINARIO_ID primary key (codiceInstallazione));
 
@@ -96,7 +96,7 @@ create table INT_TIPO (
 create table INTERVENTO (
      codice int not null auto_increment,
      note varchar(1024),
-     completato boolean not null default 0
+     completato boolean not null default 0,
      usernameResponsabile varchar(32) not null,
      usernameTecnico varchar(32),
      tipo int not null,
@@ -346,6 +346,10 @@ alter table MACCHINARIO add constraint REF_INSTA_TIPOL_FK
 alter table MACCHINARIO add constraint REF_INSTA_MODEL_FK
      foreign key (azienda, nomeModello)
      references MODELLO(azienda, nome);
+
+alter table MACCHINARIO add constraint REF_INSTA_GARAN_FK
+     foreign key (azienda, nomeModello, durataGaranzia)
+     references GARANZIA(azienda, nomeModello, durataAnni);
 
 alter table MACCHINARIO add constraint REF_INSTA_INST__FK
      foreign key (status)
