@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Scene?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.stage.Stage?>
+
+<Stage fx:id="stageAddetto" onCloseRequest="#close" title="Addetto SCADA" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.Addetto">
+    <scene>
+        <Scene fx:id="sceneAddetto">
+            <AnchorPane prefHeight="561.0" prefWidth="670.0">
+            <children>
+               <ScrollPane fx:id="scrollPanel" layoutX="14.0" layoutY="14.0" prefHeight="646.0" prefWidth="648.0" AnchorPane.bottomAnchor="37.33333333333337" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+                 <content>
+                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="645.0" prefWidth="641.0">
+                        <children>
+                           <Accordion fx:id="accordionPane" layoutX="14.0" layoutY="14.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="531.0" prefWidth="609.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="14.0" />
+                        </children>
+                     </AnchorPane>
+                 </content>
+               </ScrollPane>
+               <GridPane layoutY="579.0" prefHeight="35.0" prefWidth="669.0">
+                 <columnConstraints>
+                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                 </columnConstraints>
+                 <rowConstraints>
+                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                 </rowConstraints>
+                  <children>
+                     <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                        <children>
+                           <Button fx:id="weatherButton" layoutX="86.0" layoutY="5.0" mnemonicParsing="false" onAction="#weather" text="Meteo" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        </children>
+                     </AnchorPane>
+                     <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+                        <children>
+                           <Button fx:id="reportButton" layoutX="86.0" layoutY="5.0" mnemonicParsing="false" onAction="#generateReport" text="Reportistica" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        </children>
+                     </AnchorPane>
+                     <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
+                        <children>
+                           <Button fx:id="refreshButton" layoutX="86.0" layoutY="5.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" textFill="#0e0ee6" underline="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        </children>
+                     </AnchorPane>
+                  </children>
+               </GridPane>
+            </children></AnchorPane>
+        </Scene>
+    </scene>
+</Stage>
