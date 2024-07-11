@@ -3,13 +3,15 @@ package scada.dao;
 public class SQLTecnici {
     //manca il controllo sulla provincia
     public static String INTERVENTI_SCELTI = """
-        SELECT codice, usernameResponsabile, tipo FROM INTERVENTO
-        WHERE usernameTecnico = ?;
+        SELECT I.codice, I.usernameResponsabile, T.Descrizione FROM INTERVENTO I
+        JOIN TIPOLOGIA T ON (T.codice = I.tipo)
+        WHERE usernameTecnico = ? ;
     """;
 
     //manca il controllo sulla provincia
     public static String INTERVENTI_DISPONIBILI = """
-        SELECT codice, usernameResponsabile, tipo FROM INTERVENTO
-        where usernameTecnico = NULL;
+        SELECT I.codice, I.usernameResponsabile, T.Descrizione FROM INTERVENTO I
+        JOIN TIPOLOGIA T ON (T.codice = I.tipo)
+        WHERE usernameTecnico = null;
     """;
 }

@@ -7,7 +7,7 @@ import scada.gui.tecnici.TecniciMainRowData;
 public class Test {
     public static void main(String[] args) {
         Platform.startup(()->{
-            TecniciMainRow.newInstance(new TecniciMainRowData(0, "gianfranco.babbei", 1));
+            TecniciMainRow.newInstance(new TecniciMainRowData(0, "gianfranco.babbei", "Fotovoltaico"));
         });
     }
 }

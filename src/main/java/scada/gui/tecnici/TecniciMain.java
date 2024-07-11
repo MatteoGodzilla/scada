@@ -52,12 +52,10 @@ public class TecniciMain extends StageController {
             statement.setString(1, username);
             ResultSet result = statement.executeQuery();
             while(result.next()){
-                assignedList.getItems().add(new TecniciMainRowData(result.getInt(1), result.getString(2), result.getInt(3)));
+                assignedList.getItems().add(new TecniciMainRowData(result.getInt(1), result.getString(2), result.getString(3)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
-
 }
