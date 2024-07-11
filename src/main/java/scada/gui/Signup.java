@@ -70,7 +70,7 @@ public class Signup extends StageController {
                         statement = DAO.getDB().prepareStatement(SQLSignup.REGISTER_TECNICO);
                         break;
                     case 1:
-                        statement = DAO.getDB().prepareStatement(SQLSignup.REGISTER_TECNICO);
+                        statement = DAO.getDB().prepareStatement(SQLSignup.REGISTER_ADDETTO);
                         break;
                     case 2:
                         statement = DAO.getDB().prepareStatement(SQLSignup.REGISTER_RESPONSABILE);

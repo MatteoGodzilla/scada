@@ -1,48 +1,45 @@
 package scada.gui;
 
+import java.io.File;
 import java.io.IOException;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import scada.gui.fxml.GuiConstructor;
 import scada.gui.fxml.StageController;
 
 public class Addetto extends StageController{
 
-    public Button strButton;
-    public Button stpButton;
+    private String username;
     public Button weatherButton;
     public Button reportButton;
     public Button refreshButton;
+    public static Addetto schermataAddetto;
 
     //this static method cannot be moved in GuiController
     //because static methods can be generic, but not with the generic type defined by the class
-    public static Addetto newInstance(){
-        return GuiConstructor.createInstance("/addetto.fxml",(Addetto instance, Stage stage)->{
+    public static Addetto newInstance(String username){
+        schermataAddetto = GuiConstructor.createInstance("/addetto.fxml",(Addetto instance, Stage stage)->{
             instance.stage = stage;
+            instance.username = username;
+            //instance.addettiInfo(username);
         });
+        return schermataAddetto;
     }
 
     /**
-     * Se clicco START, disabilito il pulsante di START e attivo quello di STOP
+     * Mostra gli impianti che sono affidati all'addetto identificato dall'username
+     * @param username indica l'addetto che ha effettuato l'accesso
      */
-    public void startMacchinario() {
-        strButton.setDisable(true);
-        stpButton.setDisable(false);
+    public void addettiInfo(String username) {
+
     }
 
-    /**
-     * Se clicco STOP, disabilito il pulsante di STOP e attivo quello di START
-     */
-    public void stopMacchinario() {
-        stpButton.setDisable(true);
-        strButton.setDisable(false);
-    }
-
-    public void weather(String impianto) throws IOException {
+    public void weather() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("meteo.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         Stage stage = new Stage();
@@ -62,11 +59,18 @@ public class Addetto extends StageController{
         */
     }
 
-    public void generateReport(String impianto) {
-        //TODO: Genera un file csv con le statistiche degli impianti
+    public void generateReport() {
+        //TODO: Genera un file csv con le statistiche di un impianto
+        FileChooser file = new FileChooser();
+        file.setTitle("Save File");
+        File filePath = file.showSaveDialog(schermataAddetto.getStage());
+        System.out.println(filePath);
     }
 
+    /**
+     * Ricarica la informazioni su impianti e macchinari
+     */
     public void refresh() {
-        //TODO: Ricarica la informazioni su impianti e macchinari
+        schermataAddetto.addettiInfo(username);
     }
 }

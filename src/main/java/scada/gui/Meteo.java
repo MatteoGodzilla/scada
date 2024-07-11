@@ -13,12 +13,4 @@ public class Meteo extends StageController {
             instance.stage = stage;
         });
     }
-
-    /**
-     * Metodo per chiudere la finestra del meteo
-     */
-    public void close() {
-        //this.controller.getStage().close();
-        stage.close();
-    }
 }

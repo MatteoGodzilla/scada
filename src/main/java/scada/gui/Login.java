@@ -65,7 +65,7 @@ public class Login extends StageController {
                         break;
                     case 1:
                         //open window Addetti
-                        Addetto newWindow = Addetto.newInstance();
+                        Addetto newWindow = Addetto.newInstance(username.getText());
                         newWindow.getStage().show();
                         break;
                     case 2:
