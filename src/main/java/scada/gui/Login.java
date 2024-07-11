@@ -9,6 +9,7 @@ import scada.dao.DAO;
 import scada.dao.SQLLogin;
 import scada.gui.fxml.GuiConstructor;
 import scada.gui.fxml.StageController;
+import scada.gui.tecnici.TecniciMain;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

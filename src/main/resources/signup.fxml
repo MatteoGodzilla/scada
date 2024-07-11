@@ -26,7 +26,7 @@
                <TextField fx:id="username" layoutX="14.0" layoutY="178.0" promptText="Username" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
                <PasswordField fx:id="password" layoutX="14.0" layoutY="204.0" promptText="Password" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
                <ComboBox fx:id="extra" layoutX="14.0" layoutY="230.0" prefHeight="26.0" prefWidth="275.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-               <Button layoutX="120.0" layoutY="284.0" mnemonicParsing="false" onAction="#submit" text="Button" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="300.0" />
+               <Button layoutX="120.0" layoutY="284.0" mnemonicParsing="false" onAction="#submit" text="Registra" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="300.0" />
             </children></AnchorPane>
         </Scene>
     </scene>
