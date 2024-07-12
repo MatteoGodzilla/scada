@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import scada.dao.DAO;
 import scada.dao.SQLLogin;
+import scada.gui.addetti.Addetto;
 import scada.gui.fxml.GuiConstructor;
 import scada.gui.fxml.StageController;
 import scada.gui.tecnici.TecniciMain;
