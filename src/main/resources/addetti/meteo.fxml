@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.stage.Stage?>
 
-<Stage title="Meteo" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.Meteo">
+<Stage resizable="false" title="Meteo" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.addetti.Meteo">
     <scene>
         <Scene>
             <AnchorPane prefHeight="250.0" prefWidth="330.0">

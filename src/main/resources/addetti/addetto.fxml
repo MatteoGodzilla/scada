@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.stage.Stage?>
 
-<Stage fx:id="stageAddetto" onCloseRequest="#close" title="Addetto SCADA" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.Addetto">
+<Stage resizable="false" title="Addetto SCADA" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.addetti.Addetto">
     <scene>
         <Scene fx:id="sceneAddetto">
             <AnchorPane prefHeight="561.0" prefWidth="670.0">
@@ -24,7 +24,7 @@
                      </AnchorPane>
                  </content>
                </ScrollPane>
-               <GridPane layoutY="579.0" prefHeight="35.0" prefWidth="669.0">
+               <GridPane layoutY="579.0" prefHeight="35.0" prefWidth="669.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                  <columnConstraints>
                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
