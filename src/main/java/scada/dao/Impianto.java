@@ -81,7 +81,6 @@ public class Impianto {
             return new Impianto(result.getInt(1), result.getString(2), result.getString(3),
                 result.getFloat(4), result.getBoolean(5), result.getInt(6));
         } catch (SQLException e) {
-            // TODO: handle exception
             e.printStackTrace();
             return null;
         }

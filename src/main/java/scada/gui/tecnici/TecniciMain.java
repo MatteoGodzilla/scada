@@ -39,14 +39,27 @@ public class TecniciMain extends StageController {
                         setText(null);
                         setGraphic(null);
                     } else {
-                        AnchorPane row = TecniciMainRow.newInstance(item).root;
+                        TecniciMainRow rowController = TecniciMainRow.newInstance(item);
+                        AnchorPane row = rowController.root;
                         row.prefWidthProperty().bind(this.prefWidthProperty());
+                        rowController.setOnDoubleClick(() -> instance.openDetails());
                         setGraphic(row);
                     }
                 }
             });
             instance.InitialLoad();
         });
+    }
+
+    public void openDetails(){
+        var selected = assignedList.getSelectionModel().getSelectedItem();
+        TecniciDetails details = TecniciDetails.newInstance(selected.getImpiantoRef(), selected.getMacchinarioRef());
+        details.getStage().show();
+    }
+
+
+    public void refresh(){
+        System.out.println("REFRESH");
     }
 
     private void InitialLoad() {
