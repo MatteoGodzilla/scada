@@ -44,4 +44,12 @@ public class SQLAddetti {
         WHERE (codiceInstallazione = ? AND status = 1);
     """;
 
+    public static String METEO = """
+        SELECT IR.ts, IR.vento, IR.uv
+        FROM IMP_RILEVAZIONE IR
+        WHERE IR.codiceImpianto = ?
+        AND IR.siglaProvincia = ?
+        ORDER BY IR.ts DESC
+        LIMIT 1
+    """;
 }

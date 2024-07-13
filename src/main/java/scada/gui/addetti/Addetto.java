@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
@@ -21,6 +23,7 @@ import scada.gui.fxml.StageController;
 public class Addetto extends StageController{
 
     private String username;
+    public List<ImpiantoController> listaImpController = new ArrayList<>();
     public Button weatherButton;
     public Button reportButton;
     public Button refreshButton;
@@ -36,12 +39,28 @@ public class Addetto extends StageController{
         });
     }
 
+    /**
+     * Mostra la finestra con le informazioni sul meteo dell'impianto selezionato
+     */
     public void weather() {
-        //TODO: La nuova finestra mostra il meteo dell'impianto selezionato
-        //NON HO IDEA DI COME CAPIRE CHE IMPIANTO SELEZIONO (SEMPRE CHE SIA UNA COSA POSSIBILE DA FARE)
-        Meteo m = Meteo.newInstance();
-        m.getStage().show();
-
+        for (ImpiantoController impController : listaImpController) {
+            var impianto = impController.impiantoPane;
+            if (impianto.isExpanded()) {
+                try (PreparedStatement statement = DAO.getDB().prepareStatement(SQLAddetti.METEO)) {
+                    statement.setInt(1, impController.getCodImpianto());
+                    statement.setString(2, impController.getProvincia());
+                    ResultSet result = statement.executeQuery();
+                    result.next();
+                    Meteo m = Meteo.newInstance(impController.nomeImpianto());
+                    m.txtVento.setText(result.getString("IR.vento"));
+                    m.txtUV.setText(result.getString("IR.uv"));
+                    m.labelTime.setText(result.getString("IR.ts"));
+                    m.getStage().show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     /**
@@ -94,14 +113,15 @@ public class Addetto extends StageController{
            statement.setString(1, username);
            ResultSet result = statement.executeQuery();
             while (result.next()) {
-                ImpiantoController  impController = ImpiantoController.newInstance();
+                ImpiantoController  impController = ImpiantoController.newInstance(result.getInt("M.codiceImpianto"), result.getString("M.siglaProvincia"));
+                listaImpController.add(impController);
                 TitledPane impianto = impController.impiantoPane;
-                var nomeImpianto = "Impianto" + result.getInt("M.codiceImpianto") + " (" + result.getString("M.siglaProvincia") + ")";
+                var nomeImpianto = impController.nomeImpianto();
                 if (result.getBoolean("I.uomoInSito")) {
                     nomeImpianto = nomeImpianto + " (Uomo In Sito)";
                 }
                 impController.setTitle(nomeImpianto);
-                
+
                 try (PreparedStatement statement2 = DAO.getDB().prepareStatement(SQLAddetti.MACCHINARI)) {
                     statement2.setInt(1, result.getInt("codiceImpianto"));
                     statement2.setString(2, result.getString("siglaProvincia"));

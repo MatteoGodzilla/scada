@@ -34,6 +34,7 @@
                            <Label fx:id="labelUV" layoutX="14.0" layoutY="81.0" text="UV:" />
                            <TextField fx:id="txtVento" editable="false" layoutX="57.0" layoutY="45.0" />
                            <TextField fx:id="txtUV" editable="false" layoutX="57.0" layoutY="77.0" />
+                           <Label fx:id="labelTime" layoutX="9.0" layoutY="181.0" text="Time" />
                         </children>
                      </AnchorPane>
                   </children>
