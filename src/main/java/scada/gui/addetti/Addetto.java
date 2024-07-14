@@ -6,8 +6,11 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
@@ -56,7 +59,7 @@ public class Addetto extends StageController{
                     m.txtUV.setText(result.getString("IR.uv"));
                     m.labelTime.setText(result.getString("IR.ts"));
                     m.getStage().show();
-                } catch (Exception e) {
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
@@ -74,8 +77,8 @@ public class Addetto extends StageController{
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
         fileChooser.getExtensionFilters().add(extFilter);
         File filePath = fileChooser.showSaveDialog(getStage());
-        //In content ci va ciò che voglio salvare nel file
-        String content = "Ciao Mondo" + "!!!";
+        String content = "NomeImpianto;Data e Ora;Produzione (Kwh)\n";
+        content = content + generateInfo();
         SaveFile(content, filePath);
     }
 
@@ -88,19 +91,114 @@ public class Addetto extends StageController{
     }
 
     /**
+     * Metodo per generare le informazioni da inserire nel report
+     * @return la stringa che contiene le informazioni su un particolare impianto
+     */
+    private String generateInfo() {
+        String info = "";
+        Date d = new Date();
+        DateFormat formatoData = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, Locale.ITALY);
+        for (ImpiantoController impController : listaImpController) {
+            var impianto = impController.impiantoPane;
+            if (impianto.isExpanded()) {
+                try (PreparedStatement statement = DAO.getDB().prepareStatement(SQLAddetti.TIPOLOGIA)) {
+                    statement.setInt(1, impController.getCodImpianto());
+                    statement.setString(2, impController.getProvincia());
+                    ResultSet result = statement.executeQuery();
+                    result.next();
+                    var tipologia = result.getInt("I.tipologia");
+                    switch (tipologia) {
+                        case 1:
+                            info = impController.nomeImpianto() + ";" + formatoData.format(d) + ";" + reportFotovoltaici(impController);
+                            break;
+
+                        case 2:
+                            info = impController.nomeImpianto() + ";" + formatoData.format(d) + ";" + reportEolici(impController);
+                            break;
+
+                        case 3:
+                            info = impController.nomeImpianto() + ";" + formatoData.format(d) + ";" + reportBiogas(impController);
+                            break;
+                   }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return info;
+    }
+
+    /**
+     * Calcola il numero di Kwh prodotti dall'impianto fotovoltaico selezionato
+     * @param impController il controller dell'impianto fotovoltaico in cui si trovano i macchinari
+     * @return il numero di Kwh prodotti
+     */
+    private int reportFotovoltaici(ImpiantoController impController) {
+        int tot = 0;
+        try (PreparedStatement statement = DAO.getDB().prepareStatement(SQLAddetti.REPORT_IMPIANTO_FOTOVOLTAICO)) {
+            statement.setInt(1, impController.getCodImpianto());
+            statement.setString(2, impController.getProvincia());
+            ResultSet result = statement.executeQuery();
+            result.next();
+            tot = result.getInt("Produzione");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tot;
+    }
+
+    /**
+     * Calcola il numero di Kwh prodotti dall'impianto eolico selezionato
+     * @param impController il controller dell'impianto eolico in cui si trovano i macchinari
+     * @return il numero di Kwh prodotti
+     */
+    private int reportEolici(ImpiantoController impController) {
+        int tot = 0;
+        try (PreparedStatement statement = DAO.getDB().prepareStatement(SQLAddetti.REPORT_IMPIANTO_EOLICO)) {
+            statement.setInt(1, impController.getCodImpianto());
+            statement.setString(2, impController.getProvincia());
+            ResultSet result = statement.executeQuery();
+            result.next();
+            tot = result.getInt("Produzione");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tot;
+    }
+
+    /**
+     * Calcola il numero di Kwh prodotti dall'impianto biogas selezionato
+     * @param impController il controller dell'impianto biogas in cui si trovano i macchinari
+     * @return il numero di Kwh prodotti
+     */
+    private int reportBiogas(ImpiantoController impController) {
+        int tot = 0;
+        try (PreparedStatement statement = DAO.getDB().prepareStatement(SQLAddetti.REPORT_IMPIANTO_BIOGAS)) {
+            statement.setInt(1, impController.getCodImpianto());
+            statement.setString(2, impController.getProvincia());
+            ResultSet result = statement.executeQuery();
+            result.next();
+            tot = result.getInt("Produzione");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tot;
+    }
+
+
+    /**
      * Metodo per salvare un file
      * @param content il contenuto del file
      * @param file il percorso in cui salvare il file
-     * @throws IOException
      */
-    private void SaveFile(String content, File file) throws IOException{
+    private void SaveFile(String content, File file) {
         try {
             FileWriter fileWriter = null;
             fileWriter = new FileWriter(file);
             fileWriter.write(content);
             fileWriter.close();
         } catch (IOException e) {
-            throw new IOException(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -122,12 +220,12 @@ public class Addetto extends StageController{
                 }
                 impController.setTitle(nomeImpianto);
 
-                try (PreparedStatement statement2 = DAO.getDB().prepareStatement(SQLAddetti.MACCHINARI)) {
-                    statement2.setInt(1, result.getInt("codiceImpianto"));
-                    statement2.setString(2, result.getString("siglaProvincia"));
+                try (PreparedStatement statement2 = DAO.getDB().prepareStatement(SQLAddetti.TIPOLOGIA)) {
+                    statement2.setInt(1, result.getInt("M.codiceImpianto"));
+                    statement2.setString(2, result.getString("M.siglaProvincia"));
                     ResultSet result2 = statement2.executeQuery();
                     result2.next();
-                    var tipologia = result2.getInt("tipologia");
+                    var tipologia = result2.getInt("I.tipologia");
                     switch (tipologia) {
                         case 1:
                             macchinariFotovoltaiciInfo(impController);
@@ -166,8 +264,8 @@ public class Addetto extends StageController{
                maccController.setLabelText(nomeMacchinario);
                impController.macchinariBox.getChildren().add(macchinario);
            }
-       } catch (SQLException e2) {
-           e2.printStackTrace();
+       } catch (SQLException e) {
+           e.printStackTrace();
        }
    }
 
@@ -186,8 +284,8 @@ public class Addetto extends StageController{
                maccController.setLabelText(nomeMacchinario);
                impController.macchinariBox.getChildren().add(macchinario);
            }
-       } catch (SQLException e2) {
-           e2.printStackTrace();
+       } catch (SQLException e) {
+           e.printStackTrace();
        }
    }
 
@@ -206,8 +304,8 @@ public class Addetto extends StageController{
                maccController.setLabelText(nomeMacchinario);
                impController.macchinariBox.getChildren().add(macchinario);
            }
-       } catch (SQLException e2) {
-           e2.printStackTrace();
+       } catch (SQLException e) {
+           e.printStackTrace();
        }
    }
 
