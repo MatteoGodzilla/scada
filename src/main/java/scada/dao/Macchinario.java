@@ -41,6 +41,10 @@ public class Macchinario {
         }
     }
 
+    public static Macchinario refresh(Macchinario m){
+        return Macchinario.findFromInstCode(m.getCodiceInstallazione());
+    }
+
     //getters
 
     public int getCodiceInstallazione() {

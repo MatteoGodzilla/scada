@@ -47,22 +47,21 @@ public class TecniciMain extends StageController {
                     }
                 }
             });
-            instance.InitialLoad();
+            instance.refresh();
         });
     }
 
     public void openDetails(){
         var selected = assignedList.getSelectionModel().getSelectedItem();
-        TecniciDetails details = TecniciDetails.newInstance(selected.getImpiantoRef(), selected.getMacchinarioRef());
+        TecniciDetails details = TecniciDetails.newInstance(selected.code, selected.type, selected.getImpiantoRef(), selected.getMacchinarioRef());
+        details.closingCallback = () -> refresh();
         details.getStage().show();
     }
 
 
     public void refresh(){
-        System.out.println("REFRESH");
-    }
-
-    private void InitialLoad() {
+        assignedList.getItems().clear();
+        availableList.getItems().clear();
         try (PreparedStatement statement = DAO.getDB().prepareStatement(SQLTecnici.INTERVENTI)) {
             statement.setString(1, username);
             ResultSet result = statement.executeQuery();
@@ -82,7 +81,7 @@ public class TecniciMain extends StageController {
                             Macchinario macchinario = Macchinario.findFromInstCode(inst_code);
                             Impianto impianto = Impianto.findFromMacchinario(macchinario);
 
-                            data = new TecniciMainRowData(id_int, desc_int, impianto, macchinario);
+                            data = new TecniciMainRowData(id_int, type_int, desc_int, impianto, macchinario);
                         }
                         break;
                     }
@@ -97,7 +96,7 @@ public class TecniciMain extends StageController {
                             Macchinario macchinario = Macchinario.findFromInstCode(inst_code);
                             Impianto impianto = Impianto.findFromMacchinario(macchinario);
 
-                            data = new TecniciMainRowData(id_int, desc_int, impianto, macchinario);
+                            data = new TecniciMainRowData(id_int, type_int, desc_int, impianto, macchinario);
                         }
                         break;
                     case 3:
@@ -107,7 +106,7 @@ public class TecniciMain extends StageController {
                             ResultSet imp = imp_stmt.executeQuery();
                             imp.next();
                             Impianto impianto = Impianto.findFromCodiceProvincia(imp.getInt(1), imp.getString(2));
-                            data = new TecniciMainRowData(id_int, desc_int, impianto, null);
+                            data = new TecniciMainRowData(id_int, type_int, desc_int, impianto, null);
                         }
                         break;
                     default:

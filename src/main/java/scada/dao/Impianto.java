@@ -86,6 +86,10 @@ public class Impianto {
         }
     }
 
+    public static Impianto refresh(Impianto i){
+        return Impianto.findFromCodiceProvincia(i.getCodice(), i.getProvincia());
+    }
+
     //Getters
 
     public int getCodice() {

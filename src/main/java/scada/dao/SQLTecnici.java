@@ -4,7 +4,7 @@ public class SQLTecnici {
     public static String INTERVENTI = """
         SELECT i.codice, i.tipo, t.descrizione FROM INTERVENTO i
         JOIN INT_TIPO t on (i.tipo = t.tipo)
-        WHERE usernameTecnico = ?;
+        WHERE usernameTecnico = ? AND completato = 0;
     """;
 
     public static String INT_MACCHINARIO = """
