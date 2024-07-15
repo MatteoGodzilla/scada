@@ -32,9 +32,12 @@
                            </Label>
                            <Label fx:id="labelVento" layoutX="14.0" layoutY="49.0" text="Vento:" />
                            <Label fx:id="labelUV" layoutX="14.0" layoutY="81.0" text="UV:" />
-                           <TextField fx:id="txtVento" editable="false" layoutX="57.0" layoutY="45.0" />
-                           <TextField fx:id="txtUV" editable="false" layoutX="57.0" layoutY="77.0" />
-                           <Label fx:id="labelTime" layoutX="9.0" layoutY="181.0" text="Time" />
+                           <TextField fx:id="txtVento" editable="false" layoutX="57.0" layoutY="45.0" prefHeight="25.0" prefWidth="266.0" AnchorPane.leftAnchor="57.0" AnchorPane.rightAnchor="57.0" />
+                           <TextField fx:id="txtUV" editable="false" layoutX="57.0" layoutY="77.0" AnchorPane.leftAnchor="57.0" AnchorPane.rightAnchor="57.0" />
+                           <Label fx:id="labelTime" layoutX="9.0" layoutY="181.0" text="Time" textFill="#ef2424">
+                              <font>
+                                 <Font name="System Bold" size="12.0" />
+                              </font></Label>
                         </children>
                      </AnchorPane>
                   </children>

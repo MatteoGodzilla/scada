@@ -6,7 +6,8 @@ public class SQLAddetti {
         SELECT M.codiceImpianto, M.siglaProvincia, I.uomoInSito
         FROM MONITORAGGIO M JOIN IMPIANTO I ON (M.codiceImpianto = I.codiceImpianto)
         AND (M.siglaProvincia = I.siglaProvincia)
-        WHERE usernameAddetto = ?;
+        WHERE usernameAddetto = ?
+        AND I.inOperazione = 1;
     """;
 
     public static String TIPOLOGIA = """
@@ -14,7 +15,8 @@ public class SQLAddetti {
         FROM IMPIANTO I JOIN MONITORAGGIO M ON (I.codiceImpianto = M.codiceImpianto)
         AND (I.siglaProvincia = M.siglaProvincia)
         WHERE M.codiceImpianto = ?
-        AND M.siglaProvincia = ?;
+        AND M.siglaProvincia = ?
+        AND I.inOperazione = 1;
     """;
 
     public static String MACCHINARI_FOTOVOLTAICI = """

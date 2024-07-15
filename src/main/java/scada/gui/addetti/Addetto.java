@@ -57,7 +57,7 @@ public class Addetto extends StageController{
                     Meteo m = Meteo.newInstance(impController.nomeImpianto());
                     m.txtVento.setText(result.getString("IR.vento"));
                     m.txtUV.setText(result.getString("IR.uv"));
-                    m.labelTime.setText(result.getString("IR.ts"));
+                    m.labelTime.setText("Ultima rilevazione: " + result.getString("IR.ts"));
                     m.getStage().show();
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -73,7 +73,7 @@ public class Addetto extends StageController{
     public void generateReport() throws IOException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save File");
-        fileChooser.setInitialFileName("ReportImpianto");
+        fileChooser.setInitialFileName("ReportImpianto.csv");
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
         fileChooser.getExtensionFilters().add(extFilter);
         File filePath = fileChooser.showSaveDialog(getStage());

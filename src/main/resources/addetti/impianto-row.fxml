@@ -3,8 +3,7 @@
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<TitledPane fx:id="impiantoPane" animated="false" expanded="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="184.0" prefWidth="480.0" text="NomeImpianto" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.addetti.ImpiantoController">
+<TitledPane fx:id="impiantoPane" animated="false" expanded="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="NomeImpianto" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.addetti.ImpiantoController">
    <content>
       <VBox fx:id="macchinariBox" prefHeight="19.0" prefWidth="359.0" />
    </content>
