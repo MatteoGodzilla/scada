@@ -7,6 +7,18 @@ public class SQLTecnici {
         WHERE usernameTecnico = ? AND completato = 0;
     """;
 
+    public static String DISPONIBILI = """
+        SELECT i.codice, i.tipo, t.descrizione FROM INTERVENTO i
+        JOIN INT_TIPO t on (i.tipo = t.tipo)
+        WHERE usernameTecnico IS NULL AND completato = 0;
+    """;
+
+    public static String ASSEGNAZIONE = """
+        UPDATE INTERVENTO
+        SET usernameTecnico = ?
+        WHERE codice = ?;
+    """;
+
     public static String INT_MACCHINARIO = """
         SELECT im.codiceInstallazione FROM INT_MACCHINARIO im
         WHERE im.codiceIntervento = ?

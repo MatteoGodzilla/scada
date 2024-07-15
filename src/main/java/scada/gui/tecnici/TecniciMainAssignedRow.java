@@ -6,7 +6,7 @@ import javafx.scene.layout.AnchorPane;
 import scada.gui.fxml.GuiConstructor;
 import scada.gui.fxml.GuiController;
 
-public class TecniciMainRow implements GuiController {
+public class TecniciMainAssignedRow implements GuiController {
     public AnchorPane root;
     public Label code;
     public Label int_type;
@@ -15,8 +15,8 @@ public class TecniciMainRow implements GuiController {
 
     public Runnable onDoubleClick;
 
-    public static TecniciMainRow newInstance(TecniciMainRowData data){
-        return GuiConstructor.createInstance("/tecnici/tecnici-main-row.fxml", (TecniciMainRow instance, AnchorPane row) -> {
+    public static TecniciMainAssignedRow newInstance(TecniciMainRowData data){
+        return GuiConstructor.createInstance("/tecnici/tecnici-main-assigned-row.fxml", (TecniciMainAssignedRow instance, AnchorPane row) -> {
             instance.root = row;
             instance.code.setText("" + data.code);
             instance.int_type.setText(data.int_type);

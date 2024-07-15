@@ -10,7 +10,7 @@ public class Macchinario {
     private String azienda;
     private String nomeModello;
     private int durataGaranzia;
-    private int status; //enum?
+    private int status;
 
     private static String SQL_INSTALLAZIONE = """
         SELECT * FROM MACCHINARIO

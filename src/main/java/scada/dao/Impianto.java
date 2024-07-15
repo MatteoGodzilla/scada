@@ -10,7 +10,7 @@ public class Impianto {
     private String indirizzo;
     private float area;
     private boolean uomoInSito;
-    private int tipologia; //enum?
+    private int tipologia;
 
     private static String SQL_CODICE_PROVINCIA = """
         SELECT * FROM IMPIANTO
