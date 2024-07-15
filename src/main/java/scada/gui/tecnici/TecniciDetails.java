@@ -80,7 +80,6 @@ public class TecniciDetails extends StageController{
         a.setTitle("Conferma");
         a.setHeaderText("Confermare la chiusura dell'intervento?");
         a.showAndWait();
-        System.out.println(a.getResult());
 
         if(a.getResult() != ButtonType.OK)
             return;
@@ -111,16 +110,17 @@ public class TecniciDetails extends StageController{
             }
         } else {
             //dismissione impianto
-            // try (var stmt = DAO.getDB().prepareStatement(SQLTecniciDetails.SQL_FINE_INT_IMPIANTO)) {
-            //     stmt.setInt(1, macchinario.getCodiceInstallazione());
-            //     if(stmt.executeUpdate() > 0){
-            //         DAO.getDB().commit();
-            //     } else {
-            //         DAO.getDB().rollback();
-            //     }
-            // } catch (SQLException e) {
-            //     e.printStackTrace();
-            // }
+            try (var stmt = DAO.getDB().prepareStatement(SQLTecniciDetails.SQL_FINE_INT_IMPIANTO)) {
+                stmt.setInt(1, impianto.getCodice());
+                stmt.setString(2, impianto.getProvincia());
+                if(stmt.executeUpdate() > 0){
+                    DAO.getDB().commit();
+                } else {
+                    DAO.getDB().rollback();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         closingCallback.run();
         stage.hide();
