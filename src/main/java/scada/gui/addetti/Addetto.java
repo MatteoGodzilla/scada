@@ -6,11 +6,8 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
@@ -77,8 +74,9 @@ public class Addetto extends StageController{
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
         fileChooser.getExtensionFilters().add(extFilter);
         File filePath = fileChooser.showSaveDialog(getStage());
-        String content = "NomeImpianto;Data e Ora;Produzione (Kwh)\n";
-        content = content + generateInfo();
+        List<String> content = new ArrayList<>();
+        content.add("NomeMacchinario;Data e Ora;Produzione (Kwh)\n");
+        content.addAll(generateInfo());
         SaveFile(content, filePath);
     }
 
@@ -94,10 +92,8 @@ public class Addetto extends StageController{
      * Metodo per generare le informazioni da inserire nel report
      * @return la stringa che contiene le informazioni su un particolare impianto
      */
-    private String generateInfo() {
-        String info = "";
-        Date d = new Date();
-        DateFormat formatoData = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, Locale.ITALY);
+    private List<String> generateInfo() {
+        List<String> info = new ArrayList<>();
         for (ImpiantoController impController : listaImpController) {
             var impianto = impController.impiantoPane;
             if (impianto.isExpanded()) {
@@ -109,15 +105,15 @@ public class Addetto extends StageController{
                     var tipologia = result.getInt("I.tipologia");
                     switch (tipologia) {
                         case 1:
-                            info = impController.nomeImpianto() + ";" + formatoData.format(d) + ";" + reportFotovoltaici(impController);
+                            info = reportFotovoltaici(impController);
                             break;
 
                         case 2:
-                            info = impController.nomeImpianto() + ";" + formatoData.format(d) + ";" + reportEolici(impController);
+                            info = reportEolici(impController);
                             break;
 
                         case 3:
-                            info = impController.nomeImpianto() + ";" + formatoData.format(d) + ";" + reportBiogas(impController);
+                            info = reportBiogas(impController);
                             break;
                    }
                 } catch (SQLException e) {
@@ -129,60 +125,69 @@ public class Addetto extends StageController{
     }
 
     /**
-     * Calcola il numero di Kwh prodotti dall'impianto fotovoltaico selezionato
+     * Crea la lista con le rilevazioni dei macchinari dell'impianto fotovoltaico selezionato
      * @param impController il controller dell'impianto fotovoltaico in cui si trovano i macchinari
-     * @return il numero di Kwh prodotti
+     * @return la lista dei macchianri e delle produzioni
      */
-    private int reportFotovoltaici(ImpiantoController impController) {
-        int tot = 0;
+    private List<String> reportFotovoltaici(ImpiantoController impController) {
+        List<String> list = new ArrayList<>();
+        String row = "";
         try (PreparedStatement statement = DAO.getDB().prepareStatement(SQLAddetti.REPORT_IMPIANTO_FOTOVOLTAICO)) {
             statement.setInt(1, impController.getCodImpianto());
             statement.setString(2, impController.getProvincia());
             ResultSet result = statement.executeQuery();
-            result.next();
-            tot = result.getInt("Produzione");
+            while (result.next()) {
+                row = result.getString("MP.codiceInstallazione") + ";" + result.getString("MP.ts") + ";" + result.getInt("MP.kwh") + "\n";
+                list.add(row);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return tot;
+        return list;
     }
 
     /**
-     * Calcola il numero di Kwh prodotti dall'impianto eolico selezionato
+     * Crea la lista con le rilevazioni dei macchinari dell'impianto eolico selezionato
      * @param impController il controller dell'impianto eolico in cui si trovano i macchinari
-     * @return il numero di Kwh prodotti
+     * @return la lista dei macchinari e delle produzioni
      */
-    private int reportEolici(ImpiantoController impController) {
-        int tot = 0;
+    private List<String> reportEolici(ImpiantoController impController) {
+        List<String> list = new ArrayList<>();
+        String row = "";
         try (PreparedStatement statement = DAO.getDB().prepareStatement(SQLAddetti.REPORT_IMPIANTO_EOLICO)) {
             statement.setInt(1, impController.getCodImpianto());
             statement.setString(2, impController.getProvincia());
             ResultSet result = statement.executeQuery();
-            result.next();
-            tot = result.getInt("Produzione");
+            while (result.next()) {
+                row = result.getString("MP.codiceInstallazione") + ";" + result.getString("MP.ts") + ";" + result.getInt("MP.kwh") + "\n";
+                list.add(row);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return tot;
+        return list;
     }
 
     /**
-     * Calcola il numero di Kwh prodotti dall'impianto biogas selezionato
+     * Crea la lista con le rilevazioni dei macchinari dell'impianto biogas selezionato
      * @param impController il controller dell'impianto biogas in cui si trovano i macchinari
-     * @return il numero di Kwh prodotti
+     * @return la lista dei macchinari e delle produzioni
      */
-    private int reportBiogas(ImpiantoController impController) {
-        int tot = 0;
+    private List<String> reportBiogas(ImpiantoController impController) {
+        List<String> list = new ArrayList<>();
+        String row = "";
         try (PreparedStatement statement = DAO.getDB().prepareStatement(SQLAddetti.REPORT_IMPIANTO_BIOGAS)) {
             statement.setInt(1, impController.getCodImpianto());
             statement.setString(2, impController.getProvincia());
             ResultSet result = statement.executeQuery();
-            result.next();
-            tot = result.getInt("Produzione");
+            while (result.next()) {
+                row = result.getString("MP.codiceInstallazione") + ";" + result.getString("MP.ts") + ";" + result.getInt("MP.kwh") + "\n";
+                list.add(row);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return tot;
+        return list;
     }
 
 
@@ -191,11 +196,12 @@ public class Addetto extends StageController{
      * @param content il contenuto del file
      * @param file il percorso in cui salvare il file
      */
-    private void SaveFile(String content, File file) {
+    private void SaveFile(List<String> content, File file) {
         try {
-            FileWriter fileWriter = null;
-            fileWriter = new FileWriter(file);
-            fileWriter.write(content);
+            FileWriter fileWriter = new FileWriter(file);
+            for (String row : content) {
+                fileWriter.write(row);
+            }
             fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
