@@ -5,14 +5,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="macchinarioPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="69.0" prefWidth="503.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.addetti.MacchinarioController">
+<AnchorPane fx:id="macchinarioPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="69.0" prefWidth="503.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.addetti.MacchinarioController">
    <children>
       <Label fx:id="nomeMacchinario" layoutX="14.0" layoutY="26.0" text="NomeMacchinario">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Button fx:id="strButton" layoutX="310.0" layoutY="10.0" mnemonicParsing="false" onAction="#startMacchinario" prefHeight="50.0" prefWidth="92.0" text="START" textFill="#07ce28" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="310.0" AnchorPane.rightAnchor="101.0" AnchorPane.topAnchor="10.0" />
-      <Button fx:id="stpButton" disable="true" layoutX="402.0" layoutY="10.0" mnemonicParsing="false" onAction="#stopMacchinario" prefHeight="50.0" prefWidth="92.0" text="STOP" textFill="#dd1717" AnchorPane.bottomAnchor="9.333333333333336" AnchorPane.leftAnchor="402.0" AnchorPane.rightAnchor="9.333333333333314" AnchorPane.topAnchor="10.0" />
+      <Button fx:id="strButton" layoutX="310.0" layoutY="10.0" mnemonicParsing="false" onAction="#startMacchinario" prefHeight="50.0" prefWidth="92.0" text="START" textFill="#07ce28" AnchorPane.bottomAnchor="9.0" AnchorPane.rightAnchor="101.0" AnchorPane.topAnchor="10.0" />
+      <Button fx:id="stpButton" disable="true" layoutX="402.0" layoutY="10.0" mnemonicParsing="false" onAction="#stopMacchinario" prefHeight="50.0" prefWidth="92.0" text="STOP" textFill="#dd1717" AnchorPane.bottomAnchor="9.333333333333336" AnchorPane.rightAnchor="9.333333333333314" AnchorPane.topAnchor="10.0" />
    </children>
 </AnchorPane>
