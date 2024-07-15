@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<TitledPane animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="329.0" prefWidth="600.0" text="Creazione nuovo intervento" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+  <content>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+         <children>
+            <ComboBox layoutX="74.0" layoutY="120.0" prefWidth="168.0" />
+            <Label layoutX="73.0" layoutY="102.0" text="Tipologia intervento:" />
+            <ComboBox layoutX="73.0" layoutY="183.0" prefHeight="26.0" prefWidth="168.0" />
+            <Label layoutX="73.0" layoutY="166.0" text="Codice di riferimento:" />
+            <TextArea layoutX="258.0" layoutY="37.0" prefHeight="237.0" prefWidth="262.0" />
+            <Label layoutX="258.0" layoutY="14.0" text="Tabella informativa Impianto/Macchinario" />
+            <Button layoutX="72.0" layoutY="229.0" mnemonicParsing="false" onAction="#createIntervento" prefHeight="45.0" prefWidth="169.0" text="Genera richiesta d'intervento" />
+            <Label layoutX="80.0" layoutY="14.0" text="Livello intervento:" />
+            <RadioButton layoutX="80.0" layoutY="37.0" mnemonicParsing="false" onAction="#filterByImpianto" text="Livello d'impianto" />
+            <RadioButton layoutX="80.0" layoutY="60.0" mnemonicParsing="false" onAction="#filterByMacchinario" text="Livello di macchinario" />
+         </children></AnchorPane>
+  </content>
+</TitledPane>
