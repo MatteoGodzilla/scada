@@ -175,7 +175,7 @@ public class TecniciDetails extends StageController{
             builder.append('\n');
             builder.append("Garanzia:");
             builder.append(macchinario.getDurataGaranzia());
-            builder.append('\n');
+            builder.append(" anni\n");
             builder.append("Status:");
             builder.append(MacchinarioStatus.fromCode(macchinario.getStatus()));
             builder.append('\n');

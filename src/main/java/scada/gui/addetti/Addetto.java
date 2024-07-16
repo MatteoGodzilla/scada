@@ -75,7 +75,7 @@ public class Addetto extends StageController{
         fileChooser.getExtensionFilters().add(extFilter);
         File filePath = fileChooser.showSaveDialog(getStage());
         List<String> content = new ArrayList<>();
-        content.add("NomeMacchinario;Data e Ora;Produzione (Kwh)\n");
+        content.add("Nome Macchinario;Data e Ora;Produzione (Kwh)\n");
         content.addAll(generateInfo());
         SaveFile(content, filePath);
     }
