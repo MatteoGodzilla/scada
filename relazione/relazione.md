@@ -8,7 +8,7 @@ Questo sistema informatico si suddivide in quattro sotto-sistemi:
 
 # Analisi dei requisiti
 ## Intervista
-Abbiamo intervistato il responsabile generale della GreenRock S.p.A per ottere più informazioni su come il sistema informatico deve essere strutturato:
+Abbiamo intervistato il responsabile generale della GreenRock S.p.A. per ottere più informazioni su come il sistema informatico deve essere strutturato:
 > Abbiamo bisogno di un sistema gestionale che sia in grado di gestire impianti rinnovabili in tutta Italia. Attualmente abbiamo tre tipologie di impianto: Fotovoltaico, Eolico e Biogas.
 > I nostri dipendenti si dividono in tre grandi categorie: responsabili, addetti SCADA e tecnici. Per ognuno memorizziamo nome, cognome e area di competenza. Per responsabili e addetti SCADA, loro operano su tutta una regione d'italia, mentre i tecnici possono lavorare soltanto all'interno di una provincia.
 > I tecnici si occupano di effettuare vari interventi negli impianti, come per esempio dei controlli preventivi ai macchinari, la riparazione di un macchinario oppure la dismissione completa di un impianto.
@@ -107,7 +107,8 @@ I responsabili possono:
 
 # Progettazione concettuale
 ## Schema scheletro
-Lo schema Entity-Relationship si compone di 4 gerarchie, tutte e 4 del tipo totali ed esclusive, di 22 entità e di 15 associazioni. Lo schema può essere suddiviso in 4 parti principali (impianti, modelli, interventi e utenti) che discuteremo dopo aver presentato in una tabella tutte le entità e tutte le associazioni con una loro breve descrizione.
+Lo schema Entity-Relationship si compone di 22 entità, di 15 associazioni e di 4 gerarchie, tutte e 4 del tipo totali ed esclusive.
+Lo schema può essere suddiviso in 4 parti principali (impianti, modelli, interventi e utenti) che discuteremo dopo aver presentato in una tabella tutte le entità e tutte le associazioni con una loro breve descrizione.
 Nome | Tipo | Descrizione
 :---: |:---: | :---:
 IMPIANTO | E | Rappresenta una struttura composta da uno o più macchinari
@@ -119,13 +120,13 @@ RILEVAZIONE_VENTO | E | Si occupa di rilevare i dati di un impianto eolico
 MACC_EOLICO | E | Rappresenta un singolo macchinario di tipo eolico
 MACC_FOTOVOLTAICO | E | Rappresenta un singolo macchinario di tipo fotovoltaico
 MACC_BIOGAS | E | Rappresenta un singolo macchinario di tipo biogas
-INSTALLAZIONE | E | Indica l'azione di installare un macchinario in un determinato impianto
+INSTALLAZIONE | E | Indica un macchinario installato in un determinato impianto
 PRODUZIONE | E | L'energia prodotta (in Kwh) da un singolo macchinario
-MODELLO | E | Indica l'azienda produttrice di un modello di macchinario
+MODELLO | E | Contiene le aziende e i modelli dei macchinari
 GARANZIA | E | Tipo di assicurazione su un macchinario
 COMPONENTE | E | Pezzo facente parte di un macchinario (con msrp, cioè il prezzo di listino del pezzo)
 PROVINCIA | E | Indica il luogo in cui possono essere situati gli impianti
-UTENTE | E | Rappresenta le tipologie di lavoratori che possono accedere all'applicazione con permessi diversi
+UTENTE | E | Rappresenta un utente generico del sistema informatico
 TECNICO | E | L'utente che si occupa di eseguire interventi su impianti e/o singoli macchinari
 ADDETTO | E | L'utente che monitora gli impianti che gli sono stati assegnati
 RESPONSABILE | E | L'utente che gestisce gli interventi, gli impianti e i macchinari
@@ -135,7 +136,7 @@ INT_MACCHINARIO | E | Intervento svolto su uno specifico macchinario
 Monitora | A | Collega gli addetti agli impianti di cui si occupano
 Situato | A | Mette in relazione l'impianto alla provincia in cui è situato
 Assegnazione | A | A un tecnico viene assegnata una provincia in cui lavora
-Accettazione | A | Collega i tecnici agli interventi che possono accettare
+Accettazione | A | Collega i tecnici agli interventi che hanno già accettato
 OpImpianto | A | Lega gli impianti agli interventi su di essi
 OpMacchinario | A | Lega gli interventi ai macchinari su cui possono essere eseguiti
 CompBiogas | A | Mette in relazione l'impianto biogas con i macchinari biogas
@@ -149,23 +150,28 @@ CompModello | A | Collega i componenti che compongono un macchinario con il suo 
 OffertaGaranzie | A | Lega le garanzie con i modelli dei macchinari
 
 ### Struttura degli impianti
-Per modellare questo aspetto del database è stato scelto di utilizzare una gerarchia con superclasse l'entità `IMPIANTO` per suddividere tra loro le 3 diverse tipologie di impianto (eolico, fotovoltaico e biogas) e di collegarle rispettivamente, utilizzando altrettante associazioni, ai macchinari della stessa tipologia. Anche i macchinari, fanno parte di una gerarchia con superclasse l'entità `INSTALLAZIONE`, inoltre, entrambe le gerarchie sono totali ed esclusive. Questa modellazione rende evidente il fatto che un impianto di una tipologia deve necessariamente essere composto solo da macchinari dello stesso tipo.
+Per modellare questo aspetto del database è stato scelto di utilizzare una gerarchia con superclasse l'entità `IMPIANTO` per suddividere tra loro le 3 diverse tipologie di impianto (eolico, fotovoltaico e biogas) e di collegarle rispettivamente, utilizzando altrettante associazioni, ai macchinari della stessa tipologia.
+Anche i macchinari, fanno parte di una gerarchia con superclasse l'entità `INSTALLAZIONE`, inoltre, entrambe le gerarchie sono totali ed esclusive. Questa modellazione rende evidente il fatto che un impianto di una tipologia deve necessariamente essere composto solo da macchinari dello stesso tipo.
 ![impianti](Impianti.png)
 
 ### Struttura dei modelli, componenti e garanzia
-Questa struttura è composta da 4 entità e da 3 associazioni. L'entità `MODELLO` fa riferimento al singolo macchinario, identificato dall'entità `INSTALLAZIONE`, ma nulla vieta che sia possibile installare più macchinari dello stesso modello. L'entità `GARANZIA` è legata al modello di macchinario, cioè ogni macchinario ha almeno una garanzia, che può essere la stessa per macchinari diversi, oppure può cambiare per ogni macchinario. Infine, l'entità `COMPONENTE` fa riferimento al singolo modello, perché è plausibile che i componenti di un macchinario possano cambiare da un modello all'altro.
+Questa struttura è composta da 4 entità e da 3 associazioni.
+Ogni entità `INSTALLAZIONE` fa riferimento a una determinata entità `MODELLO`, infatti deve essere possibile installare più macchinari dello stesso modello.
+L'entità `GARANZIA` è legata al modello di macchinario, cioè ogni macchinario ha almeno una garanzia, che può essere la stessa per macchinari diversi, oppure può cambiare per ogni macchinario.
+Infine, l'entità `COMPONENTE` rappresenta una parte del modello che può essere sostituita dai tecnici.
 ![modelli](Modelli.png)
 
 ### Struttura degli interventi
-Per questo aspetto del database è stata utilizzata un'altra gerarchia, sempre totale ed esclusiva, con superclasse l'entità `INTERVENTO`. Le sottoclassi, sono le entità `INT_IMPIANTO` e `INT_MACCHINARIO`. La prima riguarda gli interventi che i tecnici, modellati dall'entità `TECNICO`, possono effettuare su un intero impianto, modellato dall'entità `IMPIANTO`. La seconda sottoclasse, invece, fa riferimento a quegli interventi che vengono svolti su un macchinario, modellato dall'entità `INSTALLAZIONE`. Un ultimo aspetto molto importante è che sono i tecnici ad accettare uno o più interventi da svolgere, grazie all'associazione `Accettazione`.
+Per questo aspetto del database è stata utilizzata un'altra gerarchia, sempre totale ed esclusiva, con superclasse l'entità `INTERVENTO`. Le sottoclassi, sono le entità `INT_IMPIANTO` e `INT_MACCHINARIO`. La prima riguarda gli interventi che i tecnici, modellati dall'entità `TECNICO`, possono effettuare su un intero impianto, modellato dall'entità `IMPIANTO`.
+La seconda sottoclasse, invece, fa riferimento a quegli interventi che vengono svolti su un macchinario, modellato dall'entità `INSTALLAZIONE`. Un ultimo aspetto molto importante è che sono i tecnici ad accettare uno o più interventi da svolgere, grazie all'associazione `Accettazione`.
 ![interventi](Interventi.png)
 
 ### Struttura degli utenti
-In questa struttura gli utenti vengono modellati tramite l'entità `UTENTE`, che è superclasse per una gerarchia, anch'essa totale ed esclusiva, che comprende i 3 tipi di utenti dell'applicazione. Le tre tipologie sono le entità `RESPONSABILE`, `ADDETTO` e `TECNICO`. Sottolineiamo che l'addetto è collegato all'entità `IMPIANTO` dall'associazione `Monitora` e sta ad indicare che il suo compito è quello di gestire gli impianti che gli sono stati assegnati. Inoltre, il tecnico, come detto in precedenza, si occupa di svolgere gli interventi. Sia le assegnazioni degli impianti agli addetti sia le richieste di intervento, vengono tutte gestite dal responsabile.
+In questa struttura gli utenti vengono modellati tramite l'entità `UTENTE`, che è superclasse per una gerarchia, anch'essa totale ed esclusiva, che comprende i 3 tipi di utenti dell'applicazione. Le tre tipologie sono le entità `RESPONSABILE`, `ADDETTO` e `TECNICO`.
+Sottolineiamo che l'addetto è collegato all'entità `IMPIANTO` dall'associazione `Monitora`, che associa ogni addetto agli impianti che gli sono stati assegnati. Inoltre, il tecnico, come detto in precedenza, si occupa di svolgere gli interventi.
+Sia le assegnazioni degli impianti agli addetti sia le richieste di intervento vengono gestite dai responsabili.
+Per questo motivo non sono associati direttamente alle entità, dato che le loro operazioni agiscono su altre tipologie di utenti.
 ![utenti](Utenti.png)
-
-## Raffinamenti proposti (a livello concettuale)
-
 
 ## Schema concettuale finale
 Questo è lo schema generale del database, ottenuto unendo le 4 strutture analizzate in precedenza.

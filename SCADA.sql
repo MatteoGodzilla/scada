@@ -59,6 +59,7 @@ create table IMPIANTO (
      area float(1) not null,
      uomoInSito char not null,
      tipologia int not null,
+     inOperazione boolean not null default 1
      constraint ID_IMPIANTO_ID primary key (codiceImpianto, siglaProvincia));
 
 create table MACC_STATUS (
