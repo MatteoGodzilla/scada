@@ -56,21 +56,21 @@ public class SQLAddetti {
     """;
 
     public static String REPORT_IMPIANTO_FOTOVOLTAICO = """
-        SELECT SUM(MP.kwh) AS Produzione
+        SELECT MP.codiceInstallazione, MP.ts, MP.kwh
         FROM MACC_PRODUZIONE MP JOIN MACC_FOTOVOLTAICO MF ON (MP.codiceInstallazione = MF.codiceInstallazione)
         WHERE MF.codiceIMpianto = ?
         AND MF.siglaProvincia = ?;
     """;
 
     public static String REPORT_IMPIANTO_EOLICO = """
-        SELECT SUM(MP.kwh) AS Produzione
+        SELECT MP.codiceInstallazione, MP.ts, MP.kwh
         FROM MACC_PRODUZIONE MP JOIN MACC_EOLICO ME ON (MP.codiceInstallazione = ME.codiceInstallazione)
         WHERE ME.codiceIMpianto = ?
         AND ME.siglaProvincia = ?;
     """;
 
     public static String REPORT_IMPIANTO_BIOGAS = """
-        SELECT SUM(MP.kwh) AS Produzione
+        SELECT MP.codiceInstallazione, MP.ts, MP.kwh
         FROM MACC_PRODUZIONE MP JOIN MACC_BIOGAS MB ON (MP.codiceInstallazione = MB.codiceInstallazione)
         WHERE MB.codiceIMpianto = ?
         AND MB.siglaProvincia = ?;

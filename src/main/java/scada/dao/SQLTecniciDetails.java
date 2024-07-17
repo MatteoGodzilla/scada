@@ -26,7 +26,8 @@ public class SQLTecniciDetails {
     """;
 
     public static String SQL_FINE_INT_IMPIANTO = """
-        DELETE FROM IMPIANTO
+        UPDATE IMPIANTO
+        SET inOperazione = 0
         WHERE (codiceImpianto = ? AND siglaProvincia = ?);
     """;
 }
