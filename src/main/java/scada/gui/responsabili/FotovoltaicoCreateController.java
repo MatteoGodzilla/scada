@@ -10,11 +10,11 @@ public class FotovoltaicoCreateController extends StageController {
             instance.stage = stage;
         });
     }
-    /*TODO*/
+    /*TODO PRIMA SI SCEGLIE AZIENDA, QUESTO SBLOCCA MODELLO*/
     public void filterByAzienda() {
         return;
     }
-    /*TODO*/
+    /*TODO SCELTO ANCHE IL MODELLO SI PUO' SCEGLIERE LA GARANZIA*/
     public void filterByModello() {
         return;
     }

@@ -5,7 +5,9 @@ import scada.gui.fxml.GuiConstructor;
 import scada.gui.fxml.StageController;
 
 public class ImpiantoCreateController extends StageController {
-    public static ImpiantoCreateController newInstance(){
+    public Runnable closingCallback;
+
+    public static ImpiantoCreateController newInstance(String regione){
         return GuiConstructor.createInstance("/responsabili/ImpiantoCreate.fxml",(ImpiantoCreateController instance, Stage stage) ->{
             instance.stage = stage;
         });

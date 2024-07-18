@@ -7,6 +7,25 @@ public class SQLResponsabili {
         JOIN INT_TIPO T on (I.tipo = T.tipo);
     """;
 
+    public static String LISTA_MACCHINARI_IMPIANTO_FOTOVOLTAICO = """
+        SELECT MF.codiceInstallazione, MF.siglaProvincia, MA.azienda, MA.nomeModello FROM MACC_FOTOVOLTAICO MF
+        JOIN MACCHINARIO MA ON (MF.codiceInstallazione = MA.codiceInstallazione) WHERE MF.codiceImpianto = ?;
+    """;
+
+    public static String LISTA_MACCHINARI_IMPIANTO_EOLICO = """
+        SELECT ME.codiceInstallazione, ME.siglaProvincia, MA.azienda, MA.nomeModello FROM MACC_EOLICO ME
+        JOIN MACCHINARIO MA ON (ME.codiceInstallazione = MA.codiceInstallazione) WHERE ME.codiceImpianto = ?;
+    """;
+
+    public static String LISTA_MACCHINARI_IMPIANTO_BIOGAS = """
+        SELECT MB.codiceInstallazione, MB.siglaProvincia, MA.azienda, MA.nomeModello FROM MACC_BIOGAS MB
+        JOIN MACCHINARIO MA ON (MB.codiceInstallazione = MA.codiceInstallazione) WHERE MB.codiceImpianto = ?;
+    """;
+
+    public static String GET_REGIONE_BY_USR = """
+        SELECT U.regione FROM USR_RESPONSABILE WHERE U.username = ?;
+    """;
+
     public static String CREAZIONE_INTERVENTI = """
         INSERT (usernameResponsabile, tipo) INTO INTERVENTO VALUES (?, ?);
     """;
@@ -34,21 +53,20 @@ public class SQLResponsabili {
         SELECT M.azienda, M.nome, M.area FROM MODELLO;
     """;
 
-    public static String CALCOLO_SPAZIO_DISPONIBILE_BIOGAS = """
+    private static String CALCOLO_SPAZIO_DISPONIBILE = """
         SELECT SUM(M.area) FROM MODELLO M WHERE M.azienda, M.nomeModello IN
-        (SELECT MA.azienda, MA.nomeModello FROM MACCHINARIO MA WHERE MA.codiceInstallazione IN
+        (SELECT MA.azienda, MA.nomeModello FROM MACCHINARIO MA WHERE MA.codiceInstallazione IN 
+    """;
+
+    public static String CALCOLO_SPAZIO_DISPONIBILE_BIOGAS = CALCOLO_SPAZIO_DISPONIBILE+"""
         (SELECT MB.codiceInstallazione FROM MACC_BIOGAS MB WHERE MB.codiceImpianto = ?));
     """;
 
-    public static String CALCOLO_SPAZIO_DISPONIBILE_EOLICO = """
-        SELECT SUM(M.area) FROM MODELLO M WHERE M.azienda, M.nomeModello IN
-        (SELECT MA.azienda, MA.nomeModello FROM MACCHINARIO MA WHERE MA.codiceInstallazione IN
+    public static String CALCOLO_SPAZIO_DISPONIBILE_EOLICO = CALCOLO_SPAZIO_DISPONIBILE+"""
         (SELECT ME.codiceInstallazione FROM MACC_EOLICO ME WHERE ME.codiceImpianto = ?));
     """;
 
-    public static String CALCOLO_SPAZIO_DISPONIBILE_FOTOVOLTAICO = """
-        SELECT SUM(M.area) FROM MODELLO M WHERE M.azienda, M.nomeModello IN
-        (SELECT MA.azienda, MA.nomeModello FROM MACCHINARIO MA WHERE MA.codiceInstallazione IN
+    public static String CALCOLO_SPAZIO_DISPONIBILE_FOTOVOLTAICO = CALCOLO_SPAZIO_DISPONIBILE+"""
         (SELECT MF.codiceInstallazione FROM MACC_FOTOVOLTAICO MF WHERE MF.codiceImpianto = ?));
     """;
 
@@ -62,7 +80,7 @@ public class SQLResponsabili {
     """;
 
     public static String IMPIANTI_REGIONALI = """
-        SELECT I.siglaProvincia, I.indirizzo, I.area, I.tipologia FROM IMPIANTO I
+        SELECT I.codImpianto, I.siglaProvincia, I.indirizzo, I.area, I.tipologia FROM IMPIANTO I
         WHERE I.siglaProvincia IN (SELECT P.siglaProvincia FROM PROVINCIA P
         WHERE P.regione = ?);
     """;
@@ -84,11 +102,6 @@ public class SQLResponsabili {
 
     public static String LISTA_GARANZIE = """
         SELECT G.descrizione, G.costo, G.durataAnni FROM GARANZIA G WHERE G.azienda = ? AND G.nomeModello = ?;
-    """;
-
-    // TODO: Probabilmente non necessaria
-    public static String GET_IMPIANTO_INFO = """
-        SELECT I.siglaProvincia, I.indirizzo, I.area, I.tipologia FROM IMPIANTO I WHERE I.codImpianto = ?;
     """;
 
     public static String CREAZIONE_IMPIANTO = """
