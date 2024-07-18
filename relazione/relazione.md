@@ -230,13 +230,46 @@ CompModello | A | 240
 OffertaGaranzie | A | 150
 
 ## Descrizione delle operazioni principali e stima della loro frequenza
-### Addetti
+Suddividiamo le operazioni dell'applicazione, e la stima della loro frequenza, in base alla tipologia di utente che svolge una determinata operazione.
+Ipotizziamo per i calcoli un mese composto da  4 settimane, con 20 giorni lavorativi da 8 ore di lavoro.
+
 ### Tecnici
+I tecnici possono:
+Descrizione | Frequenza relativa | Frequenza (al mese)
+:--- | :---: | :---:
+Accettare degli interventi | 3/giorno | 60
+Vedere gli interventi già accettati | 4/giorno | 80
+Segnalare agli addetti SCADA la presenza di un tecnico all'interno di un impianto | 2/giorno | 40
+Mettere in manutenzione un macchinario | 2/giorno | 40
+Confermare la conclusione di un intervento, con possibilità di scrivere note al responsabile | 2/giorno | 40
+
+### Addetti
+Gli addetti SCADA possono:
+Descrizione | Frequenza relativa | Frequenza (al mese)
+:--- | :---: | :---:
+Avviare/Fermare un macchinario che non sia in manutenzione | 2/giorno | 40
+Visualizzazione della presenza di un tecnico all'interno di un impianto | 2/ora | 230
+Generazione dei report richiesti dai responsabili | 1/settimana | 4
+Visualizzazione delle condizioni metereologiche di un impianto (se questo possiede la stazione meteo) | 1/giorno | 20
+
 ### Responsabili
+I responsabili possono:
+Descrizione | Frequenza relativa | Frequenza (al mese)
+:--- | :---: | :---:
+Creare nuove richieste di interventi | 3/ora | 480
+Visualizzare lo storico di tutti gli interventi | 1/giorno | 20
+Visualizzazione delle note di fine intervento scritte dai tecnici | 1/giorno | 20
+Assegnazione del controllo di un impianto agli addetti SCADA | 1/mese | 1
+Inserimento di un nuovo impianto nel database | 1/mese | 1
+
 ## Schemi di navigazione e tabelle degli accessi
 ## Raffinamento dello schema (eliminazione gerarchie, valori multipli, ...)
-diviso per le varie parti?
+
+
 ## Analisi delle ridondanze
+Lo schema concettuale, e di conseguenza quello logico, sono stati progettati volutamente rimuovendo le ridondanze, cioè siamo stati attenti a non inserire attributi per valori che potevano essere ricavati da operazioni su altri attributi.
+![Logico-final](Logico_final.png)
+
 ## Traduzione di entità e associazioni in relazioni
 ## Traduzione delle operazioni in SQL
 Siccome l'applicazione non ricava i dati dal database attraverso una query unica, ma attraverso sotto query multiple, bisogna specificare come vengono eseguite in base ai vari parametri
