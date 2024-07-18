@@ -20,7 +20,7 @@
                <TextField fx:id="textProvinciaImpianto" layoutX="14.0" layoutY="87.0" />
                <TextField fx:id="textTipologiaImpianto" layoutX="227.0" layoutY="87.0" />
                <ComboBox fx:id="comboModelloMacchinario" layoutX="14.0" layoutY="165.0" onAction="#filterByModello" prefWidth="150.0" />
-               <ComboBox fx:id="comboDurataGaranzia" layoutX="227.0" layoutY="163.0" prefWidth="150.0" />
+               <ComboBox fx:id="comboDurataGaranzia" layoutX="227.0" layoutY="163.0" onAction="#showInfoGaranzia" prefWidth="150.0" />
                <TextField fx:id="textAreaOccupata" layoutX="14.0" layoutY="275.0" />
                <TextField fx:id="textCostoGaranzia" layoutX="228.0" layoutY="289.0" />
                <TextArea fx:id="textDescrizioneGaranzia" layoutX="227.0" layoutY="215.0" prefHeight="52.0" prefWidth="150.0" />
@@ -42,7 +42,7 @@
                <Label layoutX="14.0" layoutY="327.0" text="Kg di batteri:" />
                <Label layoutX="227.0" layoutY="327.0" text="Kg di umido:" />
                <Label layoutX="14.0" layoutY="384.0" text="kWh in condizioni ottimali:" />
-               <ComboBox fx:id="comboAziendaMacchinario" layoutX="14.0" layoutY="218.0" prefWidth="150.0" />
+               <ComboBox fx:id="comboAziendaMacchinario" layoutX="14.0" layoutY="218.0" onAction="#filterByAzienda" prefWidth="150.0" />
                <Label layoutX="14.0" layoutY="200.0" text="Azienda del macchinario:" />
             </children></AnchorPane>
         </Scene>

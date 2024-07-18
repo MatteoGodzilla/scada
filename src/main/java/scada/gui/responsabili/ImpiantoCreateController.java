@@ -11,4 +11,8 @@ public class ImpiantoCreateController extends StageController {
         });
     }
 
+    /*TODO*/
+    public void createImpianto() {
+        return;
+    }
 }

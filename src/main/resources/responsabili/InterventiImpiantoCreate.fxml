@@ -13,14 +13,14 @@
         <Scene>
             <AnchorPane prefHeight="269.0" prefWidth="516.0">
             <children>
-               <ComboBox fx:id="comboTipologia" layoutX="47.0" layoutY="49.0" prefWidth="150.0" />
-               <ComboBox fx:id="comboCodiciInstallazione" layoutX="47.0" layoutY="162.0" prefWidth="150.0" />
+               <ComboBox fx:id="comboTipologia" layoutX="47.0" layoutY="49.0" onAction="#showImpiantoInfo" prefWidth="150.0" />
+               <ComboBox fx:id="comboCodiciInstallazione" layoutX="47.0" layoutY="162.0" onAction="#showImpiantoInfo" prefWidth="150.0" />
                <TextArea fx:id="textMacchinarioInfo" layoutX="231.0" layoutY="50.0" prefHeight="187.0" prefWidth="256.0" />
                <Button layoutX="28.0" layoutY="211.0" mnemonicParsing="false" onAction="#CreateIntervento" text="CREA RICHIESTA D'INTERVENTO" />
                <Label layoutX="47.0" layoutY="32.0" text="Tipologia intervento:" />
                <Label layoutX="47.0" layoutY="144.0" text="Codice di riferimento:" />
                <Label layoutX="231.0" layoutY="32.0" text="Tabella informativa impianto:" />
-               <ComboBox fx:id="comboProvincia" layoutX="47.0" layoutY="109.0" prefWidth="150.0" />
+               <ComboBox fx:id="comboProvincia" layoutX="47.0" layoutY="109.0" onAction="#showImpiantoInfo" prefWidth="150.0" />
                <Label layoutX="47.0" layoutY="92.0" text="Provincia di riferimento:" />
             </children></AnchorPane>
         </Scene>

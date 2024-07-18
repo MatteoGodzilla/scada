@@ -23,7 +23,7 @@
                <TextField fx:id="textAreaOccupata" layoutX="14.0" layoutY="290.0" />
                <TextField fx:id="textCostoGaranzia" layoutX="228.0" layoutY="289.0" />
                <TextArea fx:id="textDescrizioneGaranzia" layoutX="227.0" layoutY="215.0" prefHeight="52.0" prefWidth="150.0" />
-               <Button layoutX="101.0" layoutY="349.0" mnemonicParsing="false" onAction="#createPannello" text="INSTALLA PANNELLO FOTOVOLTAICO" />
+               <Button layoutX="112.0" layoutY="348.0" mnemonicParsing="false" onAction="#createTurbina" text="INSTALLA TURBINA EOLICA" />
                <Label layoutX="14.0" layoutY="14.0" text="Codice impianto:" />
                <Label layoutX="228.0" layoutY="14.0" text="Spazio disponibile:" />
                <Label layoutX="14.0" layoutY="69.0" text="Provincia Impianto:" />

@@ -13,4 +13,38 @@ public class ResponsabiliMain extends StageController {
             instance.username = username;
         });
     }
+
+    /*TODO*/
+    public void openImpiantoCreate() {
+        return;
+    }
+    /*TODO*/
+    public void openMacchinarioCreate() {
+        return;
+    }
+    /*TODO*/
+    public void assignImpiantoToAddetto() {
+        return;
+    }
+    /*TODO*/
+    public void filterByTipologiaInterventi() {
+        return;
+    }
+    /*TODO*/
+    public void filterByTechnicianInterventi() {
+        return;
+    }
+    /*TODO*/
+    public void showOnlyCompletedInterventi() {
+        return;
+    }
+    /*TODO*/
+    public void openInterventiImpiantocreate() {
+        return;
+    }
+
+    /*TODO*/
+    public void openInterventiMacchinarioCreate() {
+        return;
+    }
 }
