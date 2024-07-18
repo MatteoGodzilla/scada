@@ -263,14 +263,94 @@ Assegnazione del controllo di un impianto agli addetti SCADA | 1/mese | 1
 Inserimento di un nuovo impianto nel database | 1/mese | 1
 
 ## Schemi di navigazione e tabelle degli accessi
-## Raffinamento dello schema (eliminazione gerarchie, valori multipli, ...)
-
+## Raffinamento dello schema
+Dopo avere realizzato lo schema concettuale, ovvero quello Entity-Relationship, ora passiamo alla fase di progettazione logica. Per fare questo ristrutturiamo i costrutti che non possono essere rappresentati nel modello logico.
+Per prima cosa, procediamo alla scelta degli identificatori principali. Questa operazione è stata abbastanza rapida in quanto in alcune entità sono state mantenute le chiavi identificative dello schema concettuale, mentre per altre è stata scelta una combinazione di numeri e sigle (ad esempio per identificare un impianto è stato scelto di utilizzare un codice unito alla sigla della provincia in cui è situato).
+Successivamente, siamo passati all'eliminazione dell'unico attributo multivalore composto dello schema E-R. Nell'entità `MACC_EOLICO` infatti, è presente `specifiche` con cardinalità 1-N. Questo attributo indica le caratteristiche di produzione di energia da parte del macchinario eolico identificato dal `codice`. Per eliminare questo attributo si è scelto di creare un'altra entità separata, `MACC_EOLICO_SPECIFICHE` in cui sono stati inseriti gli attributi che identitificano un singolo macchinario e sono stati aggiunti quelli che componevano l'attributo multivalore (`nodi` e `kwh`). Sottolineiamo che l'attributo `nodi` fa parte dell'identificatore principale perché i Kwh dipendono dai nodi di vento e dal macchinario specifico.
+Infine, abbiamo realizzato l'eliminazione delle 4 gerarchie di generalizzazione. Per la generalizzazione dell'entità `IMPIANTO` è stato deciso di fare un collasso verso l'alto, eliminando quindi le sottoclassi perché non avevano nessun attributo particolare e perciò sono state "inglobate" all'interno della superclasse con l'aggiunta dell'attributo `tipologia` per differenziare il tipo di impianto. Questo attributo fa riferimento alla nuova entità `TIPOLOGIA` che appunto distingue la tipologia dell'impianto tra eolico, fotovoltaico e biogas.
+La gerarchia che aveva come superclasse l'entità `INSTALLAZIONE` è stata eliminata mantenendo tutte le entità e collegandole con associazioni. L'entità `INSTALLAZIONE` è stata rinominata in `MACCHINARIO`, mentre nelle sottoclassi sono stati aggiunti gli attributi necessari ad identificare l'impianto in cui sono stati installati (`codiceImpianto` e `siglaProvincia`). Allo stesso modo, è stata gestita la gerarchia con superclasse l'entità `INTERVENTO`. È stata aggiunta l'entità `INT_TIPO` che permette in base alla tipologia di intervento scelto di determinare se è relativo a un macchinario oppure a un impianto. Nell'entità `INTERVENTO` è stato aggiunto l'attributo opzionale `usernameTecnico` perché può darsi che nessun tecnico si sia ancora assegnato quell'intervento.
+L'ultima gerarchia che manca da eliminare è quella della generalizzazione dell'entità `UTENTE` in cui è stato operato un collasso verso il basso, eliminando di fatto l'entità `UTENTE` e inserendo i suoi attributi all'interno delle 3 sottoclassi. Questo tipo di collasso è stato realizzato per evitare di perdere le associazioni che legavano gli addetti agli impianti e i tecnici agli interventi.
 
 ## Analisi delle ridondanze
 Lo schema concettuale, e di conseguenza quello logico, sono stati progettati volutamente rimuovendo le ridondanze, cioè siamo stati attenti a non inserire attributi per valori che potevano essere ricavati da operazioni su altri attributi.
 ![Logico-final](Logico_final.png)
 
 ## Traduzione di entità e associazioni in relazioni
+Tutte le entità che fanno parte del modello logico sono state tradotte nel seguente schema relazionale. Il campo sottolineato corrisponde alla chiave primaria, mentre quelli segnati con un asterisco sono i campi opzionali. Con FK indichiamo l'importazione delle chiavi esterne.
+
+TIPOLOGIA(<ins>codice</ins>, descrizione)
+
+PROVINCIA(<ins>sigla</ins>, regione)
+
+IMPIANTO(<ins>siglaProvincia</ins>, <ins>codiceImpianto</ins>, indirizzo, area, uomoInSito, tipologia)
+- FK: siglaProvicnia REFERENCES Provincia
+- FK: tipologia REFERENCES Tipologia
+
+USR_ADDETTO(<ins>username</ins>, password, nome, cognome, regione)
+
+USR_TECNICO(<ins>username</ins>, password, nome, cognome, siglaProvincia)
+- FK: siglaProvincia REFERENCES Provincia
+
+USR_RESPONSABILE(<ins>username</ins>, password, nome, cognome, regione)
+
+MONITORAGGIO(<ins>siglaProvincia</ins>, <ins>codice</ins>, <ins>usernameAddetto</ins>)
+- FK: (siglaProvincia, codice) REFERENCES Impianto
+- FK: usernameAddetto REFERENCES Usr_addetto
+
+IMP_RILEVAZIONE(<ins>siglaProvincia</ins>, <ins>codiceImpianto</ins>, <ins>data</ins>, vento, uv)
+- FK: (siglaProvincia, codiceImpianto) REFERENCES Impianto
+
+MACC_STATUS(<ins>tipo</ins>, descrizione)
+
+MODELLO(<ins>azienda</ins>, <ins>nome</ins>, area)
+
+GARANZIA(<ins>azienda</ins>, <ins>nomeModello</ins>, <ins>durataAnni</ins>, costo, descrizione)
+- FK: (azienda, nomeModello) REFERENCES Modello
+
+COMPONENTE(<ins>azienda</ins>, <ins>codice</ins>, descrizione, msrp)
+
+COMP_MODELLO(<ins>aziendaComponente</ins>, <ins>codiceComponente</ins>, <ins>aziendaModello</ins>, <ins>nomeModello</ins>)
+- FK: (aziendaComponente, codiceComponente) REFERENCES Componente
+- FK: (aziendaModello, nomeModello) REFERENCES Modello
+
+MACCHINARIO(<ins>codiceInstallazione</ins>, dataInstallazione, tipologia, azienda, nomeModello, durataGaranzia, status)
+- FK: tipologia REFERENCES Tipologia
+- FK: (azienda, nomeModello) REFERENCES Modello
+- FK: status REFERENCES Macc_status
+
+MACC_PRODUZIONE(<ins>codiceInstallazione</ins>, <ins>timestamp</ins>, kwh)
+- FK: codiceInstallazione REFERENCES macchinario
+
+MACC_EOLICO(<ins>siglaProvincia</ins>, <ins>codiceImpianto</ins>, <ins>codiceInterno</ins>, codiceInstallazione)
+- FK: (siglaProvincia, codiceImpianto) REFERENCES Impianto
+- Unique(codiceInstallazione)
+
+MACC_EOLICO_SPECIFICHE(<ins>siglaProvincia</ins>, <ins>codiceImpianto</ins>, <ins>codice</ins>, <ins>nodi</ins>, kwh)
+- FK: (siglaProvincia, codiceImpianto, codice) REFERENCES Macc_eolico
+
+MACC_FOTOVOLTAICO(<ins>siglaProvincia</ins>, <ins>codiceImpianto</ins>, <ins>codiceInterno</ins>, codiceInstallazione, celle, kwhMax, angolo)
+- FK: (siglaProvincia, codiceImpianto) REFERENCES Impianto
+- Unique(codiceInstallazione)
+
+MACC_BIOGAS(<ins>siglaProvincia</ins>, <ins>codiceImpianto</ins>, <ins>codiceInterno</ins>, codiceInstallazione, kwhOttimo, kgbatteri, kgUmido)
+- FK: (siglaProvincia, codiceImpianto) REFERENCES Impianto
+- Unique(codiceInstallazione)
+
+INT_TIPO(<ins>tipo</ins>, descrizione)
+
+INTERVENTO(<ins>codice</ins>, note*, completato, usernameResponsabile, usernameTecnico*, tipo)
+- FK: usernameResponsabile REFERENCES Usr_responsabile
+- FK: usernameTecnico REFERENCES Usr_tecnico
+- FK: tipo REFERENCES Int_tipo
+
+INT_IMPIANTO(<ins>codiceIntervento</ins>, <ins>siglaProvincia</ins>, <ins>codiceImpianto</ins>)
+- FK: (siglaProvincia, codiceImpianto) REFERENCES Impianto
+- FK: codiceInterevento REFERENCES Intervento
+
+INT_MACCHINARIO(<ins>codiceInstallazione</ins>, <ins>codiceIntervento</ins>)
+- FK: codiceInterevento REFERENCES Intervento
+- FK: codiceInstallazione REFERENCES Macchinario
+
 ## Traduzione delle operazioni in SQL
 Siccome l'applicazione non ricava i dati dal database attraverso una query unica, ma attraverso sotto query multiple, bisogna specificare come vengono eseguite in base ai vari parametri
 
