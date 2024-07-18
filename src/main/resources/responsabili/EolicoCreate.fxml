@@ -1,40 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Scene?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.stage.Stage?>
 
-<TitledPane animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="504.0" prefWidth="622.0" text="Installazione turbina eolica" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
-  <content>
-    <AnchorPane minHeight="0.0" minWidth="0.0">
-         <children>
-            <Label layoutX="23.0" layoutY="185.0" text="Azienda produttrice:" />
-            <ComboBox layoutX="23.0" layoutY="203.0" prefHeight="30.0" prefWidth="200.0" />
-            <Label layoutX="251.0" layoutY="185.0" text="Modello del macchinario:" />
-            <ComboBox layoutX="251.0" layoutY="203.0" prefHeight="30.0" prefWidth="200.0" />
-            <Label layoutX="23.0" layoutY="258.0" text="Durata della garanzia:" />
-            <ComboBox layoutX="23.0" layoutY="276.0" prefHeight="30.0" prefWidth="200.0" />
-            <Label layoutX="24.0" layoutY="327.0" text="Costo garanzia:" />
-            <TextField editable="false" layoutX="107.0" layoutY="321.0" prefHeight="30.0" prefWidth="110.0" />
-            <Label layoutX="223.0" layoutY="327.0" prefHeight="18.0" prefWidth="13.0" text="€" />
-            <Label layoutX="252.0" layoutY="258.0" text="Descrizione garanzia:" />
-            <TextArea editable="false" layoutX="253.0" layoutY="276.0" prefHeight="90.0" prefWidth="200.0" />
-            <Label layoutX="26.0" layoutY="14.0" text="Macchinari presenti in impianto:" />
-            <TextField editable="false" layoutX="26.0" layoutY="32.0" prefHeight="30.0" prefWidth="193.0" />
-            <Label layoutX="246.0" layoutY="14.0" text="Spazio disponibile in impianto:" />
-            <TextField editable="false" layoutX="246.0" layoutY="32.0" onAction="#filterBySpace" prefHeight="30.0" prefWidth="193.0" />
-            <Button layoutX="24.0" layoutY="395.0" mnemonicParsing="false" onAction="#createTurbina" prefHeight="44.0" prefWidth="276.0" text="Installa Turbina" />
-            <Label layoutX="24.0" layoutY="80.0" text="Provincia impianto interessato:" />
-            <TextField editable="false" layoutX="23.0" layoutY="98.0" prefHeight="30.0" prefWidth="193.0" />
-            <Label layoutX="246.0" layoutY="80.0" text="Tipologia del macchinario:" />
-            <TextField editable="false" layoutX="246.0" layoutY="98.0" prefHeight="30.0" prefWidth="193.0" />
-            <Label layoutX="463.0" layoutY="185.0" text="Area occupata:" />
-            <TextField editable="false" layoutX="462.0" layoutY="203.0" prefHeight="30.0" prefWidth="100.0" />
-            <Label layoutX="568.0" layoutY="209.0" text="m^2" />
-         </children></AnchorPane>
-  </content>
-</TitledPane>
+<Stage xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.responsabili.EolicoCreateController">
+    <scene>
+        <Scene>
+            <AnchorPane prefHeight="444.0" prefWidth="421.0">
+            <children>
+               <TextField fx:id="textCodImpianto" layoutX="14.0" layoutY="31.0" />
+               <TextField fx:id="textSpazioDisponibile" layoutX="227.0" layoutY="31.0" />
+               <TextField fx:id="textProvinciaImpianto" layoutX="14.0" layoutY="87.0" />
+               <TextField fx:id="textTipologiaImpianto" layoutX="227.0" layoutY="87.0" />
+               <ComboBox fx:id="comboModelloMacchinario" layoutX="14.0" layoutY="165.0" onAction="#filterByModello" prefWidth="150.0" />
+               <ComboBox fx:id="comboDurataGaranzia" layoutX="227.0" layoutY="163.0" onAction="#showInfoGaranzia" prefWidth="150.0" />
+               <TextField fx:id="textAreaOccupata" layoutX="14.0" layoutY="290.0" />
+               <TextField fx:id="textCostoGaranzia" layoutX="228.0" layoutY="289.0" />
+               <TextArea fx:id="textDescrizioneGaranzia" layoutX="227.0" layoutY="215.0" prefHeight="52.0" prefWidth="150.0" />
+               <Button layoutX="101.0" layoutY="349.0" mnemonicParsing="false" onAction="#createPannello" text="INSTALLA PANNELLO FOTOVOLTAICO" />
+               <Label layoutX="14.0" layoutY="14.0" text="Codice impianto:" />
+               <Label layoutX="228.0" layoutY="14.0" text="Spazio disponibile:" />
+               <Label layoutX="14.0" layoutY="69.0" text="Provincia Impianto:" />
+               <Label layoutX="227.0" layoutY="69.0" text="Tipologia impianto:" />
+               <Label layoutX="14.0" layoutY="147.0" text="Modello del macchinario:" />
+               <Label layoutX="227.0" layoutY="146.0" text="Durata della garanzia:" />
+               <Label layoutX="15.0" layoutY="272.0" text="Area occupata:" />
+               <Label layoutX="168.0" layoutY="294.0" text="m^2" />
+               <Label layoutX="228.0" layoutY="198.0" text="Descrizione della garanzia:" />
+               <Label layoutX="228.0" layoutY="270.0" text="Costo garanzia:" />
+               <Label layoutX="390.0" layoutY="293.0" text="€" />
+               <ComboBox fx:id="comboAziendaMacchinario" layoutX="14.0" layoutY="218.0" onAction="#filterByAzienda" prefWidth="150.0" />
+               <Label layoutX="14.0" layoutY="200.0" text="Azienda del macchinario:" />
+            </children></AnchorPane>
+        </Scene>
+    </scene>
+</Stage>
