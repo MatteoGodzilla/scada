@@ -35,19 +35,19 @@ public class SQLResponsabili {
     """;
 
     public static String CALCOLO_SPAZIO_DISPONIBILE_BIOGAS = """
-        SELECT SUM(M.area) FROM MODELLO M WHERE M.azienda, M.nomeModello IN 
+        SELECT SUM(M.area) FROM MODELLO M WHERE M.azienda, M.nomeModello IN
         (SELECT MA.azienda, MA.nomeModello FROM MACCHINARIO MA WHERE MA.codiceInstallazione IN
         (SELECT MB.codiceInstallazione FROM MACC_BIOGAS MB WHERE MB.codiceImpianto = ?));
     """;
 
     public static String CALCOLO_SPAZIO_DISPONIBILE_EOLICO = """
-        SELECT SUM(M.area) FROM MODELLO M WHERE M.azienda, M.nomeModello IN 
+        SELECT SUM(M.area) FROM MODELLO M WHERE M.azienda, M.nomeModello IN
         (SELECT MA.azienda, MA.nomeModello FROM MACCHINARIO MA WHERE MA.codiceInstallazione IN
         (SELECT ME.codiceInstallazione FROM MACC_EOLICO ME WHERE ME.codiceImpianto = ?));
     """;
 
     public static String CALCOLO_SPAZIO_DISPONIBILE_FOTOVOLTAICO = """
-        SELECT SUM(M.area) FROM MODELLO M WHERE M.azienda, M.nomeModello IN 
+        SELECT SUM(M.area) FROM MODELLO M WHERE M.azienda, M.nomeModello IN
         (SELECT MA.azienda, MA.nomeModello FROM MACCHINARIO MA WHERE MA.codiceInstallazione IN
         (SELECT MF.codiceInstallazione FROM MACC_FOTOVOLTAICO MF WHERE MF.codiceImpianto = ?));
     """;
@@ -57,13 +57,13 @@ public class SQLResponsabili {
     """;
 
     public static String LISTA_TECNICI_REGIONALI = """
-        SELECT T.username FROM USR_TECNICO WHERE T.siglaProvincia IN 
+        SELECT T.username FROM USR_TECNICO WHERE T.siglaProvincia IN
         (SELECT P.siglaProvincia FROM PROVINCIA P WHERE P.regione = ?);
     """;
 
     public static String IMPIANTI_REGIONALI = """
         SELECT I.siglaProvincia, I.indirizzo, I.area, I.tipologia FROM IMPIANTO I
-        WHERE I.siglaProvincia IN (SELECT P.siglaProvincia FROM PROVINCIA P 
+        WHERE I.siglaProvincia IN (SELECT P.siglaProvincia FROM PROVINCIA P
         WHERE P.regione = ?);
     """;
 

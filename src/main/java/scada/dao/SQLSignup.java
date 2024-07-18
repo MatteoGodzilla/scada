@@ -9,8 +9,23 @@ public class SQLSignup {
         SELECT DISTINCT(regione) FROM PROVINCIA;
     """;
 
+    public static String CHECK_TECNICO = """
+        SELECT COUNT(username) FROM USR_TECNICO
+        where username = ?;
+    """;
+
+    public static String CHECK_ADDETTO = """
+        SELECT COUNT(username) FROM USR_ADDETTO
+        where username = ?;
+    """;
+
+    public static String CHECK_RESPONSABILI = """
+        SELECT COUNT(username) FROM USR_RESPONSABILE
+        where username = ?;
+    """;
+
     public static String REGISTER_TECNICO = """
-        INSERT INTO USR_TECNICO(username, password, nome, cognome, provincia)
+        INSERT INTO USR_TECNICO(username, password, nome, cognome, siglaProvincia)
         VALUE (?, ?, ?, ?, ?);
     """;
 

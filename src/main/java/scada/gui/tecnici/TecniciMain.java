@@ -23,6 +23,7 @@ public class TecniciMain extends StageController {
     public ListView<TecniciMainRowData> assignedList;
     public ListView<TecniciMainRowData> availableList;
     private String username;
+    private String provincia;
 
     public static TecniciMain newInstance(String username){
         return GuiConstructor.createInstance("/tecnici/tecnici-main.fxml", (TecniciMain instance, Stage stage)->{
@@ -73,6 +74,7 @@ public class TecniciMain extends StageController {
                     }
                 }
             });
+            instance.getTecniciInfo();
             instance.refresh();
         });
     }
@@ -133,7 +135,7 @@ public class TecniciMain extends StageController {
                 int type_int = result.getInt(2);
                 String desc_int = result.getString(3);
                 var data = getRowData(id_int, type_int, desc_int);
-                System.out.println(data);
+                // System.out.println(data);
                 if(data != null){
                     availableList.getItems().add(data);
                 }
@@ -143,36 +145,48 @@ public class TecniciMain extends StageController {
         }
     }
 
+    private void getTecniciInfo(){
+        try (var stmt = DAO.getDB().prepareStatement(SQLTecnici.GET_PROVINCIA)) {
+            stmt.setString(1, username);
+            ResultSet result = stmt.executeQuery();
+            result.next();
+            provincia = result.getString(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private TecniciMainRowData getRowData(int id_int, int type_int, String desc_int){
         switch(type_int){
-            case 1:{
+            case 1:
                 //Controllo preventivo
                 try (var macc_stmt = DAO.getDB().prepareStatement(SQLTecnici.INT_MACCHINARIO)) {
+                    System.out.println("1");
                     macc_stmt.setInt(1, id_int);
                     ResultSet macc = macc_stmt.executeQuery();
                     macc.next();
                     int inst_code = macc.getInt(1);
                     Macchinario macchinario = Macchinario.findFromInstCode(inst_code);
                     Impianto impianto = Impianto.findFromMacchinario(macchinario);
-
-                    return new TecniciMainRowData(id_int, type_int, desc_int, impianto, macchinario);
+                    if(impianto.getProvincia().equals(provincia))
+                        return new TecniciMainRowData(id_int, type_int, desc_int, impianto, macchinario);
                 } catch (SQLException e){
                     e.printStackTrace();
                 }
                 break;
-            }
             case 2:
                 //Sostituzione parti
                 try (var macc_stmt = DAO.getDB().prepareStatement(SQLTecnici.INT_MACCHINARIO)) {
                     //Controllo preventivo
+                    System.out.println("2");
                     macc_stmt.setInt(1, id_int);
                     ResultSet macc = macc_stmt.executeQuery();
                     macc.next();
                     int inst_code = macc.getInt(1);
                     Macchinario macchinario = Macchinario.findFromInstCode(inst_code);
                     Impianto impianto = Impianto.findFromMacchinario(macchinario);
-
-                    return new TecniciMainRowData(id_int, type_int, desc_int, impianto, macchinario);
+                    if(impianto.getProvincia().equals(provincia))
+                        return new TecniciMainRowData(id_int, type_int, desc_int, impianto, macchinario);
                 } catch (SQLException e){
                     e.printStackTrace();
                 }
@@ -180,11 +194,13 @@ public class TecniciMain extends StageController {
             case 3:
                 //Dismissione impianto
                 try (var imp_stmt = DAO.getDB().prepareStatement(SQLTecnici.INT_IMPIANTO)) {
+                    System.out.println("3");
                     imp_stmt.setInt(1, id_int);
                     ResultSet imp = imp_stmt.executeQuery();
                     imp.next();
                     Impianto impianto = Impianto.findFromCodiceProvincia(imp.getInt(1), imp.getString(2));
-                    return new TecniciMainRowData(id_int, type_int, desc_int, impianto, null);
+                    if(impianto.getProvincia().equals(provincia))
+                        return new TecniciMainRowData(id_int, type_int, desc_int, impianto, null);
                 } catch (SQLException e){
                     e.printStackTrace();
                 }
