@@ -1,3 +1,11 @@
+<p style="font-size:10em;">SCADA</p>
+
+Carletti Lorenzo (matr. 0001069213)
+
+Catena Matteo (matr. 0001070908)
+
+Dall'Ara Lorenzo (matr. 0001068964)
+
 # Introduzione
 Questo progetto consiste nella realizzazione di un sistema informatico che sia alla base della gestione di impianti energetici da fonti rinnovabili.
 Questo sistema informatico si suddivide in quattro sotto-sistemi:
@@ -110,7 +118,7 @@ I responsabili possono:
 Lo schema Entity-Relationship si compone di 22 entità, di 15 associazioni e di 4 gerarchie, tutte e 4 del tipo totali ed esclusive.
 Lo schema può essere suddiviso in 4 parti principali (impianti, modelli, interventi e utenti) che discuteremo dopo aver presentato in una tabella tutte le entità e tutte le associazioni con una loro breve descrizione.
 Nome | Tipo | Descrizione
-:---: |:---: | :---:
+:---: |:---: | :---
 IMPIANTO | E | Rappresenta una struttura composta da uno o più macchinari
 EOLICO | E | Una tipologia di impianto
 FOTOVOLTAICO | E | Una tipologia di impianto
@@ -179,6 +187,48 @@ Questo è lo schema generale del database, ottenuto unendo le 4 strutture analiz
 
 # Progettazione logica
 ## Stima del volume dei dati
+Nella tabella seguente viene mostrata la stima del carico dei dati che il database deve contenere:
+
+Nome | Tipo | Cardinalità
+:---: |:---: | :---:
+IMPIANTO | E | 600
+EOLICO | E | 200
+FOTOVOLTAICO | E | 200
+BIOGAS | E | 200
+RILEVAZIONE_UV | E | 73000
+RILEVAZIONE_VENTO | E | 73000
+MACC_EOLICO | E | 2000
+MACC_FOTOVOLTAICO | E | 2000
+MACC_BIOGAS | E | 2000
+INSTALLAZIONE | E | 6000
+PRODUZIONE | E | 2000000
+MODELLO | E | 60
+GARANZIA | E | 150
+COMPONENTE | E | 100
+PROVINCIA | E | 107
+UTENTE | E | 5100
+TECNICO | E | 4000
+ADDETTO | E | 1000
+RESPONSABILE | E | 100
+INTERVENTO | E | 300000
+INT_IMPIANTO | E | 100000
+INT_MACCHINARIO | E | 200000
+Monitora | A | 10000
+Situato | A | 600
+Assegnazione | A | 4000
+Accettazione | A | 200000
+OpImpianto | A | 100000
+OpMacchinario | A | 200000
+CompBiogas | A | 2000
+MeteoFotovoltaico | A | 73000
+CompFotovoltaico | A | 2000
+MeteoEolico | A | 73000
+CompEolico | A | 2000
+ProdStorica | A | 2000000
+Riferimento | A | 6000
+CompModello | A | 240
+OffertaGaranzie | A | 150
+
 ## Descrizione delle operazioni principali e stima della loro frequenza
 ### Addetti
 ### Tecnici
@@ -189,7 +239,7 @@ diviso per le varie parti?
 ## Analisi delle ridondanze
 ## Traduzione di entità e associazioni in relazioni
 ## Traduzione delle operazioni in SQL
-Siccome l'applicazione non ricava i dati dal database attraverso una query unica, ma attraverso sotto query multipl, bisogna specificare come vengono eseguite in base ai vari parametri
+Siccome l'applicazione non ricava i dati dal database attraverso una query unica, ma attraverso sotto query multiple, bisogna specificare come vengono eseguite in base ai vari parametri
 
 # Progettazione dell'applicazione
 ## Descrizione dell'architettura dell'applicazione realizzata, con screenshot
