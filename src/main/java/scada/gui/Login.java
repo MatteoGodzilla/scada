@@ -10,6 +10,7 @@ import scada.dao.SQLLogin;
 import scada.gui.addetti.Addetto;
 import scada.gui.fxml.GuiConstructor;
 import scada.gui.fxml.StageController;
+import scada.gui.responsabili.ResponsabiliMain;
 import scada.gui.tecnici.TecniciMain;
 
 import java.sql.PreparedStatement;
@@ -72,6 +73,8 @@ public class Login extends StageController {
                         break;
                     case 2:
                         //open window Responsabili
+                        ResponsabiliMain responsabili = ResponsabiliMain.newInstance(username.getText());
+                        responsabili.getStage().show();
                         break;
                 }
                 stage.hide();

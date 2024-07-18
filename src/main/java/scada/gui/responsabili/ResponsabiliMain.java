@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -24,6 +25,7 @@ public class ResponsabiliMain extends StageController {
     public static ResponsabiliMain newInstance(String username) {
         return GuiConstructor.createInstance("/responsabili/ResponsabileDashboard.fxml", (ResponsabiliMain instance, Stage stage)-> {
             TableColumn<Integer, String> codiceImpianto = new TableColumn<>(); /*FIXME: UNDERSTAND HOW TO INSERT THE VALUES IN A GOOD WAY, THIS IS ONLY A SAMPLE */
+            instance.tabellaImpiantiGestione.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
             instance.stage = stage;
             instance.username = username;
             instance.tabellaImpiantiGestione.setRowFactory(listaImpianti -> {
