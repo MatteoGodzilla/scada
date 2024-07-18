@@ -263,6 +263,149 @@ Assegnazione del controllo di un impianto agli addetti SCADA | 1/mese | 1
 Inserimento di un nuovo impianto nel database | 1/mese | 1
 
 ## Schemi di navigazione e tabelle degli accessi
+### Tecnici
+Le seguenti operazioni possono essere eseguite soltanto dopo un login con successo del tecnico, quindi si assume che le informazioni relative al tecnico (username, nome, cognome, provincia) siano note a priori.
+
+#### Operazione 1: Accettazione degli interventi
+Si assume per questa operazione che il tecnico abbia già il codice dell'intervento da accettare
+Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
+|:---:|:---:|:---:|:---:|:---:|
+Accettazione | A | S | 1 | 120/mese
+
+#### Operazione 2: Visualizzazione degli interventi già accettati
+Per tutti gli interventi vengono visualizzate le informazioni relative all'impianto dove il tecnico deve operare e, se presente, anche le informazioni sul macchinario.
+A causa delle diverse tipologie di intervento, le informaizoni vengono ricavate attraverso due percorsi diversi che coinvolgono entità e associazioni diverse.
+
+Caso 1: Intervento relativo ad un impianto
+Per questa tipologia di interventi sono disponibili soltanto le informazioni riguardanti gli impianti.
+![TODO: IMMAGINE]()
+Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
+|:---:|:---:|:---:|:---:|:---:|
+Accettazione | A | L | 50 | 4000/mese
+INT_IMPIANTO | E | L | 17 | 1360/mese
+OpImpianto | A | L | 17 | 1360/mese
+IMPIANTO | E | L | 17* | 1360/mese
+
+Caso 2: Intervento relativo ad un macchinario
+Per questa tipologia di interventi bisogna mostrare sia le informazioni sugli impianti sia quelle riguardanti i macchinari coinvolti.
+L'operazione è complicata per due motivi:
+- dall'intervento specifico si hanno informazioni soltanto riguardanti i macchinari, mentre quelli degli impianti devono essere ricavati in un secondo momento
+- per ricavare le informazioni sull'impianto si attraversano entità e associazioni diverse in base alla tipologia del macchinario.
+Questo secondo punto in realtà non impatta i calcoli della tabella seguente, perchè le entità e le associazioni percorse sono simili tra loro.
+![TODO: IMMAGINE]()
+
+Nella tabella seguente con `TIPO` si indica una tipologia specifica tra `Fotovoltaico`, `Eolico` e `Biogas`
+Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
+|:---:|:---:|:---:|:---:|:---:|
+Accettazione | A | L | 50 | 4000/mese
+INT_MACCHINARIO | E | L | 50 | 4000/mese
+OpMacchinario | A | L | 33 | 2640/mese
+MACC_`TIPO` | E | L | 33* | 2640/mese
+Comp`TIPO` | A | L | 33* | 2640/mese
+`TIPO` | E | L | 33* | 2640/mese
+
+*Queste stime considerano il caso pessimo in cui sulle associazioni OpImpianto e OpMacchinario le letture che vengono fatte si riferiscono a impianti/macchinari tutti diversi tra loro.
+È stata fatta questa scelta dato che nel dominio analizzato è raro avere più interventi che fanno riferimento alle stesse entità.
+
+#### Operazione 3: Segnalazione agli addetti SCADA della presenza di un tecnico all'interno di un impianto
+Per questa operazione si assume che il codice dell'impianto e la sua provincia sia già noto perchè visualizzato in precedenza attraverso l'operazione 2
+Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
+|:---:|:---:|:---:|:---:|:---:|
+IMPIANTO | E | S | 1 | 80/mese
+
+#### Operazione 4: Mettere in manutenzione un macchinario
+Per questa operazione si assume che il codice installazione di un macchinario sia già stato ricavato in precedenza, grazie alla visualizzazione delle informazioni con l'operazione 2
+Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
+|:---:|:---:|:---:|:---:|:---:|
+INSTALLAZIONE | E | S | 1 | 80/mese
+
+#### Operazione 5: Confermare la conclusione di un intervento, con possibilità di scrivere note al responsabile
+Per questa operazione si assume che il codice dell'intervento da concludere sia già stato ricavato in precedenza, grazie alla visualizzazione delle informazioni con l'operazione 2
+Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
+|:---:|:---:|:---:|:---:|:---:|
+INTERVENTO | E | S | 1 | 80/mese
+
+### Addetti SCADA
+#### Operazione 1: Avvio/Stop di un macchinario che non sia in manutenzione
+Concetto | Entità/Associ2000000azione | Lettura/Scrittura | Accessi | Accessi al mese
+|:---:|:---:|:---:|:---:|:---:|
+INSTALLAZIONE | E | L | 1 | 40/mese
+INSTALLAZIONE | E | S | 1 | 80/mese
+
+#### Operazione 2: Visualizzazione della presenza di un tecnico all'interno di un impianto
+Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
+|:---:|:---:|:---:|:---:|:---:|
+IMPIANTO | E | L | 1 | 230/mese
+
+#### Operazione 3: Generazione dei report richiesti dai responsabili
+Il report deve essere generato mostrando i valori di produzione dei macchinari che si trovano all'interno di un impianto, di cui si conosce a priori le informazioni.
+![TODO: IMMAGINE]()
+Nella tabella seguente con `TIPO` si indica una tipologia specifica tra `Fotovoltaico`, `Eolico` e `Biogas`
+Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
+|:---:|:---:|:---:|:---:|:---:|
+Comp`TIPO` | A | L | 10 | 40/mese
+MACC_`TIPO` | E | L | 10 | 40/mese
+ProdStorica | A | L | 3333 | 133320/mese
+PRODUZIONE | E | L | 3333 | 133320/mese
+
+#### Operazione 4: Visualizzazione delle condizioni metereologiche di un impianto
+Questa operazione coinvolge entità e associazioni differenti in base alla tipologia dell'impianto.
+Per entrambi i casi che seguono si visualizzano soltanto l'ultima rilevazione metereologica, non tutto lo storico.
+![TODO: IMMAGINE]()
+
+Caso 1: L'impianto selezionato è di tipo Fotovoltaico
+Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
+|:---:|:---:|:---:|:---:|:---:|
+RILEVAZIONE_UV | E | L | 1 | 20/mese
+
+Caso 2: L'impianto selezionato è di tipo Eolico
+Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
+|:---:|:---:|:---:|:---:|:---:|
+RILEVAZIONE_EOLICO | E | L | 1 | 20/mese
+
+### Responsabili
+#### Operazione 1: Creazione di nuove richieste di interventi
+Questa operazione differisce nelle entità/associazioni coinvolte in base alla tipologia di intervento che si vuole aggiungere
+
+Caso 1: Creazione di un intervento relativo ad un impianto
+Si assume in questo caso che le informazioni relative all'impianto siano già note a priori
+![TODO: IMMAGINE]()
+Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
+|:---:|:---:|:---:|:---:|:---:|
+INT_IMPIANTO | E | S | 1 | 960/mese
+OpImpianto | A | S | 1 | 960/mese
+
+Caso 2: Creazione di un intervento relativo ad un macchinario
+![TODO: IMMAGINE]()
+Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
+|:---:|:---:|:---:|:---:|:---:|
+INT_MACCHINARIO | E | S | 1 | 960/mese
+OpMacchinario | A | S | 1 | 960/mese
+
+#### Operazione 2: Visualizzazione dello storico di tutti gli interventi
+Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
+|:---:|:---:|:---:|:---:|:---:|
+INTERVENTO | E | L | 300000 | 6000000/mese
+
+#### Operazione 3: Visualizzazione delle note di fine intervento scritte dai tecnici
+Questa operazione fa riferimento alla visualizzazione delle note di un specifico intervento, di cui si è ottenuto il codice precedentemente
+Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
+|:---:|:---:|:---:|:---:|:---:|
+INTERVENTO | E | L | 1 | 20/mese
+
+#### Operazione 4: Assegnazione del controllo di un impianto dagli addetti SCADA
+Per semplicità indichiamo nella tabella l'azione di aggiungere un singolo impianto sotto il controllo di un addetto SCADA.
+Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
+|:---:|:---:|:---:|:---:|:---:|
+Monitora | A | S | 1 | 1/mese
+
+#### Operazione 5: Inserimento di un nuovo impianto nel database
+![TODO: IMMAGINE]()
+Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
+|:---:|:---:|:---:|:---:|:---:|
+IMPIANTO | E | S | 1 | 2/mese
+Situato | A | S | 1 | 2/mese
+
 ## Raffinamento dello schema
 Dopo avere realizzato lo schema concettuale, ovvero quello Entity-Relationship, ora passiamo alla fase di progettazione logica. Per fare questo ristrutturiamo i costrutti che non possono essere rappresentati nel modello logico.
 Per prima cosa, procediamo alla scelta degli identificatori principali. Questa operazione è stata abbastanza rapida in quanto in alcune entità sono state mantenute le chiavi identificative dello schema concettuale, mentre per altre è stata scelta una combinazione di numeri e sigle (ad esempio per identificare un impianto è stato scelto di utilizzare un codice unito alla sigla della provincia in cui è situato).
