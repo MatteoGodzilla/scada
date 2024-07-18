@@ -278,7 +278,7 @@ A causa delle diverse tipologie di intervento, le informaizoni vengono ricavate 
 
 Caso 1: Intervento relativo ad un impianto
 Per questa tipologia di interventi sono disponibili soltanto le informazioni riguardanti gli impianti.
-![TODO: IMMAGINE]()
+![Schema Navigazione Intervento Impianto](./navigazione-interventi-impianto.png)
 Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
 |:---:|:---:|:---:|:---:|:---:|
 Accettazione | A | L | 50 | 4000/mese
@@ -292,7 +292,7 @@ L'operazione è complicata per due motivi:
 - dall'intervento specifico si hanno informazioni soltanto riguardanti i macchinari, mentre quelli degli impianti devono essere ricavati in un secondo momento
 - per ricavare le informazioni sull'impianto si attraversano entità e associazioni diverse in base alla tipologia del macchinario.
 Questo secondo punto in realtà non impatta i calcoli della tabella seguente, perchè le entità e le associazioni percorse sono simili tra loro.
-![TODO: IMMAGINE]()
+![Schema Navigazione Intervento Macchinario](./navigazione-interventi-macchinario.png)
 
 Nella tabella seguente con `TIPO` si indica una tipologia specifica tra `Fotovoltaico`, `Eolico` e `Biogas`
 Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
@@ -339,7 +339,7 @@ IMPIANTO | E | L | 1 | 230/mese
 
 #### Operazione 3: Generazione dei report richiesti dai responsabili
 Il report deve essere generato mostrando i valori di produzione dei macchinari che si trovano all'interno di un impianto, di cui si conosce a priori le informazioni.
-![TODO: IMMAGINE]()
+![Schema navigazione Addetti Report](./navigazione-addetti-report.png)
 Nella tabella seguente con `TIPO` si indica una tipologia specifica tra `Fotovoltaico`, `Eolico` e `Biogas`
 Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
 |:---:|:---:|:---:|:---:|:---:|
@@ -351,7 +351,7 @@ PRODUZIONE | E | L | 3333 | 133320/mese
 #### Operazione 4: Visualizzazione delle condizioni metereologiche di un impianto
 Questa operazione coinvolge entità e associazioni differenti in base alla tipologia dell'impianto.
 Per entrambi i casi che seguono si visualizzano soltanto l'ultima rilevazione metereologica, non tutto lo storico.
-![TODO: IMMAGINE]()
+![Schema Navigazione Meteo](./navigazione-meteo.png)
 
 Caso 1: L'impianto selezionato è di tipo Fotovoltaico
 Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
@@ -369,14 +369,14 @@ Questa operazione differisce nelle entità/associazioni coinvolte in base alla t
 
 Caso 1: Creazione di un intervento relativo ad un impianto
 Si assume in questo caso che le informazioni relative all'impianto siano già note a priori
-![TODO: IMMAGINE]()
+![Schema Navigazione Inserimento Intervento Macchinario](./navigazione-inserimento-intervento-impianto.png)
 Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
 |:---:|:---:|:---:|:---:|:---:|
 INT_IMPIANTO | E | S | 1 | 960/mese
 OpImpianto | A | S | 1 | 960/mese
 
 Caso 2: Creazione di un intervento relativo ad un macchinario
-![TODO: IMMAGINE]()
+![Schema Navigazione Inserimento Intervento Macchinario](./navigazione-inserimento-intervento-macchinario.png)
 Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
 |:---:|:---:|:---:|:---:|:---:|
 INT_MACCHINARIO | E | S | 1 | 960/mese
@@ -400,7 +400,7 @@ Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
 Monitora | A | S | 1 | 1/mese
 
 #### Operazione 5: Inserimento di un nuovo impianto nel database
-![TODO: IMMAGINE]()
+![Schema navigazione inserimento nuovo impianto](./navigazione-inserimento-impianto.png)
 Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi al mese
 |:---:|:---:|:---:|:---:|:---:|
 IMPIANTO | E | S | 1 | 2/mese
