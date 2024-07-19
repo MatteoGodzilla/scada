@@ -36,7 +36,7 @@ public class Impianto {
     """;
 
 
-    private Impianto(int codice, String provincia, String indirizzo, float area, boolean uomoInSito, int tipologia) {
+    public Impianto(int codice, String provincia, String indirizzo, float area, boolean uomoInSito, int tipologia) {
         this.codiceImpianto = codice;
         this.siglaProvincia = provincia;
         this.indirizzo = indirizzo;

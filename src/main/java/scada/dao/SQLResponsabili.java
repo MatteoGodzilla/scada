@@ -8,18 +8,18 @@ public class SQLResponsabili {
     """;
 
     public static String LISTA_MACCHINARI_IMPIANTO_FOTOVOLTAICO = """
-        SELECT MF.codiceInstallazione, MF.siglaProvincia, MA.azienda, MA.nomeModello FROM MACC_FOTOVOLTAICO MF
-        JOIN MACCHINARIO MA ON (MF.codiceInstallazione = MA.codiceInstallazione) WHERE MF.codiceImpianto = ?;
+        SELECT MF.codiceInstallazione, MA.dataInstallazione, MA.azienda, MA.nomeModello FROM MACC_FOTOVOLTAICO MF
+        JOIN MACCHINARIO MA ON (MF.codiceInstallazione = MA.codiceInstallazione) WHERE MF.codiceImpianto = ? AND MF.siglaProvincia = ?;
     """;
 
     public static String LISTA_MACCHINARI_IMPIANTO_EOLICO = """
-        SELECT ME.codiceInstallazione, ME.siglaProvincia, MA.azienda, MA.nomeModello FROM MACC_EOLICO ME
-        JOIN MACCHINARIO MA ON (ME.codiceInstallazione = MA.codiceInstallazione) WHERE ME.codiceImpianto = ?;
+        SELECT ME.codiceInstallazione, MA.dataInstallazione, MA.azienda, MA.nomeModello FROM MACC_EOLICO ME
+        JOIN MACCHINARIO MA ON (ME.codiceInstallazione = MA.codiceInstallazione) WHERE ME.codiceImpianto = ? AND MF.siglaProvincia = ?;
     """;
 
     public static String LISTA_MACCHINARI_IMPIANTO_BIOGAS = """
-        SELECT MB.codiceInstallazione, MB.siglaProvincia, MA.azienda, MA.nomeModello FROM MACC_BIOGAS MB
-        JOIN MACCHINARIO MA ON (MB.codiceInstallazione = MA.codiceInstallazione) WHERE MB.codiceImpianto = ?;
+        SELECT MB.codiceInstallazione, MA.dataInstallazione, MA.azienda, MA.nomeModello FROM MACC_BIOGAS MB
+        JOIN MACCHINARIO MA ON (MB.codiceInstallazione = MA.codiceInstallazione) WHERE MB.codiceImpianto = ? AND MF.siglaProvincia = ?;
     """;
 
     public static String GET_REGIONE_BY_USR = """

@@ -18,14 +18,18 @@ public class Macchinario {
     """;
 
 
-    private Macchinario(int codice, String dataInstallazione, int tipologia, String azienda, String nomeModello, int garanzia, int status) {
+    public Macchinario(int codice, String dataInstallazione, int tipologia, String azienda, String nomeModello, int garanzia, int status) {
+        this(codice, dataInstallazione, tipologia, azienda, nomeModello);
+        this.durataGaranzia = garanzia;
+        this.status = status;
+    }
+
+    public Macchinario(int codice, String dataInstallazione, int tipologia, String azienda, String nomeModello) {
         this.codiceInstallazione = codice;
         this.dataInstallazione = dataInstallazione;
         this.tipologia = tipologia;
         this.azienda = azienda;
         this.nomeModello = nomeModello;
-        this.durataGaranzia = garanzia;
-        this.status = status;
     }
 
     public static Macchinario findFromInstCode(int codiceInstallazione){
