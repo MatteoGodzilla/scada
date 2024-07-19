@@ -50,7 +50,7 @@ public class SQLResponsabili {
     """;
 
     public static String MODELLI_MACCHINARI = """
-        SELECT M.azienda, M.nome, M.area FROM MODELLO;
+        SELECT M.azienda, M.nome, M.area FROM MODELLO M;
     """;
 
     private static String CALCOLO_SPAZIO_DISPONIBILE = """
@@ -71,11 +71,11 @@ public class SQLResponsabili {
     """;
 
     public static String LISTA_TIPOLOGIE = """
-        SELECT T.descrizione FROM INT_TIPO;
+        SELECT T.descrizione FROM INT_TIPO T;
     """;
 
     public static String LISTA_TECNICI_REGIONALI = """
-        SELECT T.username FROM USR_TECNICO WHERE T.siglaProvincia IN
+        SELECT T.username FROM USR_TECNICO T WHERE T.siglaProvincia IN
         (SELECT P.siglaProvincia FROM PROVINCIA P WHERE P.regione = ?);
     """;
 
@@ -92,12 +92,12 @@ public class SQLResponsabili {
     """;
 
     public static String ADDETTI_PER_REGIONE = """
-        SELECT A.username, A.nome, A.cognome FROM USR_ADDETTO WHERE A.regione = ?;
+        SELECT A.username, A.nome, A.cognome FROM USR_ADDETTO A WHERE A.regione = ?;
     """;
 
     public static String IMPIANTI_ASSEGNATI_A = """
         SELECT I.codImpianto, I.siglaProvincia, I.indirizzo, I.area, I.tipologia FROM IMPIANTO I
-        WHERE I.codImpianto IN (SELECT m.codiceImpianto FROM MONITORAGGIO M WHERE M.usernameAddetto = ?);
+        WHERE I.codImpianto IN (SELECT M.codiceImpianto FROM MONITORAGGIO M WHERE M.usernameAddetto = ?);
     """;
 
     public static String LISTA_GARANZIE = """
