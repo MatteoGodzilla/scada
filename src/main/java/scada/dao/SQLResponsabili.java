@@ -23,7 +23,7 @@ public class SQLResponsabili {
     """;
 
     public static String GET_REGIONE_BY_USR = """
-        SELECT U.regione FROM USR_RESPONSABILE WHERE U.username = ?;
+        SELECT U.regione FROM USR_RESPONSABILE U WHERE U.username = ?;
     """;
 
     public static String CREAZIONE_INTERVENTI = """
@@ -80,8 +80,8 @@ public class SQLResponsabili {
     """;
 
     public static String IMPIANTI_REGIONALI = """
-        SELECT I.codImpianto, I.siglaProvincia, I.indirizzo, I.area, I.tipologia FROM IMPIANTO I
-        WHERE I.siglaProvincia IN (SELECT P.siglaProvincia FROM PROVINCIA P
+        SELECT I.codiceImpianto, I.siglaProvincia, I.indirizzo, I.area, I.tipologia FROM IMPIANTO I
+        WHERE I.siglaProvincia IN (SELECT P.sigla FROM PROVINCIA P
         WHERE P.regione = ?);
     """;
 

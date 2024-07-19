@@ -25,16 +25,16 @@ public class ResponsabiliMain extends StageController {
     public TableView<Impianto> tabellaImpiantiGestione;
     public TableView<Macchinario> tabellaMacchinariGestione;
     /* CAMPI PER GESTIONE ADDETTI/IMPIANTI */
-    public TableView<AddettoRecord> tabellaAddetti;
-    public TableView<Impianto> tabellaImpiantiAddetto;
-    
+    public TableView<AddettoRecord> tabellaAddettiAssegnazione;
+    public TableView<Impianto> tabellaImpiantiAssegnazione;
+
     public static ResponsabiliMain newInstance(String username) {
         return GuiConstructor.createInstance("/responsabili/ResponsabileDashboard.fxml", (ResponsabiliMain instance, Stage stage)-> {
             instance.stage = stage;
             instance.username = username;
             /* QUERY PER IMPOSTARE ANCHE LA REGIONE DELL'UTENTE LOGGATO */
             try(PreparedStatement stmntRegione = DAO.getDB().prepareStatement(SQLResponsabili.GET_REGIONE_BY_USR)) {
-                stmntRegione.setString(0, instance.username);
+                stmntRegione.setString(1, instance.username);
                 ResultSet response = stmntRegione.executeQuery();
                 while(response.next()) {
                     instance.regione = response.getString(0);
@@ -101,8 +101,8 @@ public class ResponsabiliMain extends StageController {
                         break;
                     }
                     try(PreparedStatement stmnt = DAO.getDB().prepareStatement(selectedQuery)) {
-                        stmnt.setInt(0, clickedRow.getCodice());
-                        stmnt.setString(1, clickedRow.getProvincia());
+                        stmnt.setInt(1, clickedRow.getCodice());
+                        stmnt.setString(2, clickedRow.getProvincia());
                         ResultSet response = stmnt.executeQuery();
                         while(response.next()) {
                             Macchinario macchinario = new Macchinario(
@@ -129,26 +129,26 @@ public class ResponsabiliMain extends StageController {
             colonnaUsernameAddetto.setCellValueFactory(new PropertyValueFactory<>("username"));
             colonnaNomeAddetto.setCellValueFactory(new PropertyValueFactory<>("nome"));
             colonnaCognomeAddetto.setCellValueFactory(new PropertyValueFactory<>("cognome"));
-            instance.tabellaAddetti.getColumns().add(colonnaUsernameAddetto);
-            instance.tabellaAddetti.getColumns().add(colonnaNomeAddetto);
-            instance.tabellaAddetti.getColumns().add(colonnaCognomeAddetto);
+            instance.tabellaAddettiAssegnazione.getColumns().add(colonnaUsernameAddetto);
+            instance.tabellaAddettiAssegnazione.getColumns().add(colonnaNomeAddetto);
+            instance.tabellaAddettiAssegnazione.getColumns().add(colonnaCognomeAddetto);
 
             try (PreparedStatement stmntImpianti = DAO.getDB().prepareStatement(SQLResponsabili.ADDETTI_PER_REGIONE)) {
-                stmntImpianti.setString(0, instance.regione);
+                stmntImpianti.setString(1, instance.regione);
                 ResultSet result = stmntImpianti.executeQuery();
                 while(result.next()){
                     AddettoRecord addetto = new AddettoRecord(result.getString("username"),
                     result.getString("nome"),
                     result.getString("cognome") 
                     );
-                    instance.tabellaAddetti.getItems().add(addetto);
+                    instance.tabellaAddettiAssegnazione.getItems().add(addetto);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            instance.tabellaAddetti.setRowFactory(listaImpianti -> {
+            instance.tabellaAddettiAssegnazione.setRowFactory(listaImpianti -> {
                 /* PULISCI TABELLA IMPIANTI */
-                instance.tabellaImpiantiAddetto.getItems().clear();
+                instance.tabellaImpiantiAssegnazione.getItems().clear();
                 /* PROCEDURA DI RIEMPIMENTO TABELLA IMPIANTI ASSEGNATI AD ADDETTO */
                 TableRow<AddettoRecord> row = new TableRow<>();
                 row.setOnMouseClicked(event -> {
@@ -156,7 +156,7 @@ public class ResponsabiliMain extends StageController {
                     if (! row.isEmpty() && event.getButton()==MouseButton.PRIMARY && event.getClickCount() == 1) {
                         AddettoRecord clickedRow = row.getItem();
                         try(PreparedStatement stmnt = DAO.getDB().prepareStatement(SQLResponsabili.IMPIANTI_ASSEGNATI_A)) {
-                            stmnt.setString(0, clickedRow.getUsername());
+                            stmnt.setString(1, clickedRow.getUsername());
                             ResultSet response = stmnt.executeQuery();
                             while(response.next()) {
                                 Impianto impianto = new Impianto(response.getInt("codImpianto"),
@@ -166,7 +166,7 @@ public class ResponsabiliMain extends StageController {
                          false,
                                     response.getInt("tipologia")
                                 );
-                                instance.tabellaImpiantiAddetto.getItems().add(impianto);
+                                instance.tabellaImpiantiAssegnazione.getItems().add(impianto);
                             }
                         } catch (SQLException e) {
                             e.printStackTrace();
@@ -181,7 +181,7 @@ public class ResponsabiliMain extends StageController {
     private void loadImpiantiGestione() {
         tabellaImpiantiGestione.getItems().clear();
         try (PreparedStatement stmntImpianti = DAO.getDB().prepareStatement(SQLResponsabili.IMPIANTI_REGIONALI)) {
-            stmntImpianti.setString(0, this.regione);
+            stmntImpianti.setString(1, this.regione);
             ResultSet result = stmntImpianti.executeQuery();
             while(result.next()){
                 Impianto impianto = new Impianto(result.getInt("codImpianto"),
