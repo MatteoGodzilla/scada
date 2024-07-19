@@ -37,7 +37,7 @@ public class ResponsabiliMain extends StageController {
                 stmntRegione.setString(1, instance.username);
                 ResultSet response = stmntRegione.executeQuery();
                 while(response.next()) {
-                    instance.regione = response.getString(0);
+                    instance.regione = response.getString("regione");
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
