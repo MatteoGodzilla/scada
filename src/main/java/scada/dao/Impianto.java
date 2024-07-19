@@ -5,8 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Impianto {
-    private int codiceImpianto;
-    private String siglaProvincia;
+    private int codice;
+    private String provincia;
     private String indirizzo;
     private float area;
     private boolean uomoInSito;
@@ -37,8 +37,8 @@ public class Impianto {
 
 
     public Impianto(int codice, String provincia, String indirizzo, float area, boolean uomoInSito, int tipologia) {
-        this.codiceImpianto = codice;
-        this.siglaProvincia = provincia;
+        this.codice = codice;
+        this.provincia = provincia;
         this.indirizzo = indirizzo;
         this.area = area;
         this.uomoInSito = uomoInSito;
@@ -93,11 +93,11 @@ public class Impianto {
     //Getters
 
     public int getCodice() {
-        return codiceImpianto;
+        return codice;
     }
 
     public String getProvincia() {
-        return siglaProvincia;
+        return provincia;
     }
 
     public String getIndirizzo() {

@@ -45,22 +45,22 @@ public class ResponsabiliMain extends StageController {
             /* TABPANE CONTENENTE LA GESTIONE MACCHINARI E IMPIANTI */
             /* INIZIALIZZAZIONE COLONNE TABELLA IMPIANTI */
             TableColumn<Impianto, String> colonnaCodiceImpianto = new TableColumn<>("Codice impianto");
-            TableColumn<Impianto, String> colonnaProvincia = new TableColumn<>("Provincia");
-            TableColumn<Impianto, String> colonnaIndirizzo = new TableColumn<>("Indirizzo");
-            TableColumn<Impianto, String> colonnaAreaImpianto = new TableColumn<>("Dimensioni");
-            TableColumn<Impianto, String> colonnaTipologiaImpianto = new TableColumn<>("Tipologia Impianto");
+            TableColumn<Impianto, String> colonnaProvinciaImpiantoGestione = new TableColumn<>("Provincia");
+            TableColumn<Impianto, String> colonnaIndirizzoImpiantoGestione = new TableColumn<>("Indirizzo");
+            TableColumn<Impianto, String> colonnaAreaImpiantoGestione = new TableColumn<>("Dimensioni");
+            TableColumn<Impianto, String> colonnaTipologiaImpiantoGestione = new TableColumn<>("Tipologia Impianto");
             /* BINDING CON GETTER CLASSE IMPIANTO */
-            colonnaCodiceImpianto.setCellValueFactory(new PropertyValueFactory<>("codiceImpianto"));
-            colonnaProvincia.setCellValueFactory(new PropertyValueFactory<>("siglaProvincia"));
-            colonnaIndirizzo.setCellValueFactory(new PropertyValueFactory<>("indirizzo"));
-            colonnaAreaImpianto.setCellValueFactory(new PropertyValueFactory<>("area"));
-            colonnaTipologiaImpianto.setCellValueFactory(new PropertyValueFactory<>("tipologia"));
+            colonnaCodiceImpianto.setCellValueFactory(new PropertyValueFactory<>("codice"));
+            colonnaProvinciaImpiantoGestione.setCellValueFactory(new PropertyValueFactory<>("provincia"));
+            colonnaIndirizzoImpiantoGestione.setCellValueFactory(new PropertyValueFactory<>("indirizzo"));
+            colonnaAreaImpiantoGestione.setCellValueFactory(new PropertyValueFactory<>("area"));
+            colonnaTipologiaImpiantoGestione.setCellValueFactory(new PropertyValueFactory<>("tipologia"));
             /* AGGIUNTA DELLE COLONNE ALLA TABLEVIEW IMPIANTI */
             instance.tabellaImpiantiGestione.getColumns().add(colonnaCodiceImpianto);
-            instance.tabellaImpiantiGestione.getColumns().add(colonnaProvincia);
-            instance.tabellaImpiantiGestione.getColumns().add(colonnaIndirizzo);
-            instance.tabellaImpiantiGestione.getColumns().add(colonnaAreaImpianto);
-            instance.tabellaImpiantiGestione.getColumns().add(colonnaTipologiaImpianto);
+            instance.tabellaImpiantiGestione.getColumns().add(colonnaProvinciaImpiantoGestione);
+            instance.tabellaImpiantiGestione.getColumns().add(colonnaIndirizzoImpiantoGestione);
+            instance.tabellaImpiantiGestione.getColumns().add(colonnaAreaImpiantoGestione);
+            instance.tabellaImpiantiGestione.getColumns().add(colonnaTipologiaImpiantoGestione);
             /* INIZIALIZZAZIONE COLONNE TABELLA MACCHINARI */
             TableColumn<Macchinario, String> colonnaCodiceMacchinario = new TableColumn<>("Codice");
             TableColumn<Macchinario, String> colonnaDataInstallazioneMacchinario = new TableColumn<>("Data Installazione");
@@ -85,7 +85,6 @@ public class ResponsabiliMain extends StageController {
             /* PROCEDURA DI RIEMPIMENTO TABELLA MACHINARI IMPIANTO SPECIFICO */
             TableRow<Impianto> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
-                /* FIXME: NON CONVINTO CHE LA CONDIZIONE SIA CORRETTA */
                 if (! row.isEmpty() && event.getButton()==MouseButton.PRIMARY && event.getClickCount() == 1) {
                     Impianto clickedRow = row.getItem();
                     String selectedQuery = "";
@@ -133,6 +132,24 @@ public class ResponsabiliMain extends StageController {
             instance.tabellaAddettiAssegnazione.getColumns().add(colonnaNomeAddetto);
             instance.tabellaAddettiAssegnazione.getColumns().add(colonnaCognomeAddetto);
 
+            TableColumn<Impianto, String> colonnaCodiceImpiantoAssegnazione = new TableColumn<>("Codice impianto");
+            TableColumn<Impianto, String> colonnaProvinciaImpiantoAssegnazione = new TableColumn<>("Provincia");
+            TableColumn<Impianto, String> colonnaIndirizzoImpiantoAssegnazione = new TableColumn<>("Indirizzo");
+            TableColumn<Impianto, String> colonnaAreaImpiantoAssegnazione = new TableColumn<>("Dimensioni");
+            TableColumn<Impianto, String> colonnaTipologiaImpiantoAssegnazione = new TableColumn<>("Tipologia Impianto");
+            /* BINDING CON GETTER CLASSE IMPIANTO */
+            colonnaCodiceImpiantoAssegnazione.setCellValueFactory(new PropertyValueFactory<>("codice"));
+            colonnaProvinciaImpiantoAssegnazione.setCellValueFactory(new PropertyValueFactory<>("provincia"));
+            colonnaIndirizzoImpiantoAssegnazione.setCellValueFactory(new PropertyValueFactory<>("indirizzo"));
+            colonnaAreaImpiantoAssegnazione.setCellValueFactory(new PropertyValueFactory<>("area"));
+            colonnaTipologiaImpiantoAssegnazione.setCellValueFactory(new PropertyValueFactory<>("tipologia"));
+            /* AGGIUNTA DELLE COLONNE ALLA TABLEVIEW IMPIANTI ASSEGNAZIONE */
+            instance.tabellaImpiantiAssegnazione.getColumns().add(colonnaCodiceImpiantoAssegnazione);
+            instance.tabellaImpiantiAssegnazione.getColumns().add(colonnaProvinciaImpiantoAssegnazione);
+            instance.tabellaImpiantiAssegnazione.getColumns().add(colonnaIndirizzoImpiantoAssegnazione);
+            instance.tabellaImpiantiAssegnazione.getColumns().add(colonnaAreaImpiantoAssegnazione);
+            instance.tabellaImpiantiAssegnazione.getColumns().add(colonnaTipologiaImpiantoAssegnazione);
+
             try (PreparedStatement stmntImpianti = DAO.getDB().prepareStatement(SQLResponsabili.ADDETTI_PER_REGIONE)) {
                 stmntImpianti.setString(1, instance.regione);
                 ResultSet result = stmntImpianti.executeQuery();
@@ -152,14 +169,13 @@ public class ResponsabiliMain extends StageController {
                 /* PROCEDURA DI RIEMPIMENTO TABELLA IMPIANTI ASSEGNATI AD ADDETTO */
                 TableRow<AddettoRecord> row = new TableRow<>();
                 row.setOnMouseClicked(event -> {
-                    /* FIXME: NON CONVINTO CHE LA CONDIZIONE SIA CORRETTA */
                     if (! row.isEmpty() && event.getButton()==MouseButton.PRIMARY && event.getClickCount() == 1) {
                         AddettoRecord clickedRow = row.getItem();
                         try(PreparedStatement stmnt = DAO.getDB().prepareStatement(SQLResponsabili.IMPIANTI_ASSEGNATI_A)) {
                             stmnt.setString(1, clickedRow.getUsername());
                             ResultSet response = stmnt.executeQuery();
                             while(response.next()) {
-                                Impianto impianto = new Impianto(response.getInt("codImpianto"),
+                                Impianto impianto = new Impianto(response.getInt("codiceImpianto"),
                                     response.getString("siglaProvincia"),
                                     response.getString("indirizzo"),
                                     response.getFloat("area"),
@@ -184,13 +200,14 @@ public class ResponsabiliMain extends StageController {
             stmntImpianti.setString(1, this.regione);
             ResultSet result = stmntImpianti.executeQuery();
             while(result.next()){
-                Impianto impianto = new Impianto(result.getInt("codImpianto"),
+                Impianto impianto = new Impianto(result.getInt("codiceImpianto"),
                  result.getString("siglaProvincia"),
                  result.getString("indirizzo"),
                  result.getFloat("area"),
                  false,
                  result.getInt("tipologia")
                 );
+                System.out.println(impianto.getCodice());
                 tabellaImpiantiGestione.getItems().add(impianto);
             }
         } catch (SQLException e) {
