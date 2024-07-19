@@ -395,7 +395,7 @@ Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi/mese
 |:---:|:---:|:---:|:---:|:---:|
 INTERVENTO | E | L | 1 | 20/mese
 
-#### Operazione 4: Assegnazione del controllo di un impianto dagli addetti SCADA
+#### Operazione 4: Assegnazione del controllo di un impianto agli addetti SCADA
 Per semplicità indichiamo nella tabella l'azione di aggiungere un singolo impianto sotto il controllo di un addetto SCADA.
 Concetto | Entità/Associazione | Lettura/Scrittura | Accessi | Accessi/mese
 |:---:|:---:|:---:|:---:|:---:|
@@ -413,6 +413,7 @@ Dopo avere realizzato lo schema concettuale, ovvero quello Entity-Relationship, 
 Per prima cosa, procediamo alla scelta degli identificatori principali. Questa operazione è stata abbastanza rapida in quanto in alcune entità sono state mantenute le chiavi identificative dello schema concettuale, mentre per altre è stata scelta una combinazione di numeri e sigle (ad esempio per identificare un impianto è stato scelto di utilizzare un codice unito alla sigla della provincia in cui è situato).
 Successivamente, siamo passati all'eliminazione dell'unico attributo multivalore composto dello schema E-R. Nell'entità `MACC_EOLICO` infatti, è presente `specifiche` con cardinalità 1-N. Questo attributo indica le caratteristiche di produzione di energia da parte del macchinario eolico identificato dal `codice`. Per eliminare questo attributo si è scelto di creare un'altra entità separata, `MACC_EOLICO_SPECIFICHE` in cui sono stati inseriti gli attributi che identitificano un singolo macchinario e sono stati aggiunti quelli che componevano l'attributo multivalore (`nodi` e `kwh`). Sottolineiamo che l'attributo `nodi` fa parte dell'identificatore principale perché i Kwh dipendono dai nodi di vento e dal macchinario specifico.
 Infine, abbiamo realizzato l'eliminazione delle 4 gerarchie di generalizzazione. Per la generalizzazione dell'entità `IMPIANTO` è stato deciso di fare un collasso verso l'alto, eliminando quindi le sottoclassi perché non avevano nessun attributo particolare e perciò sono state "inglobate" all'interno della superclasse con l'aggiunta dell'attributo `tipologia` per differenziare il tipo di impianto. Questo attributo fa riferimento alla nuova entità `TIPOLOGIA` che appunto distingue la tipologia dell'impianto tra eolico, fotovoltaico e biogas.
+Eliminando le sottoclassi si è reso necessario fondere le entità `RILEVAZIONE_VENTO` e `RILEVAZIONE_UV` nell'entità `IMP_RILEVAZIONE` che memorizza le rilevazioni meteo delle stazioni degli impinati fotovoltaici ed eolici.
 La gerarchia che aveva come superclasse l'entità `INSTALLAZIONE` è stata eliminata mantenendo tutte le entità e collegandole con associazioni. L'entità `INSTALLAZIONE` è stata rinominata in `MACCHINARIO`, mentre nelle sottoclassi sono stati aggiunti gli attributi necessari ad identificare l'impianto in cui sono stati installati (`codiceImpianto` e `siglaProvincia`). Allo stesso modo, è stata gestita la gerarchia con superclasse l'entità `INTERVENTO`. È stata aggiunta l'entità `INT_TIPO` che permette in base alla tipologia di intervento scelto di determinare se è relativo a un macchinario oppure a un impianto. Nell'entità `INTERVENTO` è stato aggiunto l'attributo opzionale `usernameTecnico` perché può darsi che nessun tecnico si sia ancora assegnato quell'intervento.
 L'ultima gerarchia che manca da eliminare è quella della generalizzazione dell'entità `UTENTE` in cui è stato operato un collasso verso il basso, eliminando di fatto l'entità `UTENTE` e inserendo i suoi attributi all'interno delle 3 sottoclassi. Questo tipo di collasso è stato realizzato per evitare di perdere le associazioni che legavano gli addetti agli impianti e i tecnici agli interventi.
 
@@ -497,7 +498,127 @@ INT_MACCHINARIO(<ins>codiceInstallazione</ins>, <ins>codiceIntervento</ins>)
 - FK: codiceInstallazione REFERENCES Macchinario
 
 ## Traduzione delle operazioni in SQL
-Siccome l'applicazione non ricava i dati dal database attraverso una query unica, ma attraverso sotto query multiple, bisogna specificare come vengono eseguite in base ai vari parametri
+In questa parte dividiamo le operazioni da svolgere per tipo di utente e le traduciamo in query SQL. Spesso, l'applicazione non ricava i dati dal database attraverso una query unica, ma attraverso più sottoquery multiple. Comunque in questa sezione riportiamo le query più esemplificative per le operazioni descritte.
+I campi racchiusi tra parentesi angolari <> rappresentano parametri che vengono sostituiti dall'applicazione a run-time con i valori corretti.
+
+### Tecnici
+<ins>Accettare degli interventi</ins>
+
+    UPDATE INTERVENTO
+    SET usernameTecnico = <usernameTecnico>
+    WHERE codice = <codiceIntervento>
+
+<ins>Vedere gli interventi già accettati</ins>
+
+    SELECT i.codice, i.tipo, t.descrizione FROM INTERVENTO i
+    JOIN INT_TIPO t on (i.tipo = t.tipo)
+    WHERE usernameTecnico = <usernameTecnico> AND completato = 0
+
+<ins>Segnalare agli addetti SCADA della presenza di un tecnico all'interno di un impianto</ins>
+
+    UPDATE IMPIANTO
+    SET uomoInSito = 1
+    WHERE (codiceImpianto = <codiceImpianto> AND siglaProvincia = <siglaProvincia>)
+
+<ins>Mettere in manutenzione un macchinario</ins>
+
+    UPDATE MACCHINARIO
+    SET status = 3
+    WHERE codiceInstallazione = <codiceInstallazione>
+
+<ins>Confermare la conclusione di un intervento, con possibilità di scrivere note al responsabile</ins>
+
+    UPDATE INTERVENTO
+    SET completato = 1, note = <notePerResponsabile>
+    WHERE codice = <codiceIntervento>
+
+### Addetti
+<ins>Avviare un macchinario che non sia in manutenzione</ins>
+
+    UPDATE MACCHINARIO
+    SET status = 1
+    WHERE (codiceInstallazione = <codiceInstallazione> AND status = 2)
+
+<ins>Fermare un macchinario che non sia in manutenzione</ins>
+
+    UPDATE MACCHINARIO
+    SET status = 2
+    WHERE (codiceInstallazione = <codiceInstallazione> AND status = 1)
+
+<ins>Visualizzazione della presenza di un tecnico all'interno di un impianto</ins>
+
+Questa operazione viene svolta insieme alla visualizzazione dei parametri generali di un impianto.
+
+    SELECT M.codiceImpianto, M.siglaProvincia, I.uomoInSito
+    FROM MONITORAGGIO M JOIN IMPIANTO I ON (M.codiceImpianto = I.codiceImpianto)
+    AND (M.siglaProvincia = I.siglaProvincia)
+    WHERE usernameAddetto = <usernameAddetto>
+    AND I.inOperazione = 1
+
+<ins>Generazione dei report richiesti dai responsabili</ins>
+
+Prima è necessario ricavare la tipologia dell'impianto di cui si vuole ottenere il report:
+
+    SELECT I.tipologia
+    FROM IMPIANTO I JOIN MONITORAGGIO M ON (I.codiceImpianto = M.codiceImpianto)
+    AND (I.siglaProvincia = M.siglaProvincia)
+    WHERE M.codiceImpianto = <codiceImpianto>
+    AND M.siglaProvincia = <siglaProvincia>
+    AND I.inOperazione = 1
+
+Poi in base alla tipologia restituita dalla query eseguo una delle 3 query seguenti:
+
+    SELECT MP.codiceInstallazione, MP.ts, MP.kwh
+    FROM MACC_PRODUZIONE MP JOIN MACC_FOTOVOLTAICO MF ON (MP.codiceInstallazione = MF.codiceInstallazione)
+    WHERE MF.codiceImpianto = <codiceImpianto>
+    AND MF.siglaProvincia = <siglaProvincia>
+
+    SELECT MP.codiceInstallazione, MP.ts, MP.kwh
+    FROM MACC_PRODUZIONE MP JOIN MACC_EOLICO ME ON (MP.codiceInstallazione = ME.codiceInstallazione)
+    WHERE ME.codiceImpianto = <codiceImpianto>
+    AND ME.siglaProvincia = <siglaProvincia>
+
+    SELECT MP.codiceInstallazione, MP.ts, MP.kwh
+    FROM MACC_PRODUZIONE MP JOIN MACC_BIOGAS MB ON (MP.codiceInstallazione = MB.codiceInstallazione)
+    WHERE MB.codiceImpianto = <codiceImpianto>
+    AND MB.siglaProvincia = <siglaProvincia>
+
+<ins>Visualizzazione delle condizioni metereologiche di un impianto</ins>
+
+Per questa query si assume che l'impianto selezionato possieda una stazione meteo.
+
+    SELECT IR.ts, IR.vento, IR.uv
+    FROM IMP_RILEVAZIONE IR
+    WHERE IR.codiceImpianto = <codiceImpianto>
+    AND IR.siglaProvincia = <siglaProvincia>
+    ORDER BY IR.ts DESC
+    LIMIT 1
+
+### Responsabili
+<ins>Creare nuove richieste di interventi</ins>
+
+    INSERT INTO INTERVENTO (usernameResponsabile, tipo) VALUES (<usernameResponsabile>, <tipo>)
+
+<ins>Visualizzare lo storico di tutti gli interventi</ins>
+
+    SELECT I.codice, I.tipo, T.descrizione FROM INTERVENTO I
+    JOIN INT_TIPO T on (I.tipo = T.tipo)
+
+<ins>Visualizzazione delle note di fine intervento scritte dai tecnici</ins>
+
+Questa operazione viene svolta insieme alla visualizzazione dei parametri generali di un intervento.
+
+    SELECT I.codice, I.tipo, T.descrizione, I.note FROM INTERVENTO I
+    JOIN INT_TIPO T on (I.tipo = T.tipo)
+    WHERE completato = 1
+
+<ins>Assegnazione del controllo di un impianto agli addetti SCADA</ins>
+
+    INSERT INTO MONITORAGGIO (usernameAddetto, codiceImpianto, siglaProvincia) VALUES (<usernameAddetto>, <codiceImpianto>, <siglaProvincia>)
+
+<ins>Inserimento di un nuovo impianto nel database</ins>
+
+    INSERT INTO IMPIANTO (siglaProvincia, indirizzo, area, tipologia) VALUES (<siglaProvincia>, <indirizzo>, <area>, <tipologia>)
 
 # Progettazione dell'applicazione
 ## Descrizione dell'architettura dell'applicazione realizzata, con screenshot
