@@ -39,7 +39,7 @@ public class SQLResponsabili {
     """;
 
     public static String INTERVENTI_COMPLETATI = """
-        SELECT I.codice, I.tipo, T.descrizione FROM INTERVENTO I
+        SELECT I.codice, I.tipo, T.descrizione, I.note FROM INTERVENTO I
         JOIN INT_TIPO T on (I.tipo = T.tipo)
         WHERE completato = 1;
     """;
@@ -55,7 +55,7 @@ public class SQLResponsabili {
 
     private static String CALCOLO_SPAZIO_DISPONIBILE = """
         SELECT SUM(M.area) FROM MODELLO M WHERE M.azienda, M.nomeModello IN
-        (SELECT MA.azienda, MA.nomeModello FROM MACCHINARIO MA WHERE MA.codiceInstallazione IN 
+        (SELECT MA.azienda, MA.nomeModello FROM MACCHINARIO MA WHERE MA.codiceInstallazione IN
     """;
 
     public static String CALCOLO_SPAZIO_DISPONIBILE_BIOGAS = CALCOLO_SPAZIO_DISPONIBILE+"""

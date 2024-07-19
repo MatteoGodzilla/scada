@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.control.Accordion;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
@@ -57,7 +59,10 @@ public class Addetto extends StageController{
                     m.labelTime.setText("Ultima rilevazione: " + result.getString("IR.ts"));
                     m.getStage().show();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    Alert a = new Alert(AlertType.CONFIRMATION);
+                    a.setTitle("Meteo");
+                    a.setHeaderText("Questo è un impianto che non possiede una stazione meteo!");
+                    a.showAndWait();
                 }
             }
         }
