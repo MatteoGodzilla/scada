@@ -504,121 +504,157 @@ I campi racchiusi tra parentesi angolari <> rappresentano parametri che vengono 
 ### Tecnici
 <ins>Accettare degli interventi</ins>
 
-    UPDATE INTERVENTO
-    SET usernameTecnico = <usernameTecnico>
-    WHERE codice = <codiceIntervento>
+```SQL
+UPDATE INTERVENTO
+SET usernameTecnico = <usernameTecnico>
+WHERE codice = <codiceIntervento>
+```
 
 <ins>Vedere gli interventi già accettati</ins>
 
-    SELECT i.codice, i.tipo, t.descrizione FROM INTERVENTO i
-    JOIN INT_TIPO t on (i.tipo = t.tipo)
-    WHERE usernameTecnico = <usernameTecnico> AND completato = 0
+```SQL
+SELECT i.codice, i.tipo, t.descrizione FROM INTERVENTO i
+JOIN INT_TIPO t on (i.tipo = t.tipo)
+WHERE usernameTecnico = <usernameTecnico> AND completato = 0
+```
 
 <ins>Segnalare agli addetti SCADA della presenza di un tecnico all'interno di un impianto</ins>
 
-    UPDATE IMPIANTO
-    SET uomoInSito = 1
-    WHERE (codiceImpianto = <codiceImpianto> AND siglaProvincia = <siglaProvincia>)
+```SQL
+UPDATE IMPIANTO
+SET uomoInSito = 1
+WHERE (codiceImpianto = <codiceImpianto>
+AND siglaProvincia = <siglaProvincia>)
+```
 
 <ins>Mettere in manutenzione un macchinario</ins>
 
-    UPDATE MACCHINARIO
-    SET status = 3
-    WHERE codiceInstallazione = <codiceInstallazione>
+```SQL
+UPDATE MACCHINARIO
+SET status = 3
+WHERE codiceInstallazione = <codiceInstallazione>
+```
 
 <ins>Confermare la conclusione di un intervento, con possibilità di scrivere note al responsabile</ins>
 
-    UPDATE INTERVENTO
-    SET completato = 1, note = <notePerResponsabile>
-    WHERE codice = <codiceIntervento>
+```SQL
+UPDATE INTERVENTO
+SET completato = 1, note = <notePerResponsabile>
+WHERE codice = <codiceIntervento>
+```
 
 ### Addetti
 <ins>Avviare un macchinario che non sia in manutenzione</ins>
 
-    UPDATE MACCHINARIO
-    SET status = 1
-    WHERE (codiceInstallazione = <codiceInstallazione> AND status = 2)
+```SQL
+UPDATE MACCHINARIO
+SET status = 1
+WHERE (codiceInstallazione = <codiceInstallazione> AND status = 2)
+```
 
 <ins>Fermare un macchinario che non sia in manutenzione</ins>
 
-    UPDATE MACCHINARIO
-    SET status = 2
-    WHERE (codiceInstallazione = <codiceInstallazione> AND status = 1)
+```SQL
+UPDATE MACCHINARIO
+SET status = 2
+WHERE (codiceInstallazione = <codiceInstallazione> AND status = 1)
+```
 
 <ins>Visualizzazione della presenza di un tecnico all'interno di un impianto</ins>
 
 Questa operazione viene svolta insieme alla visualizzazione dei parametri generali di un impianto.
-
-    SELECT M.codiceImpianto, M.siglaProvincia, I.uomoInSito
-    FROM MONITORAGGIO M JOIN IMPIANTO I ON (M.codiceImpianto = I.codiceImpianto)
-    AND (M.siglaProvincia = I.siglaProvincia)
-    WHERE usernameAddetto = <usernameAddetto>
-    AND I.inOperazione = 1
+```SQL
+SELECT M.codiceImpianto, M.siglaProvincia, I.uomoInSito
+FROM MONITORAGGIO M JOIN IMPIANTO I
+ON (M.codiceImpianto = I.codiceImpianto)
+AND (M.siglaProvincia = I.siglaProvincia)
+WHERE usernameAddetto = <usernameAddetto>
+AND I.inOperazione = 1
+```
 
 <ins>Generazione dei report richiesti dai responsabili</ins>
 
 Prima è necessario ricavare la tipologia dell'impianto di cui si vuole ottenere il report:
-
-    SELECT I.tipologia
-    FROM IMPIANTO I JOIN MONITORAGGIO M ON (I.codiceImpianto = M.codiceImpianto)
-    AND (I.siglaProvincia = M.siglaProvincia)
-    WHERE M.codiceImpianto = <codiceImpianto>
-    AND M.siglaProvincia = <siglaProvincia>
-    AND I.inOperazione = 1
+```SQL
+SELECT I.tipologia
+FROM IMPIANTO I JOIN MONITORAGGIO M
+ON (I.codiceImpianto = M.codiceImpianto)
+AND (I.siglaProvincia = M.siglaProvincia)
+WHERE M.codiceImpianto = <codiceImpianto>
+AND M.siglaProvincia = <siglaProvincia>
+AND I.inOperazione = 1
+```
 
 Poi in base alla tipologia restituita dalla query eseguo una delle 3 query seguenti:
+```SQL
+SELECT MP.codiceInstallazione, MP.ts, MP.kwh
+FROM MACC_PRODUZIONE MP JOIN MACC_FOTOVOLTAICO MF
+ON (MP.codiceInstallazione = MF.codiceInstallazione)
+WHERE MF.codiceImpianto = <codiceImpianto>
+AND MF.siglaProvincia = <siglaProvincia>
 
-    SELECT MP.codiceInstallazione, MP.ts, MP.kwh
-    FROM MACC_PRODUZIONE MP JOIN MACC_FOTOVOLTAICO MF ON (MP.codiceInstallazione = MF.codiceInstallazione)
-    WHERE MF.codiceImpianto = <codiceImpianto>
-    AND MF.siglaProvincia = <siglaProvincia>
+SELECT MP.codiceInstallazione, MP.ts, MP.kwh
+FROM MACC_PRODUZIONE MP JOIN MACC_EOLICO ME
+ON (MP.codiceInstallazione = ME.codiceInstallazione)
+WHERE ME.codiceImpianto = <codiceImpianto>
+AND ME.siglaProvincia = <siglaProvincia>
 
-    SELECT MP.codiceInstallazione, MP.ts, MP.kwh
-    FROM MACC_PRODUZIONE MP JOIN MACC_EOLICO ME ON (MP.codiceInstallazione = ME.codiceInstallazione)
-    WHERE ME.codiceImpianto = <codiceImpianto>
-    AND ME.siglaProvincia = <siglaProvincia>
-
-    SELECT MP.codiceInstallazione, MP.ts, MP.kwh
-    FROM MACC_PRODUZIONE MP JOIN MACC_BIOGAS MB ON (MP.codiceInstallazione = MB.codiceInstallazione)
-    WHERE MB.codiceImpianto = <codiceImpianto>
-    AND MB.siglaProvincia = <siglaProvincia>
+SELECT MP.codiceInstallazione, MP.ts, MP.kwh
+FROM MACC_PRODUZIONE MP JOIN MACC_BIOGAS MB
+ON (MP.codiceInstallazione = MB.codiceInstallazione)
+WHERE MB.codiceImpianto = <codiceImpianto>
+AND MB.siglaProvincia = <siglaProvincia>
+```
 
 <ins>Visualizzazione delle condizioni metereologiche di un impianto</ins>
 
 Per questa query si assume che l'impianto selezionato possieda una stazione meteo.
-
-    SELECT IR.ts, IR.vento, IR.uv
-    FROM IMP_RILEVAZIONE IR
-    WHERE IR.codiceImpianto = <codiceImpianto>
-    AND IR.siglaProvincia = <siglaProvincia>
-    ORDER BY IR.ts DESC
-    LIMIT 1
+```SQL
+SELECT IR.ts, IR.vento, IR.uv
+FROM IMP_RILEVAZIONE IR
+WHERE IR.codiceImpianto = <codiceImpianto>
+AND IR.siglaProvincia = <siglaProvincia>
+ORDER BY IR.ts DESC
+LIMIT 1
+```
 
 ### Responsabili
 <ins>Creare nuove richieste di interventi</ins>
 
-    INSERT INTO INTERVENTO (usernameResponsabile, tipo) VALUES (<usernameResponsabile>, <tipo>)
+```SQL
+INSERT INTO INTERVENTO(usernameResponsabile, tipo)
+VALUES (<usernameResponsabile>, <tipo>)
+```
 
 <ins>Visualizzare lo storico di tutti gli interventi</ins>
 
-    SELECT I.codice, I.tipo, T.descrizione FROM INTERVENTO I
-    JOIN INT_TIPO T on (I.tipo = T.tipo)
+```SQL
+SELECT I.codice, I.tipo, T.descrizione FROM INTERVENTO I
+JOIN INT_TIPO T ON (I.tipo = T.tipo)
+```
 
 <ins>Visualizzazione delle note di fine intervento scritte dai tecnici</ins>
 
 Questa operazione viene svolta insieme alla visualizzazione dei parametri generali di un intervento.
-
-    SELECT I.codice, I.tipo, T.descrizione, I.note FROM INTERVENTO I
-    JOIN INT_TIPO T on (I.tipo = T.tipo)
-    WHERE completato = 1
+```SQL
+SELECT I.codice, I.tipo, T.descrizione, I.note FROM INTERVENTO I
+JOIN INT_TIPO T ON (I.tipo = T.tipo)
+WHERE completato = 1
+```
 
 <ins>Assegnazione del controllo di un impianto agli addetti SCADA</ins>
 
-    INSERT INTO MONITORAGGIO (usernameAddetto, codiceImpianto, siglaProvincia) VALUES (<usernameAddetto>, <codiceImpianto>, <siglaProvincia>)
+```SQL
+INSERT INTO MONITORAGGIO(usernameAddetto, codiceImpianto, siglaProvincia)
+VALUES (<usernameAddetto>, <codiceImpianto>, <siglaProvincia>)
+```
 
 <ins>Inserimento di un nuovo impianto nel database</ins>
 
-    INSERT INTO IMPIANTO (siglaProvincia, indirizzo, area, tipologia) VALUES (<siglaProvincia>, <indirizzo>, <area>, <tipologia>)
+```SQL
+INSERT INTO IMPIANTO(siglaProvincia, indirizzo, area, tipologia)
+VALUES (<siglaProvincia>, <indirizzo>, <area>, <tipologia>)
+```
 
 # Progettazione dell'applicazione
 Il sistema informativo si basa su MariaDB, un fork open source molto popolare di MYSQL.
