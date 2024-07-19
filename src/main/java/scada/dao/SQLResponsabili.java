@@ -27,15 +27,15 @@ public class SQLResponsabili {
     """;
 
     public static String CREAZIONE_INTERVENTI = """
-        INSERT (usernameResponsabile, tipo) INTO INTERVENTO VALUES (?, ?);
+        INSERT INTO INTERVENTO (usernameResponsabile, tipo) VALUES (?, ?);
     """;
 
     public static String CREAZIONE_INTERVENTO_MACCHINARIO = """
-        INSERT (codiceInstallazione, codiceIntervento) INTO INT_MACCHINARIO VALUES (?, ?);
+        INSERT INTO INT_MACCHINARIO (codiceInstallazione, codiceIntervento) VALUES (?, ?);
     """;
 
     public static String CREAZIONE_INTERVENTO_IMPIANTO = """
-        INSERT (codiceImpianto, codiceIntervento, siglaProvincia) INTO INT_IMPIANTO VALUES (?, ?, ?);
+        INSERT INTO INT_IMPIANTO (codiceImpianto, codiceIntervento, siglaProvincia) VALUES (?, ?, ?);
     """;
 
     public static String INTERVENTI_COMPLETATI = """
@@ -96,7 +96,7 @@ public class SQLResponsabili {
     """;
 
     public static String IMPIANTI_ASSEGNATI_A = """
-        I.codImpianto, I.siglaProvincia, I.indirizzo, I.area, I.tipologia FROM IMPIANTO I
+        SELECT I.codImpianto, I.siglaProvincia, I.indirizzo, I.area, I.tipologia FROM IMPIANTO I
         WHERE I.codImpianto IN (SELECT m.codiceImpianto FROM MONITORAGGIO M WHERE M.usernameAddetto = ?);
     """;
 
@@ -105,23 +105,27 @@ public class SQLResponsabili {
     """;
 
     public static String CREAZIONE_IMPIANTO = """
-        INSERT (siglaProvincia, indirizzo, area, tipologia) INTO IMPIANTO VALUES (?, ?, ?, ?);
+        INSERT INTO IMPIANTO (siglaProvincia, indirizzo, area, tipologia) VALUES (?, ?, ?, ?);
     """;
 
     public static String CREAZIONE_BIOGAS = """
-        INSERT (codiceImpianto, siglaProvincia, codiceInstallazione, codiceInterno, kwhOttimo, kgBatteri, kgUmido) INTO MACC_BIOGAS VALUES (?, ?, ?, ?, ?, ?, ?);
+        INSERT INTO MACC_BIOGAS (codiceImpianto, siglaProvincia, codiceInstallazione, codiceInterno, kwhOttimo, kgBatteri, kgUmido) VALUES (?, ?, ?, ?, ?, ?, ?);
     """;
 
     public static String CREAZIONE_EOLICO = """
-        INSERT (codiceImpianto, siglaProvincia, codiceInstallazione, codiceInterno) INTO MACC_EOLICO VALUES (?, ?, ?, ?);
+        INSERT INTO MACC_EOLICO (codiceImpianto, siglaProvincia, codiceInstallazione, codiceInterno) VALUES (?, ?, ?, ?);
     """;
 
     public static String CREAZIONE_FOTOVOLTAICO = """
-        INSERT (codiceImpianto, siglaProvincia, codiceInstallazione, codiceInterno, celle, kwhMax, angolo) INTO MACC_FOTOVOLTAICO VALUES (?, ?, ?, ?, ?, ?, ?);
+        INSERT INTO MACC_FOTOVOLTAICO (codiceImpianto, siglaProvincia, codiceInstallazione, codiceInterno, celle, kwhMax, angolo) VALUES (?, ?, ?, ?, ?, ?, ?);
     """;
 
     public static String CREAZIONE_MACCHINARIO = """
-        INSERT (dataInstallazione, tipologia, azienda, nomeModello, durataGaranzia) INTO MACCHINARIO VALUES (?, ?, ?, ?, ?);
+        INSERT INTO MACCHINARIO (dataInstallazione, tipologia, azienda, nomeModello, durataGaranzia) VALUES (?, ?, ?, ?, ?);
+    """;
+
+    public static String ASSEGNA_IMPIANTO_A = """
+        INSERT INTO MONITORAGGIO (usernameAddetto, codiceImpianto, siglaProvincia) VALUES (?, ?, ?);
     """;
 }
 
