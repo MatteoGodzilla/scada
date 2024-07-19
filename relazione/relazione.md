@@ -621,4 +621,48 @@ Questa operazione viene svolta insieme alla visualizzazione dei parametri genera
     INSERT INTO IMPIANTO (siglaProvincia, indirizzo, area, tipologia) VALUES (<siglaProvincia>, <indirizzo>, <area>, <tipologia>)
 
 # Progettazione dell'applicazione
+Il sistema informativo si basa su MariaDB, un fork open source molto popolare di MYSQL.
+L'applicazione che interagisce con il database è un'applicazione GUI realizzata in Java 17 attraverso la libreria JavaFX. Per il collegamento tra applicazione e database è stata utilizzata la libreria JDBC.
 ## Descrizione dell'architettura dell'applicazione realizzata, con screenshot
+All'avvio dell'applicazione la prima finestra che viene proposta è quella di login
+![Screenshot Login](Screenshot_login.png)
+1. Tipologia dell'utente che desidera entrare
+2. Campo Username
+3. Campo Password
+4. Bottone di login
+5. Link per l'apertura della schermata di registrazione
+
+Da questa schermata è possibile accedere al sistema informatico oppure aprire la finestra relativa alla registrazione di un nuovo utente nel sistema
+![Screenshot Signup](Screenshot_registrazione.png)
+1. Tipologia di utente da registrare
+2. Campo Nome
+3. Campo Cognome
+4. Campo Username
+5. Campo Password
+6. Menù a tendina per l'area di competenza. Se si sta registrando un tecnico vengono elencate le possibili provincie, mentre per gli addetti e per i responsabili vengono elencate le regioni.
+
+In base alla tipologia di utente specificata nella schermata di login si possono aprire tre schermate diverse.
+### Tecnici
+![Screenshot Tecnici](Screenshot_tecnico.png)
+1. Elenco degli interventi già assegnati
+2. Elenco degli interventi disponibili
+3. Intervento singolo già assegnato al tecnico, con le informazioni relative all'impianto da raggiungere
+4. Intervento singolo non ancora assegnato
+5. Bottone per assegnarsi come tecnico di un intervento disponibile
+6. Bottone per mostrare informazioni aggiuntive relative ad un intervento selezionato nell'elenco 1
+7. Bottone per aggiornare i due elenchi degli interventi
+
+### Addetti SCADA
+![Screenshot Addetti](Screenshot_addetto.png)
+1. Informazioni relative ad un impianto
+2. Informazioni relative ad un macchinario nell'impianto aperto
+3. Bottone per avviare un macchinario fermo
+4. Bottone per fermare un macchianrio avviato
+5. Bottone per visualizzare le informazioni metereologiche sull'impianto aperto
+6. Bottone per generare la reportistica relativa all'impianto aperto
+7. Bottone per aggiornare l'elenco degli impianti e dei macchinari
+Nota: Nel caso un macchinario sia in manutenzione i bottoni 3 e 4 vengono disabilitati
+
+### Responsabili
+![Screenshot Responsabili]()
+
