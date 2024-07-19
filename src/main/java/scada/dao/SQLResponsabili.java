@@ -4,7 +4,7 @@ public class SQLResponsabili {
 
     public static String INTERVENTI = """
         SELECT I.codice, I.tipo, T.descrizione FROM INTERVENTO I
-        JOIN INT_TIPO T on (I.tipo = T.tipo);
+        JOIN INT_TIPO T ON (I.tipo = T.tipo);
     """;
 
     public static String LISTA_MACCHINARI_IMPIANTO_FOTOVOLTAICO = """
@@ -40,13 +40,13 @@ public class SQLResponsabili {
 
     public static String INTERVENTI_COMPLETATI = """
         SELECT I.codice, I.tipo, T.descrizione, I.note FROM INTERVENTO I
-        JOIN INT_TIPO T on (I.tipo = T.tipo)
+        JOIN INT_TIPO T ON (I.tipo = T.tipo)
         WHERE completato = 1;
     """;
 
     public static String INTERVENTI_PER_TIPOLOGIA ="""
         SELECT I.codice, I.tipo, T.descrizione FROM INTERVENTO I
-        JOIN INT_TIPO T on (I.tipo = T.tipo) WHERE T.descrizione = ?;
+        JOIN INT_TIPO T ON (I.tipo = T.tipo) WHERE T.descrizione = ?;
     """;
 
     public static String MODELLI_MACCHINARI = """
