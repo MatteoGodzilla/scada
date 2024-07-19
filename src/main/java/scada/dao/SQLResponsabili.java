@@ -86,9 +86,9 @@ public class SQLResponsabili {
     """;
 
     public static String IMPIANTI_NON_ASSEGNATI_A = """
-        SELECT I.codImpianto, I.siglaProvincia, I.indirizzo, I.area, I.tipologia FROM IMPIANTO I
-        WHERE I.codImpianto NOT IN (SELECT M.codiceImpianto FROM MONITORAGGIO M WHERE M.usernameAddetto = ?)
-        AND I.siglaProvincia IN (SELECT P.siglaProvincia FROM PROVINCIA P WHERE P.regione = ?);
+        SELECT I.codiceImpianto FROM IMPIANTO I WHERE I.codiceImpianto NOT IN
+        (SELECT M.codiceImpianto FROM MONITORAGGIO M WHERE M.usernameAddetto = ?)
+        AND I.siglaProvincia IN (SELECT P.sigla FROM PROVINCIA P WHERE P.regione = ?);
     """;
 
     public static String ADDETTI_PER_REGIONE = """
@@ -96,8 +96,8 @@ public class SQLResponsabili {
     """;
 
     public static String IMPIANTI_ASSEGNATI_A = """
-        SELECT I.codImpianto, I.siglaProvincia, I.indirizzo, I.area, I.tipologia FROM IMPIANTO I
-        WHERE I.codImpianto IN (SELECT M.codiceImpianto FROM MONITORAGGIO M WHERE M.usernameAddetto = ?);
+        SELECT I.codiceImpianto, I.siglaProvincia, I.indirizzo, I.area, I.tipologia FROM IMPIANTO I
+        WHERE I.codiceImpianto IN (SELECT M.codiceImpianto FROM MONITORAGGIO M WHERE M.usernameAddetto = ?);
     """;
 
     public static String LISTA_GARANZIE = """
@@ -126,6 +126,10 @@ public class SQLResponsabili {
 
     public static String ASSEGNA_IMPIANTO_A = """
         INSERT INTO MONITORAGGIO (usernameAddetto, codiceImpianto, siglaProvincia) VALUES (?, ?, ?);
+    """;
+
+    public static String GET_PROVINCIE_FROM_REGIONE = """
+        SELECT P.sigla FROM PROVINCIA P WHERE P.regione = ?;
     """;
 }
 

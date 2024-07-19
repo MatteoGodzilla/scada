@@ -3,10 +3,16 @@ package scada.gui.responsabili;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableListBase;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
@@ -27,7 +33,9 @@ public class ResponsabiliMain extends StageController {
     /* CAMPI PER GESTIONE ADDETTI/IMPIANTI */
     public TableView<AddettoRecord> tabellaAddettiAssegnazione;
     public TableView<Impianto> tabellaImpiantiAssegnazione;
-
+    public TextField textUserAddetto;
+    public ComboBox<String> comboProvinciaAssegnazione;
+    public ComboBox<Integer> comboCodiceAssegnazione;
     public static ResponsabiliMain newInstance(String username) {
         return GuiConstructor.createInstance("/responsabili/ResponsabileDashboard.fxml", (ResponsabiliMain instance, Stage stage)-> {
             instance.stage = stage;
@@ -80,12 +88,11 @@ public class ResponsabiliMain extends StageController {
             instance.tabellaImpiantiGestione.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
             /* CONFIGURIAMO EVENTO ON SELECTION DELLA RIGA PER COMPILARE LA TABLEVIEW DEI MACCHINARI */
             instance.tabellaImpiantiGestione.setRowFactory(listaImpianti -> {
-            /* PULISCI TABELLA MACCHINARI */
-            instance.tabellaMacchinariGestione.getItems().clear();
             /* PROCEDURA DI RIEMPIMENTO TABELLA MACHINARI IMPIANTO SPECIFICO */
             TableRow<Impianto> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (! row.isEmpty() && event.getButton()==MouseButton.PRIMARY && event.getClickCount() == 1) {
+                    instance.tabellaMacchinariGestione.getItems().clear();
                     Impianto clickedRow = row.getItem();
                     String selectedQuery = "";
                     switch(clickedRow.getTipologia()) {
@@ -171,6 +178,18 @@ public class ResponsabiliMain extends StageController {
                 row.setOnMouseClicked(event -> {
                     if (! row.isEmpty() && event.getButton()==MouseButton.PRIMARY && event.getClickCount() == 1) {
                         AddettoRecord clickedRow = row.getItem();
+                        instance.textUserAddetto.setText(clickedRow.getUsername());
+                        try(PreparedStatement stmnt = DAO.getDB().prepareStatement(SQLResponsabili.GET_PROVINCIE_FROM_REGIONE))
+                        {
+                            stmnt.setString(1, instance.regione);
+                            ResultSet response = stmnt.executeQuery();
+                            while(response.next()) {
+                                /* FIXME TROVARE COME COMPILARE COMBOBOX */
+                                //sigle.add(response.getString("sigla"));
+                            }
+                        }catch(SQLException e) {
+                            e.printStackTrace();
+                        }
                         try(PreparedStatement stmnt = DAO.getDB().prepareStatement(SQLResponsabili.IMPIANTI_ASSEGNATI_A)) {
                             stmnt.setString(1, clickedRow.getUsername());
                             ResultSet response = stmnt.executeQuery();
@@ -243,7 +262,11 @@ public class ResponsabiliMain extends StageController {
     /* FINESTRA ASSEGNAZIONE IMPIANTI AD ADDETTI*/
     /*TODO*/
     public void assignImpiantoToAddetto() {
-        /* LITERALLY ONE QUERY AND ONE REFRESH OF THE TABLE */
+        /* LITERALLY ONE QUERY AND ONE REFRESH OF THE TABLE, NEED THE USERNAME OF THE CLICKED ROW */
+        return;
+    }
+
+    public void filterByProvinciaAssegnazione() {
         return;
     }
 
