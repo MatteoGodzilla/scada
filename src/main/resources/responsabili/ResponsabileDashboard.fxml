@@ -11,25 +11,56 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 <?import javafx.stage.Stage?>
 
-<Stage xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.responsabili.ResponsabiliMain">
+<Stage minHeight="600.0" minWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.responsabili.ResponsabiliMain">
     <scene>
         <Scene>
-            <AnchorPane prefHeight="507.0" prefWidth="614.0">
+            <AnchorPane prefHeight="600.0" prefWidth="800.0">
             <children>
-               <TabPane prefHeight="506.0" prefWidth="801.0" tabClosingPolicy="UNAVAILABLE">
+               <TabPane prefHeight="506.0" prefWidth="801.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                  <tabs>
                    <Tab text="Gestione Impianti">
                      <content>
-                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="478.0" prefWidth="702.0">
+                       <AnchorPane minHeight="0.0" minWidth="0.0">
                               <children>
-                                 <TableView fx:id="tabellaImpiantiGestione" layoutX="14.0" layoutY="24.0" prefHeight="394.0" prefWidth="314.0" />
-                                 <TableView fx:id="tabellaMacchinariGestione" layoutX="341.0" layoutY="24.0" prefHeight="394.0" prefWidth="314.0" />
-                                 <Button layoutX="82.0" layoutY="430.0" mnemonicParsing="false" onAction="#openImpiantoCreate" text="AGGIUNGI NUOVO IMPIANTO" />
-                                 <Button layoutX="396.0" layoutY="430.0" mnemonicParsing="false" onAction="#openMacchinarioCreate" text="AGGIUNGI NUOVO MACCHINARIO" />
-                                 <Label layoutX="65.0" layoutY="5.0" text="ELENCO IMPIANTI NELLA TUA REGIONE" />
-                                 <Label layoutX="350.0" layoutY="5.0" text="MACCHINARI PRESENTI NELL'IMPIANTO SELEZIONATO" />
+                                 <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                   <columnConstraints>
+                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                   </columnConstraints>
+                                   <rowConstraints>
+                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                   </rowConstraints>
+                                    <children>
+                                       <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                          <children>
+                                             <Label alignment="CENTER" text="ELENCO IMPIANTI NELLA TUA REGIONE" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="7.0">
+                                                <font>
+                                                   <Font size="16.0" />
+                                                </font>
+                                             </Label>
+                                             <TableView fx:id="tabellaImpiantiGestione" prefHeight="394.0" prefWidth="314.0" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="36.0" />
+                                             <Button mnemonicParsing="false" onAction="#openImpiantoCreate" text="AGGIUNGI NUOVO IMPIANTO" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="7.0" />
+                                          </children>
+                                       </AnchorPane>
+                                       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+                                          <children>
+                                             <Label alignment="CENTER" text="MACCHINARI PRESENTI NELL'IMPIANTO" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="7.0">
+                                                <font>
+                                                   <Font size="16.0" />
+                                                </font>
+                                             </Label>
+                                             <TableView fx:id="tabellaMacchinariGestione" layoutX="7.0" layoutY="29.0" prefHeight="394.0" prefWidth="314.0" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="36.0" />
+                                             <Button mnemonicParsing="false" onAction="#openMacchinarioCreate" text="AGGIUNGI NUOVO MACCHINARIO" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" />
+                                          </children>
+                                       </AnchorPane>
+                                    </children>
+                                 </GridPane>
                               </children>
                            </AnchorPane>
                      </content>
@@ -38,20 +69,56 @@
                      <content>
                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                               <children>
-                                 <TableView fx:id="tabellaAddettiAssegnazione" layoutX="14.0" layoutY="39.0" prefHeight="414.0" prefWidth="232.0" />
-                                 <TableView fx:id="tabellaImpiantiAssegnazione" layoutX="252.0" layoutY="39.0" prefHeight="414.0" prefWidth="232.0" />
-                                 <TextField fx:id="textUserAddetto" layoutX="517.0" layoutY="54.0" />
-                                 <ComboBox fx:id="comboProvinciaAssegnazione" layoutX="517.0" layoutY="98.0" prefWidth="150.0" />
-                                 <ComboBox fx:id="ComboCodiceAssegnazione" layoutX="517.0" layoutY="148.0" prefWidth="150.0" />
-                                 <TextArea fx:id="textInfoImpiantoAssegnazione" layoutX="493.0" layoutY="203.0" prefHeight="210.0" prefWidth="200.0" />
-                                 <Button layoutX="537.0" layoutY="427.0" mnemonicParsing="false" onAction="#assignImpiantoToAddetto" text="Assegna impianto" />
-                                 <Label layoutX="517.0" layoutY="39.0" text="Username addetto:" />
-                                 <Label layoutX="517.0" layoutY="80.0" text="Provincia impianto:" />
-                                 <Label layoutX="517.0" layoutY="130.0" text="Codice di riferimento:" />
-                                 <Label layoutX="492.0" layoutY="185.0" text="Tabella informativa impianto:" />
-                                 <Label layoutX="497.0" layoutY="21.0" text="ASSEGNAZIONE NUOVO IMPIANTO" />
-                                 <Label layoutX="252.0" layoutY="21.0" text="LISTA IMPIANTI ASSEGNATI:" />
-                                 <Label layoutX="14.0" layoutY="21.0" text="LISTA DEGLI ADDETTI:" />
+                                 <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                   <columnConstraints>
+                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                   </columnConstraints>
+                                   <rowConstraints>
+                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                   </rowConstraints>
+                                    <children>
+                                       <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                          <children>
+                                             <Label alignment="CENTER" text="LISTA DEGLI ADDETTI" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="7.0">
+                                                <font>
+                                                   <Font size="16.0" />
+                                                </font>
+                                             </Label>
+                                             <TableView fx:id="tabellaAddettiAssegnazione" layoutX="18.0" layoutY="29.0" prefHeight="414.0" prefWidth="232.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="36.0" />
+                                          </children>
+                                       </AnchorPane>
+                                       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+                                          <children>
+                                             <Label alignment="CENTER" text="LISTA IMPIANTI ASSEGNATI" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="7.0">
+                                                <font>
+                                                   <Font size="16.0" />
+                                                </font>
+                                             </Label>
+                                             <TableView fx:id="tabellaImpiantiAssegnazione" prefHeight="414.0" prefWidth="232.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="36.0" />
+                                          </children>
+                                       </AnchorPane>
+                                       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
+                                          <children>
+                                             <Label alignment="CENTER" text="NUOVA ASSEGNAZIONE" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="7.0">
+                                                <font>
+                                                   <Font size="16.0" />
+                                                </font>
+                                             </Label>
+                                             <Label layoutX="7.0" layoutY="29.0" text="Username addetto:" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="36.0" />
+                                             <TextField fx:id="textUserAddetto" layoutX="7.0" layoutY="54.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="61.0" />
+                                             <Label layoutX="7.0" layoutY="80.0" text="Provincia impianto:" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="94.0" />
+                                             <ComboBox fx:id="comboProvinciaAssegnazione" layoutX="7.0" layoutY="98.0" prefWidth="150.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="119.0" />
+                                             <Label layoutX="7.0" layoutY="124.0" text="Codice di riferimento:" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="152.0" />
+                                             <ComboBox fx:id="ComboCodiceAssegnazione" layoutX="7.0" layoutY="142.0" prefWidth="150.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="177.0" />
+                                             <Label layoutX="7.0" layoutY="168.0" text="Tabella informativa impianto:" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="210.0" />
+                                             <TextArea fx:id="textInfoImpiantoAssegnazione" layoutX="3.0" layoutY="319.0" prefHeight="210.0" prefWidth="200.0" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="235.0" />
+                                             <Button mnemonicParsing="false" onAction="#assignImpiantoToAddetto" text="Assegna impianto" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" />
+                                          </children>
+                                       </AnchorPane>
+                                    </children>
+                                 </GridPane>
                               </children>
                            </AnchorPane>
                      </content>
@@ -60,15 +127,44 @@
                        <content>
                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="478.0" prefWidth="727.0">
                               <children>
-                                 <TableView fx:id="tabellaInterventi" layoutX="14.0" layoutY="39.0" prefHeight="397.0" prefWidth="506.0" />
-                                 <ComboBox layoutX="536.0" layoutY="82.0" onAction="#filterByTipologiaInterventi" prefWidth="150.0" />
-                                 <ComboBox layoutX="536.0" layoutY="134.0" onAction="#filterByTechnicianInterventi" prefWidth="150.0" />
-                                 <CheckBox layoutX="536.0" layoutY="187.0" mnemonicParsing="false" onAction="#showOnlyCompletedInterventi" text="Completati" />
-                                 <Label layoutX="536.0" layoutY="65.0" text="Tipologia intervento:" />
-                                 <Label layoutX="536.0" layoutY="116.0" text="Tecnico incaricato:" />
-                                 <Label layoutX="14.0" layoutY="21.0" text="ELENCO INTERVENTI TECNICI" />
-                                 <Button layoutX="526.0" layoutY="378.0" mnemonicParsing="false" onAction="#openInterventiImpiantocreate" text="RICHIEDI INTERVENTO PER UN IMPIANTO" />
-                                 <Button layoutX="526.0" layoutY="411.0" mnemonicParsing="false" onAction="#openInterventiMacchinarioCreate" text="RICHIEDI INTERVENTO PER UN MACCHINARIO" />
+                                 <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                   <columnConstraints>
+                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="66.0" prefWidth="100.0" />
+                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                   </columnConstraints>
+                                   <rowConstraints>
+                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                   </rowConstraints>
+                                    <children>
+                                       <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                          <children>
+                                             <Label alignment="CENTER" text="ELENCO INTERVENTI TECNICI" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="7.0">
+                                                <font>
+                                                   <Font size="16.0" />
+                                                </font>
+                                             </Label>
+                                             <TableView fx:id="tabellaInterventi" layoutX="15.0" layoutY="29.0" prefHeight="397.0" prefWidth="506.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="36.0" />
+                                          </children>
+                                       </AnchorPane>
+                                       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+                                          <children>
+                                             <Label alignment="CENTER" text="OPZIONI" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="7.0">
+                                                <font>
+                                                   <Font size="16.0" />
+                                                </font>
+                                             </Label>
+                                             <Label layoutY="29.0" text="Tipologia intervento:" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="29.0" />
+                                             <ComboBox layoutX="9.0" layoutY="47.0" onAction="#filterByTipologiaInterventi" prefWidth="150.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="54.0" />
+                                             <Label layoutX="9.0" layoutY="82.0" text="Tecnico incaricato:" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="87.0" />
+                                             <ComboBox layoutY="91.0" onAction="#filterByTechnicianInterventi" prefWidth="150.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="112.0" />
+                                             <CheckBox layoutX="7.0" layoutY="117.0" mnemonicParsing="false" onAction="#showOnlyCompletedInterventi" text="Completati" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="145.0" />
+                                             <Label layoutX="7.0" layoutY="478.0" text="Richiedi intervento per:" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="7.0" />
+                                             <Button layoutY="503.0" mnemonicParsing="false" onAction="#openInterventiImpiantocreate" text="IMPIANTO" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" />
+                                             <Button layoutX="-13.0" layoutY="529.0" mnemonicParsing="false" onAction="#openInterventiMacchinarioCreate" text="MACCHINARIO" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" />
+                                          </children>
+                                       </AnchorPane>
+                                    </children>
+                                 </GridPane>
                               </children>
                            </AnchorPane>
                        </content>
