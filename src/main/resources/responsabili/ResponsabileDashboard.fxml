@@ -7,7 +7,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -25,18 +24,8 @@
                      <content>
                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="478.0" prefWidth="702.0">
                               <children>
-                                 <TableView fx:id="tabellaImpiantiGestione" layoutX="14.0" layoutY="24.0" prefHeight="394.0" prefWidth="314.0">
-                                   <columns>
-                                     <TableColumn prefWidth="75.0" text="C1" />
-                                     <TableColumn prefWidth="75.0" text="C2" />
-                                   </columns>
-                                 </TableView>
-                                 <TableView fx:id="tabellaMacchinariGestione" layoutX="341.0" layoutY="24.0" prefHeight="394.0" prefWidth="314.0">
-                                    <columns>
-                                       <TableColumn prefWidth="75.0" text="C1" />
-                                       <TableColumn prefWidth="75.0" text="C2" />
-                                    </columns>
-                                 </TableView>
+                                 <TableView fx:id="tabellaImpiantiGestione" layoutX="14.0" layoutY="24.0" prefHeight="394.0" prefWidth="314.0" />
+                                 <TableView fx:id="tabellaMacchinariGestione" layoutX="341.0" layoutY="24.0" prefHeight="394.0" prefWidth="314.0" />
                                  <Button layoutX="82.0" layoutY="430.0" mnemonicParsing="false" onAction="#openImpiantoCreate" text="AGGIUNGI NUOVO IMPIANTO" />
                                  <Button layoutX="396.0" layoutY="430.0" mnemonicParsing="false" onAction="#openMacchinarioCreate" text="AGGIUNGI NUOVO MACCHINARIO" />
                                  <Label layoutX="65.0" layoutY="5.0" text="ELENCO IMPIANTI NELLA TUA REGIONE" />
@@ -49,18 +38,8 @@
                      <content>
                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                               <children>
-                                 <TableView fx:id="tabellaAddettiAssegnazione" layoutX="14.0" layoutY="39.0" prefHeight="414.0" prefWidth="232.0">
-                                   <columns>
-                                     <TableColumn prefWidth="75.0" text="C1" />
-                                     <TableColumn prefWidth="75.0" text="C2" />
-                                   </columns>
-                                 </TableView>
-                                 <TableView fx:id="tabellaImpiantiAssegnazione" layoutX="252.0" layoutY="39.0" prefHeight="414.0" prefWidth="232.0">
-                                    <columns>
-                                       <TableColumn prefWidth="75.0" text="C1" />
-                                       <TableColumn prefWidth="75.0" text="C2" />
-                                    </columns>
-                                 </TableView>
+                                 <TableView fx:id="tabellaAddettiAssegnazione" layoutX="14.0" layoutY="39.0" prefHeight="414.0" prefWidth="232.0" />
+                                 <TableView fx:id="tabellaImpiantiAssegnazione" layoutX="252.0" layoutY="39.0" prefHeight="414.0" prefWidth="232.0" />
                                  <TextField fx:id="textUserAddetto" layoutX="517.0" layoutY="54.0" />
                                  <ComboBox fx:id="comboProvinciaAssegnazione" layoutX="517.0" layoutY="98.0" prefWidth="150.0" />
                                  <ComboBox fx:id="ComboCodiceAssegnazione" layoutX="517.0" layoutY="148.0" prefWidth="150.0" />
@@ -81,12 +60,7 @@
                        <content>
                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="478.0" prefWidth="727.0">
                               <children>
-                                 <TableView fx:id="tabellaInterventi" layoutX="14.0" layoutY="39.0" prefHeight="397.0" prefWidth="506.0">
-                                   <columns>
-                                     <TableColumn prefWidth="75.0" text="C1" />
-                                     <TableColumn prefWidth="75.0" text="C2" />
-                                   </columns>
-                                 </TableView>
+                                 <TableView fx:id="tabellaInterventi" layoutX="14.0" layoutY="39.0" prefHeight="397.0" prefWidth="506.0" />
                                  <ComboBox layoutX="536.0" layoutY="82.0" onAction="#filterByTipologiaInterventi" prefWidth="150.0" />
                                  <ComboBox layoutX="536.0" layoutY="134.0" onAction="#filterByTechnicianInterventi" prefWidth="150.0" />
                                  <CheckBox layoutX="536.0" layoutY="187.0" mnemonicParsing="false" onAction="#showOnlyCompletedInterventi" text="Completati" />
