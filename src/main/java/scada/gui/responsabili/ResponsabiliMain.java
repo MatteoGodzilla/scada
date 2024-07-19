@@ -12,6 +12,7 @@ import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import scada.gui.fxml.GuiConstructor;
 import scada.gui.fxml.StageController;
+import scada.dao.AddettoRecord;
 import scada.dao.DAO;
 import scada.dao.Impianto;
 import scada.dao.Macchinario;
@@ -20,12 +21,28 @@ import scada.dao.SQLResponsabili;
 public class ResponsabiliMain extends StageController {
     private String username;
     private String regione;
+    /* CAMPI PER GESTIONE IMPIANTI/MACCHINARI */
     public TableView<Impianto> tabellaImpiantiGestione;
     public TableView<Macchinario> tabellaMacchinariGestione;
+    /* CAMPI PER GESTIONE ADDETTI/IMPIANTI */
+    public TableView<AddettoRecord> tabellaAddetti;
+    public TableView<Impianto> tabellaImpiantiAddetto;
+    
     public static ResponsabiliMain newInstance(String username) {
         return GuiConstructor.createInstance("/responsabili/ResponsabileDashboard.fxml", (ResponsabiliMain instance, Stage stage)-> {
             instance.stage = stage;
             instance.username = username;
+            /* QUERY PER IMPOSTARE ANCHE LA REGIONE DELL'UTENTE LOGGATO */
+            try(PreparedStatement stmntRegione = DAO.getDB().prepareStatement(SQLResponsabili.GET_REGIONE_BY_USR)) {
+                stmntRegione.setString(0, instance.username);
+                ResultSet response = stmntRegione.executeQuery();
+                while(response.next()) {
+                    instance.regione = response.getString(0);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            /* TABPANE CONTENENTE LA GESTIONE MACCHINARI E IMPIANTI */
             /* INIZIALIZZAZIONE COLONNE TABELLA IMPIANTI */
             TableColumn<Impianto, String> colonnaCodiceImpianto = new TableColumn<>("Codice impianto");
             TableColumn<Impianto, String> colonnaProvincia = new TableColumn<>("Provincia");
@@ -88,7 +105,6 @@ public class ResponsabiliMain extends StageController {
                         stmnt.setString(1, clickedRow.getProvincia());
                         ResultSet response = stmnt.executeQuery();
                         while(response.next()) {
-                            /*TODO:aggiunta macchinario in tabella */
                             Macchinario macchinario = new Macchinario(
                                 response.getInt("codiceInstallazione"),
                                 response.getString("dataInstallazione"), clickedRow.getTipologia(),
@@ -103,23 +119,67 @@ public class ResponsabiliMain extends StageController {
                 }
                 });
                 return row ;
-
             });
-            instance.loadImpianti();
+            instance.loadImpiantiGestione();
+            /* FINE TABPANE GESTIONE IMPIANTI E MACCHINARI */
+            /* TABPANE GESTIONE ADDETTI E IMPIANTI ASSEGNATI */
+            TableColumn<AddettoRecord, String> colonnaUsernameAddetto = new TableColumn<>("Username");
+            TableColumn<AddettoRecord, String> colonnaNomeAddetto = new TableColumn<>("Nome");
+            TableColumn<AddettoRecord, String> colonnaCognomeAddetto = new TableColumn<>("Cognome");
+            colonnaUsernameAddetto.setCellValueFactory(new PropertyValueFactory<>("username"));
+            colonnaNomeAddetto.setCellValueFactory(new PropertyValueFactory<>("nome"));
+            colonnaCognomeAddetto.setCellValueFactory(new PropertyValueFactory<>("cognome"));
+            instance.tabellaAddetti.getColumns().add(colonnaUsernameAddetto);
+            instance.tabellaAddetti.getColumns().add(colonnaNomeAddetto);
+            instance.tabellaAddetti.getColumns().add(colonnaCognomeAddetto);
+
+            try (PreparedStatement stmntImpianti = DAO.getDB().prepareStatement(SQLResponsabili.ADDETTI_PER_REGIONE)) {
+                stmntImpianti.setString(0, instance.regione);
+                ResultSet result = stmntImpianti.executeQuery();
+                while(result.next()){
+                    AddettoRecord addetto = new AddettoRecord(result.getString("username"),
+                    result.getString("nome"),
+                    result.getString("cognome") 
+                    );
+                    instance.tabellaAddetti.getItems().add(addetto);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            instance.tabellaAddetti.setRowFactory(listaImpianti -> {
+                /* PULISCI TABELLA IMPIANTI */
+                instance.tabellaImpiantiAddetto.getItems().clear();
+                /* PROCEDURA DI RIEMPIMENTO TABELLA IMPIANTI ASSEGNATI AD ADDETTO */
+                TableRow<AddettoRecord> row = new TableRow<>();
+                row.setOnMouseClicked(event -> {
+                    /* FIXME: NON CONVINTO CHE LA CONDIZIONE SIA CORRETTA */
+                    if (! row.isEmpty() && event.getButton()==MouseButton.PRIMARY && event.getClickCount() == 1) {
+                        AddettoRecord clickedRow = row.getItem();
+                        try(PreparedStatement stmnt = DAO.getDB().prepareStatement(SQLResponsabili.IMPIANTI_ASSEGNATI_A)) {
+                            stmnt.setString(0, clickedRow.getUsername());
+                            ResultSet response = stmnt.executeQuery();
+                            while(response.next()) {
+                                Impianto impianto = new Impianto(response.getInt("codImpianto"),
+                                    response.getString("siglaProvincia"),
+                                    response.getString("indirizzo"),
+                                    response.getFloat("area"),
+                         false,
+                                    response.getInt("tipologia")
+                                );
+                                instance.tabellaImpiantiAddetto.getItems().add(impianto);
+                            }
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    });
+                    return row;
+                });
         });
     }
 
-    private void loadImpianti() {
+    private void loadImpiantiGestione() {
         tabellaImpiantiGestione.getItems().clear();
-        try(PreparedStatement stmntRegione = DAO.getDB().prepareStatement(SQLResponsabili.GET_REGIONE_BY_USR)) {
-            stmntRegione.setString(0, this.username);
-            ResultSet response = stmntRegione.executeQuery();
-            while(response.next()) {
-                this.regione = response.getString(0);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         try (PreparedStatement stmntImpianti = DAO.getDB().prepareStatement(SQLResponsabili.IMPIANTI_REGIONALI)) {
             stmntImpianti.setString(0, this.regione);
             ResultSet result = stmntImpianti.executeQuery();
@@ -140,16 +200,27 @@ public class ResponsabiliMain extends StageController {
 
     public void openImpiantoCreate() {
         ImpiantoCreateController impiantoCreator = ImpiantoCreateController.newInstance(this.regione);
-        impiantoCreator.closingCallback = () -> loadImpianti();
+        impiantoCreator.closingCallback = () -> loadImpiantiGestione();
         impiantoCreator.getStage().show();
     }
 
     public void openMacchinarioCreate() {
-        // TODO
-        // var selected = tabellaImpiantiGestione.getSelectionModel().getSelectedItem();
-        /* SWITCH SU TIPOLOGIA CON APERTURA CORRETTO FORM DI CREAZIONE */
-        // creator.closingCallback = () -> loadImpianti();
-        // creator.getStage().show();
+        /* TODO: NECESSARIO CLOSING CALLBACK?? */
+        var selected = tabellaImpiantiGestione.getSelectionModel().getSelectedItem();
+        switch(selected.getTipologia()) {
+            case 1: /* FOTOVOLTAICO */
+                FotovoltaicoCreateController fotovoltaicoCreator = FotovoltaicoCreateController.newInstance(selected.getCodice(), selected.getProvincia());
+                fotovoltaicoCreator.getStage().show();
+                break;
+            case 2: /* EOLICO */
+                EolicoCreateController eolicoCreator = EolicoCreateController.newInstance(selected.getCodice(), selected.getProvincia());
+                eolicoCreator.getStage().show();
+                break;
+            case 3:
+                BiogasCreateController biogasCreator = BiogasCreateController.newInstance(selected.getCodice(), selected.getProvincia());
+                biogasCreator.getStage().show();
+                break;
+        }
     }
 
     /* FINESTRA ASSEGNAZIONE IMPIANTI AD ADDETTI*/

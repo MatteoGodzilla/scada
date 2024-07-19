@@ -5,7 +5,7 @@ import scada.gui.fxml.GuiConstructor;
 import scada.gui.fxml.StageController;
 
 public class FotovoltaicoCreateController extends StageController {
-     public static FotovoltaicoCreateController newInstance(){
+     public static FotovoltaicoCreateController newInstance(int codiceImpianto, String provinciaImpianto){
         return GuiConstructor.createInstance("/responsabili/FotovoltaicoCreate.fxml",(FotovoltaicoCreateController instance, Stage stage) ->{
             instance.stage = stage;
         });

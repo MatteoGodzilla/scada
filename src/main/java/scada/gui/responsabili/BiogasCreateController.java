@@ -5,7 +5,7 @@ import scada.gui.fxml.GuiConstructor;
 import scada.gui.fxml.StageController;
 
 public class BiogasCreateController extends StageController {
-    public static BiogasCreateController newInstance(){
+    public static BiogasCreateController newInstance(int codiceImpianto, String provinciaImpianto){
         return GuiConstructor.createInstance("/responsabili/BiogasCreate.fxml",(BiogasCreateController instance, Stage stage) ->{
             instance.stage = stage;
         });

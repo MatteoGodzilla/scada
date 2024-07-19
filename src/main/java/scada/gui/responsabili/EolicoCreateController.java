@@ -5,7 +5,7 @@ import scada.gui.fxml.GuiConstructor;
 import scada.gui.fxml.StageController;
 
 public class EolicoCreateController extends StageController {
-     public static EolicoCreateController newInstance(){
+     public static EolicoCreateController newInstance(int codiceImpianto, String provinciaImpianto){
         return GuiConstructor.createInstance("/responsabili/EolicoCreate.fxml",(EolicoCreateController instance, Stage stage) ->{
             instance.stage = stage;
         });
