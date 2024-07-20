@@ -330,9 +330,10 @@ public class ResponsabiliMain extends StageController {
     private void loadComboBoxCodiciAssegnazione() {
         comboCodiceAssegnazione.getItems().clear();
         if(!comboProvinciaAssegnazione.getSelectionModel().getSelectedItem().isEmpty()) {
-            try (PreparedStatement stmntImpianti = DAO.getDB().prepareStatement(SQLResponsabili.GET_CODICI_IMPIANTI_FROM_PROVINCIA)) {
-                stmntImpianti.setString(1, comboProvinciaAssegnazione.getSelectionModel().getSelectedItem());
-                ResultSet result = stmntImpianti.executeQuery();
+            try (PreparedStatement stmntCodiciDaAssegnare = DAO.getDB().prepareStatement(SQLResponsabili.IMPIANTI_NON_ASSEGNATI_A)) {
+                stmntCodiciDaAssegnare.setString(1, this.textUserAddetto.getText());
+                stmntCodiciDaAssegnare.setString(2, comboProvinciaAssegnazione.getSelectionModel().getSelectedItem());
+                ResultSet result = stmntCodiciDaAssegnare.executeQuery();
                 while(result.next()){
                     /* COMPILAZIONE COMBOBOX ASSEGNAZIONE CODICI */
                     comboCodiceAssegnazione.getItems().add(result.getInt("codiceImpianto"));
@@ -492,6 +493,7 @@ public class ResponsabiliMain extends StageController {
     public void refreshTableInterventi() {
         this.loadInterventi();
         this.checkInterventiCompletati.setSelected(false);
+        this.loadComboTecnici();
     }
     /**
      * Apre la finestra di creazione di un intervento per un impianto

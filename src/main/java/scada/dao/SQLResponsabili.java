@@ -94,7 +94,7 @@ public class SQLResponsabili {
     public static String IMPIANTI_NON_ASSEGNATI_A = """
         SELECT I.codiceImpianto FROM IMPIANTO I WHERE I.codiceImpianto NOT IN
         (SELECT M.codiceImpianto FROM MONITORAGGIO M WHERE M.usernameAddetto = ?)
-        AND I.siglaProvincia IN (SELECT P.sigla FROM PROVINCIA P WHERE P.regione = ?);
+        AND I.siglaProvincia = ?;
     """;
 
     public static String ADDETTI_PER_REGIONE = """
