@@ -138,4 +138,22 @@ public class SQLResponsabili {
     public static String GET_NOTE_FROM_CODICE_INTERVENTO = """
         SELECT I.note FROM INTERVENTO I WHERE I.codice = ?;
     """;
+
+    public static String LISTA_MACCHINARI_FOTOVOLTAICI_PER_REGIONE = """
+        SELECT MA.codiceInstallazione FROM MACCHINARIO MA
+        JOIN MACC_FOTOVOLTAICO MF ON (MA.codiceInstallazione = MF.codiceInstallazione)
+        WHERE MF.siglaProvincia IN (SELECT P.sigla FROM PROVINCIA P WHERE P.regione = ?);
+    """;
+
+    public static String LISTA_MACCHINARI_BIOGAS_PER_REGIONE = """
+        SELECT MA.codiceInstallazione FROM MACCHINARIO MA
+        JOIN MACC_BIOGAS MB ON (MA.codiceInstallazione = MB.codiceInstallazione)
+        WHERE MB.siglaProvincia IN (SELECT P.sigla FROM PROVINCIA P WHERE P.regione = ?);
+    """;
+
+    public static String LISTA_MACCHINARI_EOLICO_PER_REGIONE = """
+        SELECT MA.codiceInstallazione FROM MACCHINARIO MA
+        JOIN MACC_EOLICO ME ON (MA.codiceInstallazione = ME.codiceInstallazione)
+        WHERE ME.siglaProvincia IN (SELECT P.sigla FROM PROVINCIA P WHERE P.regione = ?);
+    """;
 }
