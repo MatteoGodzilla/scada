@@ -324,7 +324,6 @@ public class ResponsabiliMain extends StageController {
         }
     }
 
-    /* FIXME: QUERY RITORNA CODICI DI IMPIANTI GIA' ASSEGNATI */
     private void loadImpiantiDaAddetto(AddettoRecord clickedRow) {
         this.tabellaImpiantiAssegnazione.getItems().clear();
         this.textUserAddetto.setText(clickedRow.getUsername());
@@ -447,7 +446,6 @@ public class ResponsabiliMain extends StageController {
     }
 
     /* METODI CONTROLLER E UTILITY FINESTRA GESTIONE INTERVENTI */
-    /* TODO BISOGNA DECIDERE COME GESTIRE IL FILTRO */
     private void loadInterventiGeneric(String query) {
         this.tabellaInterventi.getItems().clear();
         try (PreparedStatement stmntInterventi = DAO.getDB().prepareStatement(query)) {
