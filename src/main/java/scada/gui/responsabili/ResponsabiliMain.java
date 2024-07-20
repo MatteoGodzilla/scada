@@ -283,7 +283,7 @@ public class ResponsabiliMain extends StageController {
     }
 
     public void deleteImpianto(KeyEvent event) {
-        if( event.getCode() == KeyCode.DELETE) {
+        if( event.getCode() == KeyCode.DELETE || event.getCode() == KeyCode.BACK_SPACE ) {
             Impianto impianto = this.tabellaImpiantiGestione.getSelectionModel().getSelectedItem();
             Alert confirm = new Alert(AlertType.CONFIRMATION);
             confirm.setHeaderText("In questo modo metterai in dismissione l'impianto, sei sicuro?");

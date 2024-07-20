@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.stage.Stage?>
 
-<Stage minHeight="600.0" minWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.responsabili.ResponsabiliMain">
+<Stage minHeight="600.0" minWidth="800.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.responsabili.ResponsabiliMain">
     <scene>
         <Scene>
             <AnchorPane prefHeight="600.0" prefWidth="800.0">
@@ -44,7 +44,7 @@
                                                    <Font size="16.0" />
                                                 </font>
                                              </Label>
-                                             <TableView fx:id="tabellaImpiantiGestione" prefHeight="394.0" prefWidth="314.0" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="36.0" />
+                                             <TableView fx:id="tabellaImpiantiGestione" onKeyPressed="#deleteImpianto" prefHeight="394.0" prefWidth="314.0" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="36.0" />
                                              <Button mnemonicParsing="false" onAction="#openImpiantoCreate" text="AGGIUNGI NUOVO IMPIANTO" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="7.0" />
                                           </children>
                                        </AnchorPane>

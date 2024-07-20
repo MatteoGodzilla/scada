@@ -94,7 +94,7 @@ public class SQLResponsabili {
     public static String IMPIANTI_NON_ASSEGNATI_A = """
         SELECT I.codiceImpianto FROM IMPIANTO I WHERE I.codiceImpianto NOT IN
         (SELECT M.codiceImpianto FROM MONITORAGGIO M WHERE M.usernameAddetto = ?)
-        AND I.siglaProvincia = ?;
+        AND I.siglaProvincia = ? AND I.inOperazione = 1;
     """;
 
     public static String ADDETTI_PER_REGIONE = """
@@ -103,7 +103,8 @@ public class SQLResponsabili {
 
     public static String IMPIANTI_ASSEGNATI_A = """
         SELECT I.codiceImpianto, I.siglaProvincia, I.indirizzo, I.area, I.tipologia FROM IMPIANTO I
-        WHERE I.codiceImpianto IN (SELECT M.codiceImpianto FROM MONITORAGGIO M WHERE M.usernameAddetto = ?);
+        WHERE I.codiceImpianto IN (SELECT M.codiceImpianto FROM MONITORAGGIO M WHERE M.usernameAddetto = ?) 
+        AND I.inOperazione = 1;
     """;
 
     public static String LISTA_GARANZIE = """
