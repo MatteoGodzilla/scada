@@ -146,7 +146,6 @@ public class Signup extends StageController {
             while(result.next()){
                 provincie.add(result.getString(1));
             }
-            System.out.println(provincie.size());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -156,7 +155,6 @@ public class Signup extends StageController {
             while(result.next()){
                 regioni.add(result.getString(1));
             }
-            System.out.println(regioni.size());
         } catch (SQLException e) {
             e.printStackTrace();
         }

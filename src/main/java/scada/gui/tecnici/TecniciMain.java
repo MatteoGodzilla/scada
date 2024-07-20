@@ -135,7 +135,6 @@ public class TecniciMain extends StageController {
                 int type_int = result.getInt(2);
                 String desc_int = result.getString(3);
                 var data = getRowData(id_int, type_int, desc_int);
-                // System.out.println(data);
                 if(data != null){
                     availableList.getItems().add(data);
                 }
@@ -161,7 +160,6 @@ public class TecniciMain extends StageController {
             case 1:
                 //Controllo preventivo
                 try (var macc_stmt = DAO.getDB().prepareStatement(SQLTecnici.INT_MACCHINARIO)) {
-                    System.out.println("1");
                     macc_stmt.setInt(1, id_int);
                     ResultSet macc = macc_stmt.executeQuery();
                     macc.next();
@@ -178,7 +176,6 @@ public class TecniciMain extends StageController {
                 //Sostituzione parti
                 try (var macc_stmt = DAO.getDB().prepareStatement(SQLTecnici.INT_MACCHINARIO)) {
                     //Controllo preventivo
-                    System.out.println("2");
                     macc_stmt.setInt(1, id_int);
                     ResultSet macc = macc_stmt.executeQuery();
                     macc.next();
@@ -194,7 +191,6 @@ public class TecniciMain extends StageController {
             case 3:
                 //Dismissione impianto
                 try (var imp_stmt = DAO.getDB().prepareStatement(SQLTecnici.INT_IMPIANTO)) {
-                    System.out.println("3");
                     imp_stmt.setInt(1, id_int);
                     ResultSet imp = imp_stmt.executeQuery();
                     imp.next();

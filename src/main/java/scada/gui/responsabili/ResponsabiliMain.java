@@ -165,7 +165,7 @@ public class ResponsabiliMain extends StageController {
                 while(result.next()){
                     AddettoRecord addetto = new AddettoRecord(result.getString("username"),
                     result.getString("nome"),
-                    result.getString("cognome") 
+                    result.getString("cognome")
                     );
                     instance.tabellaAddettiAssegnazione.getItems().add(addetto);
                 }
@@ -266,8 +266,9 @@ public class ResponsabiliMain extends StageController {
     }
 
     public void openMacchinarioCreate() {
-        /* TODO: NECESSARIO CLOSING CALLBACK?? */
         var selected = tabellaImpiantiGestione.getSelectionModel().getSelectedItem();
+        if(selected == null)
+            return;
         switch(selected.getTipologia()) {
             case 1: /* FOTOVOLTAICO */
                 FotovoltaicoCreateController fotovoltaicoCreator = FotovoltaicoCreateController.newInstance(selected.getCodice(), selected.getProvincia());
