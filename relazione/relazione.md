@@ -715,6 +715,23 @@ Schermata 1: Gestione Impianti
 
 Schermata 2: Assegnazione del controllo impianto agli addetti SCADA
 ![Screenshot Responsabili 2](Screenshot_responsabile_2.png)
+1. Lista degli addetti presenti nella regione del responsabile
+2. Lista degli impianti assegnati all'addetto selezionato nella lista 1
+3. Singolo addetto
+4. Singolo impianto associato all'addetto
+5. Username dell'addetto di cui si vuole fare una nuova associazione(campo auto-popolato)
+6. Provincia dell'impianto di cui si vuole fare la nuova associazione
+7. Codice specifico dell'impianto di cui si vuole fare l'associazione
+8. Informazioni dell'impianto selezionato con 6 e 7, per confermare di aver scelto l'impianto giusto
+9. Bottone per assegnare l'impianto all'addetto 
 
 Schermata 3: Gestione degli interventi
 ![Screenshot Responsabili 3](Screenshot_responsabile_3.png)
+1. Elenco degli interventi
+2. Intervento singolo
+3. Filtro degli interventi per tecnico incaricato
+4. Filtro degli interventi per quelli completati
+5. Bottone per resettare i filtri di ricerca
+6. Note dell'intervento (se disponibili)
+7. Bottone per richiedere l'intervento su un impianto
+8. Bottone per richiedere l'intervento su un macchinario di un impianto
