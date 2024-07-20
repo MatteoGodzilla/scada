@@ -54,19 +54,19 @@ public class SQLResponsabili {
     """;
 
     private static String CALCOLO_SPAZIO_DISPONIBILE = """
-        SELECT SUM(M.area) FROM MODELLO M WHERE M.azienda, M.nomeModello IN
+        SELECT SUM(M.area) FROM MODELLO M WHERE (M.azienda, M.nome) IN
         (SELECT MA.azienda, MA.nomeModello FROM MACCHINARIO MA WHERE MA.codiceInstallazione IN
     """;
 
-    public static String CALCOLO_SPAZIO_DISPONIBILE_BIOGAS = CALCOLO_SPAZIO_DISPONIBILE+"""
+    public static String CALCOLO_SPAZIO_DISPONIBILE_BIOGAS = CALCOLO_SPAZIO_DISPONIBILE + """
         (SELECT MB.codiceInstallazione FROM MACC_BIOGAS MB WHERE MB.codiceImpianto = ?));
     """;
 
-    public static String CALCOLO_SPAZIO_DISPONIBILE_EOLICO = CALCOLO_SPAZIO_DISPONIBILE+"""
+    public static String CALCOLO_SPAZIO_DISPONIBILE_EOLICO = CALCOLO_SPAZIO_DISPONIBILE + """
         (SELECT ME.codiceInstallazione FROM MACC_EOLICO ME WHERE ME.codiceImpianto = ?));
     """;
 
-    public static String CALCOLO_SPAZIO_DISPONIBILE_FOTOVOLTAICO = CALCOLO_SPAZIO_DISPONIBILE+"""
+    public static String CALCOLO_SPAZIO_DISPONIBILE_FOTOVOLTAICO = CALCOLO_SPAZIO_DISPONIBILE + """
         (SELECT MF.codiceInstallazione FROM MACC_FOTOVOLTAICO MF WHERE MF.codiceImpianto = ?));
     """;
 
@@ -101,7 +101,7 @@ public class SQLResponsabili {
     """;
 
     public static String LISTA_GARANZIE = """
-        SELECT G.descrizione, G.costo, G.durataAnni FROM GARANZIA G WHERE G.azienda = ? AND G.nomeModello = ?;
+        SELECT G.durataAnni, G.descrizione, G.costo FROM GARANZIA G WHERE G.azienda = ? AND G.nomeModello = ?;
     """;
 
     public static String CREAZIONE_IMPIANTO = """
@@ -116,12 +116,8 @@ public class SQLResponsabili {
         INSERT INTO MACC_EOLICO (codiceImpianto, siglaProvincia, codiceInstallazione, codiceInterno) VALUES (?, ?, ?, ?);
     """;
 
-    public static String CREAZIONE_FOTOVOLTAICO = """
-        INSERT INTO MACC_FOTOVOLTAICO (codiceImpianto, siglaProvincia, codiceInstallazione, codiceInterno, celle, kwhMax, angolo) VALUES (?, ?, ?, ?, ?, ?, ?);
-    """;
-
     public static String CREAZIONE_MACCHINARIO = """
-        INSERT INTO MACCHINARIO (dataInstallazione, tipologia, azienda, nomeModello, durataGaranzia) VALUES (?, ?, ?, ?, ?);
+        INSERT INTO MACCHINARIO (dataInstallazione, tipologia, azienda, nomeModello, durataGaranzia, status) VALUES (?, ?, ?, ?, ?, ?);
     """;
 
     public static String ASSEGNA_IMPIANTO_A = """

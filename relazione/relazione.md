@@ -700,5 +700,17 @@ In base alla tipologia di utente specificata nella schermata di login si possono
 Nota: Nel caso un macchinario sia in manutenzione i bottoni 3 e 4 vengono disabilitati
 
 ### Responsabili
-![Screenshot Responsabili]()
+La finestra dei responsabili si suddivide in tre pagine, ognuna dedicata alla gestione di una determinata area del sistema informatico
 
+Schermata 1: Gestione Impianti
+![Screenshot Responsabili 1](Screenshot_responsabile_1.png)
+1. Informazioni relative ad un impianto all'interno della regione del responsabile
+2. Informazioni relative ad un macchinario contenuto all'interno dell'impianto selezionato a sinistra
+3. Bottone per l'apertura della finestra dedicata per l'inserimento di un nuovo impianto
+4. Bottone per l'apertura della finestra dedicata per l'inserimento di un nuovo macchinario all'interno dell'impianto
+
+Schermata 2: Assegnazione del controllo impianto agli addetti SCADA
+![Screenshot Responsabili 2]()
+
+Schermata 3: Gestione degli interventi
+![Screenshot Responsabili 3]()
