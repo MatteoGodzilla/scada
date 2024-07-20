@@ -4,12 +4,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import scada.dao.DAO;
 import scada.dao.Impianto;
+import scada.dao.InterventiTipologia;
 import scada.dao.SQLResponsabili;
 import scada.dao.Tipologia;
 import scada.gui.fxml.GuiConstructor;
@@ -17,14 +20,15 @@ import scada.gui.fxml.StageController;
 
 public class InterventoImpiantoCreateController extends StageController {
     public Runnable onCloseRunnable;
-    public ComboBox<Integer> comboTipologia;
+    public ComboBox<String> comboTipologia;
     public ComboBox<String> comboProvincia;
     public ComboBox<Integer> comboCodiceImpianto;
     public TextArea textImpiantoInfo;
+
     private String regione;
     private String username;
     private Impianto impianto;
-
+    private List<Integer> realTipologiaCode = new ArrayList<>();
     public static InterventoImpiantoCreateController newInstance(String regione, String username){
         return GuiConstructor.createInstance("/responsabili/InterventiImpiantoCreate.fxml",(InterventoImpiantoCreateController instance, Stage stage) ->{
             instance.stage = stage;
@@ -34,7 +38,9 @@ public class InterventoImpiantoCreateController extends StageController {
             try (PreparedStatement statement = DAO.getDB().prepareStatement(SQLResponsabili.LISTA_INTERVENTO_TIPI)) {
                 ResultSet result = statement.executeQuery();
                 while (result.next()) {
-                    instance.comboTipologia.getItems().add(result.getInt("T.tipo"));
+                    int tipologia = result.getInt("T.tipo");
+                    instance.realTipologiaCode.add(tipologia);
+                    instance.comboTipologia.getItems().add(InterventiTipologia.fromCode(tipologia));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -101,7 +107,8 @@ public class InterventoImpiantoCreateController extends StageController {
         int codice = 0;
         try (PreparedStatement statement = DAO.getDB().prepareStatement(SQLResponsabili.CREAZIONE_INTERVENTI, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, this.username);
-            statement.setInt(2, this.comboTipologia.getSelectionModel().getSelectedItem());
+            int chosenIndex = comboTipologia.getSelectionModel().getSelectedIndex();
+            statement.setInt(2, realTipologiaCode.get(chosenIndex));
             int res = statement.executeUpdate();
             if (res == 0) {
                 System.out.println("INSERIMENTO DI INTERVENTO FALLITO!!!");
