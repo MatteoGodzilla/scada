@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.stage.Stage?>
 
-<Stage minHeight="450.0" minWidth="420.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.responsabili.FotovoltaicoCreateController">
+<Stage minHeight="470.0" minWidth="450.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.responsabili.FotovoltaicoCreateController">
     <scene>
         <Scene>
             <AnchorPane prefHeight="450.0" prefWidth="420.0">
