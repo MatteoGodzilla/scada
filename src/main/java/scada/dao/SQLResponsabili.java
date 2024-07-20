@@ -39,14 +39,20 @@ public class SQLResponsabili {
     """;
 
     public static String INTERVENTI_COMPLETATI = """
-        SELECT I.codice, I.tipo, T.descrizione, I.note FROM INTERVENTO I
+        SELECT I.codice, I.note, I.completato, I.usernameTecnico, T.descrizione FROM INTERVENTO I
         JOIN INT_TIPO T ON (I.tipo = T.tipo)
-        WHERE completato = 1;
+        WHERE I.completato = 1 AND I.usernameResponsabile = ?;
     """;
 
-    public static String INTERVENTI_PER_TIPOLOGIA ="""
-        SELECT I.codice, I.tipo, T.descrizione FROM INTERVENTO I
-        JOIN INT_TIPO T ON (I.tipo = T.tipo) WHERE T.descrizione = ?;
+    public static String INTERVENTI_PER_TECNICO = """
+        SELECT I.codice, I.note, I.completato, I.usernameTecnico, T.descrizione FROM INTERVENTO I
+        JOIN INT_TIPO T ON (I.tipo = T.tipo) WHERE I.usernameResponsabile = ? AND WHERE I.usernameTecnico = ?;
+    """;
+
+    public static String INTERVENTI_COMPLETATI_PER_TECNICO = """
+        SELECT I.codice, I.note, I.completato, I.usernameTecnico, T.descrizione FROM INTERVENTO I
+        JOIN INT_TIPO T ON (I.tipo = T.tipo)
+        WHERE I.completato = 1 AND I.usernameResponsabile = ? AND I.usernameTecnico = ?;
     """;
 
     public static String MODELLI_MACCHINARI = """

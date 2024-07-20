@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
@@ -42,6 +43,10 @@ public class ResponsabiliMain extends StageController {
     public Button buttonAssegnaImpianto;
     /* CAMPI GESTIONE INTERVENTI */
     public TableView<InterventiRecord> tabellaInterventi;
+    public TextArea textNoteInterventi;
+    //TODO:public ComboBox<TipologiaRecord> comboTipologiaInterventi;
+    public ComboBox<String> comboTecniciIncaricati;
+    public CheckBox checkInterventiCompletati;
 
     public static ResponsabiliMain newInstance(String username) {
         return GuiConstructor.createInstance("/responsabili/ResponsabileDashboard.fxml", (ResponsabiliMain instance, Stage stage)-> {
@@ -153,14 +158,27 @@ public class ResponsabiliMain extends StageController {
             TableColumn<InterventiRecord, String> colonnaStatusIntervento = new TableColumn<>("Completato");
             TableColumn<InterventiRecord, String> colonnaUsernameTecnicoIntervento = new TableColumn<>("Tecnico incaricato");
             TableColumn<InterventiRecord, String> colonnaDescrizioneIntervento = new TableColumn<>("Descrizione intervento");
+            TableColumn<InterventiRecord, String> colonnaNoteIntervento = new TableColumn<>("Note");
             colonnaCodiceIntervento.setCellValueFactory(new PropertyValueFactory<>("codiceIntervento"));
             colonnaDescrizioneIntervento.setCellValueFactory(new PropertyValueFactory<>("descrizioneIntervento"));
             colonnaStatusIntervento.setCellValueFactory(new PropertyValueFactory<>("completato"));
             colonnaUsernameTecnicoIntervento.setCellValueFactory(new PropertyValueFactory<>("usernameTecnico"));
+            colonnaNoteIntervento.setCellValueFactory(new PropertyValueFactory<>("noteIntervento"));
             instance.tabellaInterventi.getColumns().add(colonnaCodiceIntervento);
             instance.tabellaInterventi.getColumns().add(colonnaStatusIntervento);
             instance.tabellaInterventi.getColumns().add(colonnaUsernameTecnicoIntervento);
             instance.tabellaInterventi.getColumns().add(colonnaDescrizioneIntervento);
+            instance.tabellaInterventi.getColumns().add(colonnaNoteIntervento);
+            instance.tabellaInterventi.setRowFactory(listaInterventi -> {
+            TableRow<InterventiRecord> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (! row.isEmpty() && event.getButton()==MouseButton.PRIMARY && event.getClickCount() == 1) {
+                    instance.textNoteInterventi.clear();
+                    instance.textNoteInterventi.setText(row.getItem().getNoteIntervento());
+                }
+                });
+                return row;
+            });
             instance.loadInterventi();
         });
     }
@@ -391,17 +409,17 @@ public class ResponsabiliMain extends StageController {
 
     /* METODI CONTROLLER E UTILITY FINESTRA GESTIONE INTERVENTI */
     /* TODO BISOGNA DECIDERE COME GESTIRE IL FILTRO */
-
-    private void loadInterventi() {
+    private void loadInterventiGeneric(String query) {
         this.tabellaInterventi.getItems().clear();
-        try (PreparedStatement stmntInterventi = DAO.getDB().prepareStatement(SQLResponsabili.INTERVENTI)) {
+        try (PreparedStatement stmntInterventi = DAO.getDB().prepareStatement(query)) {
             stmntInterventi.setString(1, this.username);
             ResultSet result = stmntInterventi.executeQuery();
             while(result.next()){
                 InterventiRecord intervento = new InterventiRecord(result.getInt("codice"),
                     result.getBoolean("completato"),
                     result.getString("usernameTecnico"),
-                    result.getString("descrizione")
+                    result.getString("descrizione"),
+                    result.getString("note")
                 );
                 this.tabellaInterventi.getItems().add(intervento);
             }
@@ -409,14 +427,33 @@ public class ResponsabiliMain extends StageController {
             e.printStackTrace();
         }
     }
+    private void loadInterventi() {
+        this.loadInterventiGeneric(SQLResponsabili.INTERVENTI);
+    }
 
-    public void filterByTipologiaInterventi() {
-        return;
+    public void filterInterventiTable() {
+        if (this.comboTecniciIncaricati.getSelectionModel().getSelectedItem() != null && this.checkInterventiCompletati.isSelected()) {
+            this.loadInterventiCompletatiPerTecnico();
+        } else if (this.comboTecniciIncaricati.getSelectionModel().getSelectedItem() != null && !this.checkInterventiCompletati.isSelected()) {
+            this.loadInterventiPerTecnico();
+        } else if (this.comboTecniciIncaricati.getSelectionModel().getSelectedItem() == null && this.checkInterventiCompletati.isSelected()){
+            this.loadInterventiCompletati();
+        } else {
+            this.loadInterventi();
+        }
     }
-    /*TODO*/
-    public void filterByTechnicianInterventi() {
-        return;
+    private void loadInterventiCompletati() {
+        this.loadInterventiGeneric(SQLResponsabili.INTERVENTI_COMPLETATI);
     }
+
+    private void loadInterventiPerTecnico() {
+        this.loadInterventiGeneric(SQLResponsabili.INTERVENTI_PER_TECNICO);
+    }
+
+    private void loadInterventiCompletatiPerTecnico() {
+        this.loadInterventiGeneric(SQLResponsabili.INTERVENTI_COMPLETATI_PER_TECNICO);
+    }
+
     /*TODO*/
     public void showOnlyCompletedInterventi() {
         return;

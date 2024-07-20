@@ -5,11 +5,17 @@ public class InterventiRecord {
     private Boolean completato;
     private String usernameTecnico;
     private String descrizioneIntervento;
-    public InterventiRecord(Integer codiceIntervento, Boolean completato, String usernameTecnico, String descrizioneIntervento) {
+    private String noteIntervento;
+
+    public InterventiRecord(Integer codiceIntervento, Boolean completato, String usernameTecnico, String descrizioneIntervento, String noteIntervento) {
         this.codiceIntervento = codiceIntervento;
         this.completato = completato;
         this.usernameTecnico = usernameTecnico;
         this.descrizioneIntervento = descrizioneIntervento;
+        this.noteIntervento = noteIntervento;
+    }
+    public String getNoteIntervento() {
+        return noteIntervento;
     }
 
     public Boolean getCompletato() {
