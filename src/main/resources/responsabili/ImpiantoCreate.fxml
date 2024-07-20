@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.stage.Stage?>
 
-<Stage xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.responsabili.ImpiantoCreateController">
+<Stage minHeight="355.0" minWidth="362.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.responsabili.ImpiantoCreateController">
     <scene>
         <Scene>
             <AnchorPane prefHeight="355.0" prefWidth="362.0">
@@ -18,11 +18,11 @@
                <ComboBox fx:id="comboTipologia" layoutX="134.0" layoutY="64.0" prefHeight="26.0" prefWidth="198.0" />
                <TextField fx:id="textIndirizzo" layoutX="14.0" layoutY="164.0" prefHeight="26.0" prefWidth="314.0" />
                <Spinner fx:id="textAreaImpianto" layoutX="178.0" layoutY="231.0" />
-               <Button layoutX="84.0" layoutY="283.0" mnemonicParsing="false" onAction="#createImpianto" text="Completa procedura di installazione" />
+               <Button layoutX="52.0" layoutY="281.0" mnemonicParsing="false" onAction="#createImpianto" text="Completa procedura di installazione" />
                <Label layoutX="14.0" layoutY="46.0" text="Provincia:" />
                <Label layoutX="134.0" layoutY="46.0" text="Tipologia impianto:" />
                <Label layoutX="14.0" layoutY="146.0" text="Indirizzo locazione impianto:" />
-               <Label layoutX="14.0" layoutY="235.0" text="Area d'occupazione impianto:" />
+               <Label layoutX="14.0" layoutY="235.0" text="Area d'occupazione:" />
             </children></AnchorPane>
         </Scene>
     </scene>

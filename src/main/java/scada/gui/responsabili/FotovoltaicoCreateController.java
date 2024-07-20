@@ -4,10 +4,8 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javafx.scene.control.Button;
@@ -25,6 +23,7 @@ import scada.gui.fxml.GuiConstructor;
 import scada.gui.fxml.StageController;
 
 public class FotovoltaicoCreateController extends StageController {
+    public Runnable onCloseRunnable;
     //gui
     public TextField textCodImpianto;
     public TextField textProvinciaImpianto;
@@ -70,7 +69,7 @@ public class FotovoltaicoCreateController extends StageController {
             ResultSet result = spazioRimanente.executeQuery();
             result.next();
             remainingSpace = impianto.getArea() - result.getFloat(1);
-            textSpazioDisponibile.setText(result.getString(1));
+            textSpazioDisponibile.setText(remainingSpace + "");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -171,6 +170,8 @@ public class FotovoltaicoCreateController extends StageController {
 
             if(stmt3.executeUpdate() > 0){
                 DAO.getDB().commit();
+                onCloseRunnable.run();
+                stage.hide();
             } else {
                 DAO.getDB().rollback();
             }

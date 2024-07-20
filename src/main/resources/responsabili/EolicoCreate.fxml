@@ -14,29 +14,29 @@
         <Scene>
             <AnchorPane prefHeight="420.0" prefWidth="420.0">
             <children>
-               <TextField fx:id="textCodImpianto" layoutX="14.0" layoutY="31.0" />
-               <TextField fx:id="textSpazioDisponibile" layoutX="227.0" layoutY="31.0" />
-               <TextField fx:id="textProvinciaImpianto" layoutX="14.0" layoutY="87.0" />
-               <TextField fx:id="textTipologiaImpianto" layoutX="227.0" layoutY="87.0" />
-               <ComboBox fx:id="comboModelloMacchinario" layoutX="14.0" layoutY="165.0" onAction="#filterByModello" prefWidth="150.0" />
-               <ComboBox fx:id="comboDurataGaranzia" layoutX="227.0" layoutY="163.0" onAction="#showInfoGaranzia" prefWidth="150.0" />
-               <TextField fx:id="textAreaOccupata" layoutX="14.0" layoutY="290.0" />
-               <TextField fx:id="textCostoGaranzia" layoutX="228.0" layoutY="289.0" />
-               <TextArea fx:id="textDescrizioneGaranzia" layoutX="227.0" layoutY="215.0" prefHeight="52.0" prefWidth="150.0" />
-               <Button layoutX="112.0" layoutY="348.0" mnemonicParsing="false" onAction="#createTurbina" text="INSTALLA TURBINA EOLICA" />
+               <TextField fx:id="textCodImpianto" disable="true" editable="false" layoutX="14.0" layoutY="31.0" />
+               <TextField fx:id="textSpazioDisponibile" disable="true" editable="false" layoutX="227.0" layoutY="31.0" />
+               <TextField fx:id="textProvinciaImpianto" disable="true" editable="false" layoutX="14.0" layoutY="87.0" />
+               <TextField fx:id="textTipologiaImpianto" disable="true" editable="false" layoutX="227.0" layoutY="87.0" />
+               <ComboBox fx:id="comboModelloMacchinario" disable="true" layoutX="227.0" layoutY="163.0" onAction="#filterByModello" prefWidth="150.0" />
+               <ComboBox fx:id="comboDurataGaranzia" disable="true" layoutX="14.0" layoutY="216.0" onAction="#showInfoGaranzia" prefWidth="150.0" />
+               <TextField fx:id="textAreaOccupata" disable="true" layoutX="14.0" layoutY="290.0" />
+               <TextField fx:id="textCostoGaranzia" disable="true" layoutX="228.0" layoutY="289.0" />
+               <TextArea fx:id="textDescrizioneGaranzia" disable="true" layoutX="227.0" layoutY="215.0" prefHeight="52.0" prefWidth="150.0" />
+               <Button fx:id="btnInstallation" disable="true" layoutX="112.0" layoutY="348.0" mnemonicParsing="false" onAction="#createTurbina" text="INSTALLA TURBINA EOLICA" />
                <Label layoutX="14.0" layoutY="14.0" text="Codice impianto:" />
                <Label layoutX="228.0" layoutY="14.0" text="Spazio disponibile:" />
                <Label layoutX="14.0" layoutY="69.0" text="Provincia Impianto:" />
                <Label layoutX="227.0" layoutY="69.0" text="Tipologia impianto:" />
-               <Label layoutX="14.0" layoutY="147.0" text="Modello del macchinario:" />
-               <Label layoutX="227.0" layoutY="146.0" text="Durata della garanzia:" />
+               <Label layoutX="225.0" layoutY="145.0" text="Modello del macchinario:" />
+               <Label layoutX="13.0" layoutY="201.0" text="Durata della garanzia:" />
                <Label layoutX="15.0" layoutY="272.0" text="Area occupata:" />
-               <Label layoutX="168.0" layoutY="294.0" text="m^2" />
+               <Label layoutX="176.0" layoutY="294.0" text="m^2" />
                <Label layoutX="228.0" layoutY="198.0" text="Descrizione della garanzia:" />
                <Label layoutX="228.0" layoutY="270.0" text="Costo garanzia:" />
                <Label layoutX="390.0" layoutY="293.0" text="€" />
-               <ComboBox fx:id="comboAziendaMacchinario" layoutX="14.0" layoutY="218.0" onAction="#filterByAzienda" prefWidth="150.0" />
-               <Label layoutX="14.0" layoutY="200.0" text="Azienda del macchinario:" />
+               <ComboBox fx:id="comboAziendaMacchinario" layoutX="14.0" layoutY="163.0" onAction="#filterByAzienda" prefWidth="150.0" />
+               <Label layoutX="13.0" layoutY="145.0" text="Azienda del macchinario:" />
             </children></AnchorPane>
         </Scene>
     </scene>

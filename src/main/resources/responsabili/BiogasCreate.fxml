@@ -10,40 +10,40 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.stage.Stage?>
 
-<Stage minHeight="450.0" minWidth="420.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.responsabili.BiogasCreateController">
+<Stage minHeight="470.0" minWidth="420.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.responsabili.BiogasCreateController">
     <scene>
         <Scene>
             <AnchorPane prefHeight="450.0" prefWidth="420.0">
             <children>
-               <TextField fx:id="textCodImpianto" layoutX="14.0" layoutY="31.0" />
-               <TextField fx:id="textSpazioDisponibile" layoutX="227.0" layoutY="31.0" />
-               <TextField fx:id="textProvinciaImpianto" layoutX="14.0" layoutY="87.0" />
-               <TextField fx:id="textTipologiaImpianto" layoutX="227.0" layoutY="87.0" />
-               <ComboBox fx:id="comboModelloMacchinario" layoutX="14.0" layoutY="165.0" onAction="#filterByModello" prefWidth="150.0" />
-               <ComboBox fx:id="comboDurataGaranzia" layoutX="227.0" layoutY="163.0" onAction="#showInfoGaranzia" prefWidth="150.0" />
-               <TextField fx:id="textAreaOccupata" layoutX="14.0" layoutY="275.0" />
-               <TextField fx:id="textCostoGaranzia" layoutX="228.0" layoutY="289.0" />
-               <TextArea fx:id="textDescrizioneGaranzia" layoutX="227.0" layoutY="215.0" prefHeight="52.0" prefWidth="150.0" />
-               <Spinner fx:id="spinKGUmido" layoutX="228.0" layoutY="345.0" />
-               <Spinner fx:id="spinKGBatteri" layoutX="14.0" layoutY="345.0" />
-               <TextField fx:id="textKWHOttimali" layoutX="14.0" layoutY="402.0" />
-               <Button layoutX="236.0" layoutY="402.0" mnemonicParsing="false" onAction="#createDigestore" text="INSTALLA DIGESTORE" />
+               <TextField fx:id="textCodImpianto" disable="true" layoutX="14.0" layoutY="31.0" />
+               <TextField fx:id="textSpazioDisponibile" disable="true" layoutX="227.0" layoutY="31.0" />
+               <TextField fx:id="textProvinciaImpianto" disable="true" layoutX="14.0" layoutY="87.0" />
+               <TextField fx:id="textTipologiaImpianto" disable="true" layoutX="227.0" layoutY="87.0" />
+               <ComboBox fx:id="comboModelloMacchinario" disable="true" layoutX="230.0" layoutY="163.0" onAction="#filterByModello" prefWidth="150.0" />
+               <ComboBox fx:id="comboDurataGaranzia" disable="true" layoutX="14.0" layoutY="216.0" onAction="#showInfoGaranzia" prefWidth="150.0" />
+               <TextField fx:id="textAreaOccupata" disable="true" editable="false" layoutX="12.0" layoutY="289.0" />
+               <TextField fx:id="textCostoGaranzia" disable="true" editable="false" layoutX="228.0" layoutY="289.0" />
+               <TextArea fx:id="textDescrizioneGaranzia" disable="true" editable="false" layoutX="227.0" layoutY="215.0" prefHeight="52.0" prefWidth="150.0" />
+               <Spinner fx:id="spinKGUmido" disable="true" editable="true" layoutX="228.0" layoutY="345.0" />
+               <Spinner fx:id="spinKGBatteri" disable="true" editable="true" layoutX="14.0" layoutY="345.0" />
+               <TextField fx:id="textKWHOttimali" disable="true" layoutX="14.0" layoutY="402.0" />
+               <Button fx:id="btnInstallation" disable="true" layoutX="236.0" layoutY="402.0" mnemonicParsing="false" onAction="#createDigestore" text="INSTALLA DIGESTORE" />
                <Label layoutX="14.0" layoutY="14.0" text="Codice impianto:" />
                <Label layoutX="228.0" layoutY="14.0" text="Spazio disponibile:" />
                <Label layoutX="14.0" layoutY="69.0" text="Provincia Impianto:" />
                <Label layoutX="227.0" layoutY="69.0" text="Tipologia impianto:" />
-               <Label layoutX="14.0" layoutY="147.0" text="Modello del macchinario:" />
-               <Label layoutX="227.0" layoutY="146.0" text="Durata della garanzia:" />
-               <Label layoutX="15.0" layoutY="257.0" text="Area occupata:" />
-               <Label layoutX="168.0" layoutY="279.0" text="m^2" />
+               <Label layoutX="228.0" layoutY="145.0" text="Modello del macchinario:" />
+               <Label layoutX="13.0" layoutY="198.0" text="Durata della garanzia:" />
+               <Label layoutX="14.0" layoutY="270.0" text="Area occupata:" />
+               <Label layoutX="176.0" layoutY="293.0" text="m^2" />
                <Label layoutX="228.0" layoutY="198.0" text="Descrizione della garanzia:" />
                <Label layoutX="228.0" layoutY="270.0" text="Costo garanzia:" />
                <Label layoutX="390.0" layoutY="293.0" text="€" />
                <Label layoutX="14.0" layoutY="327.0" text="Kg di batteri:" />
                <Label layoutX="227.0" layoutY="327.0" text="Kg di umido:" />
                <Label layoutX="14.0" layoutY="384.0" text="kWh in condizioni ottimali:" />
-               <ComboBox fx:id="comboAziendaMacchinario" layoutX="14.0" layoutY="218.0" onAction="#filterByAzienda" prefWidth="150.0" />
-               <Label layoutX="14.0" layoutY="200.0" text="Azienda del macchinario:" />
+               <ComboBox fx:id="comboAziendaMacchinario" layoutX="14.0" layoutY="163.0" onAction="#filterByAzienda" prefWidth="150.0" />
+               <Label layoutX="13.0" layoutY="145.0" text="Azienda del macchinario:" />
             </children></AnchorPane>
         </Scene>
     </scene>
