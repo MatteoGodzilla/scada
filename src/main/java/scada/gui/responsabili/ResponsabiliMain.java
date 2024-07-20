@@ -4,12 +4,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -18,6 +24,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import scada.gui.fxml.GuiConstructor;
 import scada.gui.fxml.StageController;
 import scada.dao.AddettoRecord;
@@ -26,6 +33,7 @@ import scada.dao.Impianto;
 import scada.dao.InterventiRecord;
 import scada.dao.Macchinario;
 import scada.dao.SQLResponsabili;
+import scada.dao.Tipologia;
 
 public class ResponsabiliMain extends StageController {
     private String username;
@@ -73,7 +81,11 @@ public class ResponsabiliMain extends StageController {
             colonnaProvinciaImpiantoGestione.setCellValueFactory(new PropertyValueFactory<>("provincia"));
             colonnaIndirizzoImpiantoGestione.setCellValueFactory(new PropertyValueFactory<>("indirizzo"));
             colonnaAreaImpiantoGestione.setCellValueFactory(new PropertyValueFactory<>("area"));
-            colonnaTipologiaImpiantoGestione.setCellValueFactory(new PropertyValueFactory<>("tipologia"));
+            // colonnaTipologiaImpiantoGestione.setCellValueFactory(new PropertyValueFactory<>("tipologia"));
+            colonnaTipologiaImpiantoGestione.setCellValueFactory(param ->
+                new SimpleStringProperty(Tipologia.fromCode(param.getValue().getTipologia()))
+            );
+
             /* AGGIUNTA DELLE COLONNE ALLA TABLEVIEW IMPIANTI */
             instance.tabellaImpiantiGestione.getColumns().add(colonnaCodiceImpianto);
             instance.tabellaImpiantiGestione.getColumns().add(colonnaProvinciaImpiantoGestione);
@@ -131,7 +143,11 @@ public class ResponsabiliMain extends StageController {
             colonnaProvinciaImpiantoAssegnazione.setCellValueFactory(new PropertyValueFactory<>("provincia"));
             colonnaIndirizzoImpiantoAssegnazione.setCellValueFactory(new PropertyValueFactory<>("indirizzo"));
             colonnaAreaImpiantoAssegnazione.setCellValueFactory(new PropertyValueFactory<>("area"));
-            colonnaTipologiaImpiantoAssegnazione.setCellValueFactory(new PropertyValueFactory<>("tipologia"));
+            // colonnaTipologiaImpiantoAssegnazione.setCellValueFactory(new PropertyValueFactory<>("tipologia"));
+            colonnaTipologiaImpiantoAssegnazione.setCellValueFactory(param ->
+                new SimpleStringProperty(Tipologia.fromCode(param.getValue().getTipologia()))
+            );
+
             /* AGGIUNTA DELLE COLONNE ALLA TABLEVIEW IMPIANTI ASSEGNAZIONE */
             instance.tabellaImpiantiAssegnazione.getColumns().add(colonnaCodiceImpiantoAssegnazione);
             instance.tabellaImpiantiAssegnazione.getColumns().add(colonnaProvinciaImpiantoAssegnazione);
@@ -399,8 +415,7 @@ public class ResponsabiliMain extends StageController {
                 while(result.next()){
                    infoString += "Indirizzo di locazione: " + result.getString("indirizzo") + "\n";
                    infoString += "Area occupata: " + Float.toString(result.getFloat("area")) + "\n";
-                   /* FIXME MAKE JOIN TO SHOW THE TYPE DESCRIPTION */
-                   infoString += "Tipologia dell'impianto: " + Integer.toString(result.getInt("tipologia")) + "\n";
+                   infoString += "Tipologia dell'impianto: " + Tipologia.fromCode(result.getInt("tipologia")) + "\n";
                    textInfoImpiantoAssegnazione.setText(infoString);
                 }
                 this.buttonAssegnaImpianto.setDisable(false);

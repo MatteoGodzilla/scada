@@ -1,6 +1,6 @@
 package scada.dao;
 
-public class SQLImpiantoCreate {
+public class SQLCreazioneImpianto {
     public static String GET_TIPOLOGIE = """
         SELECT codice FROM TIPOLOGIA;
     """;
