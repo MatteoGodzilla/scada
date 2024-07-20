@@ -141,41 +141,27 @@ public class ResponsabiliMain extends StageController {
             TableRow<AddettoRecord> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (! row.isEmpty() && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
-                    AddettoRecord clickedRow = row.getItem();
-                    instance.tabellaImpiantiAssegnazione.getItems().clear();
-                    instance.textUserAddetto.setText(clickedRow.getUsername());
-                    try(PreparedStatement stmnt = DAO.getDB().prepareStatement(SQLResponsabili.IMPIANTI_ASSEGNATI_A)) {
-                        stmnt.setString(1, clickedRow.getUsername());
-                        ResultSet response = stmnt.executeQuery();
-                        while(response.next()) {
-                            Impianto impianto = new Impianto(response.getInt("codiceImpianto"),
-                                response.getString("siglaProvincia"),
-                                response.getString("indirizzo"),
-                                response.getFloat("area"),
-                        false,
-                                response.getInt("tipologia")
-                            );
-                            instance.tabellaImpiantiAssegnazione.getItems().add(impianto);
-                        }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+                    instance.loadImpiantiDaAddetto(row.getItem());
                 }
-                instance.loadComboBoxProvinceAssegnazione();
                 });
                 return row;
             });
             instance.loadAddetti();
             /* FINE TABPANE GESTIONE ADDETTI E IMPIANTI ASSEGNATI */
+            /* INIZIO TABPANE GESTIONE INTERVENTI */
             TableColumn<InterventiRecord, String> colonnaCodiceIntervento = new TableColumn<>("Codice intervento");
-            TableColumn<InterventiRecord, String> colonnaTipoIntervento = new TableColumn<>("Tipologia intervento");
+            TableColumn<InterventiRecord, String> colonnaStatusIntervento = new TableColumn<>("Completato");
+            TableColumn<InterventiRecord, String> colonnaUsernameTecnicoIntervento = new TableColumn<>("Tecnico incaricato");
             TableColumn<InterventiRecord, String> colonnaDescrizioneIntervento = new TableColumn<>("Descrizione intervento");
             colonnaCodiceIntervento.setCellValueFactory(new PropertyValueFactory<>("codiceIntervento"));
-            colonnaTipoIntervento.setCellValueFactory(new PropertyValueFactory<>("tipoIntervento"));
             colonnaDescrizioneIntervento.setCellValueFactory(new PropertyValueFactory<>("descrizioneIntervento"));
+            colonnaStatusIntervento.setCellValueFactory(new PropertyValueFactory<>("completato"));
+            colonnaUsernameTecnicoIntervento.setCellValueFactory(new PropertyValueFactory<>("usernameTecnico"));
             instance.tabellaInterventi.getColumns().add(colonnaCodiceIntervento);
-            instance.tabellaInterventi.getColumns().add(colonnaTipoIntervento);
+            instance.tabellaInterventi.getColumns().add(colonnaStatusIntervento);
+            instance.tabellaInterventi.getColumns().add(colonnaUsernameTecnicoIntervento);
             instance.tabellaInterventi.getColumns().add(colonnaDescrizioneIntervento);
+            instance.loadInterventi();
         });
     }
 
@@ -277,6 +263,29 @@ public class ResponsabiliMain extends StageController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /* FIXME: QUERY RITORNA CODICI DI IMPIANTI GIA' ASSEGNATI */
+    private void loadImpiantiDaAddetto(AddettoRecord clickedRow) {
+        this.tabellaImpiantiAssegnazione.getItems().clear();
+        this.textUserAddetto.setText(clickedRow.getUsername());
+        try(PreparedStatement stmnt = DAO.getDB().prepareStatement(SQLResponsabili.IMPIANTI_ASSEGNATI_A)) {
+            stmnt.setString(1, clickedRow.getUsername());
+            ResultSet response = stmnt.executeQuery();
+            while(response.next()) {
+                Impianto impianto = new Impianto(response.getInt("codiceImpianto"),
+                    response.getString("siglaProvincia"),
+                    response.getString("indirizzo"),
+                    response.getFloat("area"),
+            false,
+                    response.getInt("tipologia")
+                );
+                this.tabellaImpiantiAssegnazione.getItems().add(impianto);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        this.loadComboBoxProvinceAssegnazione();
     }
 
     private void loadComboBoxProvinceAssegnazione() {
@@ -382,17 +391,17 @@ public class ResponsabiliMain extends StageController {
     /* TODO BISOGNA DECIDERE COME GESTIRE IL FILTRO */
 
     private void loadInterventi() {
-        this.tabellaAddettiAssegnazione.getItems().clear();
-        this.tabellaImpiantiAssegnazione.getItems().clear();
-        try (PreparedStatement stmntImpianti = DAO.getDB().prepareStatement(SQLResponsabili.ADDETTI_PER_REGIONE)) {
-            stmntImpianti.setString(1, this.regione);
-            ResultSet result = stmntImpianti.executeQuery();
+        this.tabellaInterventi.getItems().clear();
+        try (PreparedStatement stmntInterventi = DAO.getDB().prepareStatement(SQLResponsabili.INTERVENTI)) {
+            stmntInterventi.setString(1, this.username);
+            ResultSet result = stmntInterventi.executeQuery();
             while(result.next()){
-                AddettoRecord addetto = new AddettoRecord(result.getString("username"),
-                result.getString("nome"),
-                result.getString("cognome")
+                InterventiRecord intervento = new InterventiRecord(result.getInt("codice"),
+                    result.getBoolean("completato"),
+                    result.getString("usernameTecnico"),
+                    result.getString("descrizione")
                 );
-                this.tabellaAddettiAssegnazione.getItems().add(addetto);
+                this.tabellaInterventi.getItems().add(intervento);
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -3,8 +3,8 @@ package scada.dao;
 public class SQLResponsabili {
 
     public static String INTERVENTI = """
-        SELECT I.codice, I.tipo, T.descrizione FROM INTERVENTO I
-        JOIN INT_TIPO T ON (I.tipo = T.tipo);
+        SELECT I.codice, I.note, I.completato, I.usernameTecnico, T.descrizione FROM INTERVENTO I
+        JOIN INT_TIPO T ON (I.tipo = T.tipo) WHERE I.usernameResponsabile = ?;
     """;
 
     public static String LISTA_MACCHINARI_IMPIANTO_FOTOVOLTAICO = """
@@ -127,10 +127,13 @@ public class SQLResponsabili {
     public static String GET_INFO_IMPIANTO_FROM_PROVINCIA_CODICE = """
         SELECT I.indirizzo, I.area, I.tipologia FROM IMPIANTO I
         WHERE I.siglaProvincia = ? AND I.codiceImpianto = ?;
-        WHERE I.siglaProvincia = ? AND I.codiceImpianto = ?;
     """;
 
     public static String LISTA_INTERVENTO_TIPI = """
         SELECT T.tipo FROM INT_TIPO T;
+    """;
+
+    public static String GET_NOTE_FROM_CODICE_INTERVENTO = """
+        SELECT I.note FROM INTERVENTO I WHERE I.codice = ?;
     """;
 }
