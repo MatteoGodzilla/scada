@@ -109,12 +109,12 @@
                                              <Label layoutX="7.0" layoutY="29.0" text="Username addetto:" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="36.0" />
                                              <TextField fx:id="textUserAddetto" editable="false" layoutX="7.0" layoutY="54.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="61.0" />
                                              <Label layoutX="7.0" layoutY="80.0" text="Provincia impianto:" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="94.0" />
-                                             <ComboBox fx:id="comboProvinciaAssegnazione" layoutX="7.0" layoutY="98.0" onAction="#filterByProvinciaAssegnazione" prefWidth="150.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="119.0" />
+                                             <ComboBox fx:id="comboProvinciaAssegnazione" disable="true" layoutX="7.0" layoutY="98.0" onAction="#unlockComboCodiceImpianto" prefWidth="150.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="119.0" />
                                              <Label layoutX="7.0" layoutY="124.0" text="Codice di riferimento:" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="152.0" />
-                                             <ComboBox fx:id="ComboCodiceAssegnazione" layoutX="7.0" layoutY="142.0" prefWidth="150.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="177.0" />
+                                             <ComboBox fx:id="comboCodiceAssegnazione" disable="true" layoutX="7.0" layoutY="142.0" onAction="#compileInfoImpianto" prefWidth="150.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="177.0" />
                                              <Label layoutX="7.0" layoutY="168.0" text="Tabella informativa impianto:" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="210.0" />
-                                             <TextArea fx:id="textInfoImpiantoAssegnazione" layoutX="3.0" layoutY="319.0" prefHeight="210.0" prefWidth="200.0" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="235.0" />
-                                             <Button mnemonicParsing="false" onAction="#assignImpiantoToAddetto" text="Assegna impianto" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" />
+                                             <TextArea fx:id="textInfoImpiantoAssegnazione" editable="false" layoutX="3.0" layoutY="319.0" prefHeight="210.0" prefWidth="200.0" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="235.0" />
+                                             <Button disable="true" mnemonicParsing="false" onAction="#assignImpiantoToAddetto" text="Assegna impianto" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" />
                                           </children>
                                        </AnchorPane>
                                     </children>

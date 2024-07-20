@@ -14,12 +14,12 @@ public class SQLResponsabili {
 
     public static String LISTA_MACCHINARI_IMPIANTO_EOLICO = """
         SELECT ME.codiceInstallazione, MA.dataInstallazione, MA.azienda, MA.nomeModello FROM MACC_EOLICO ME
-        JOIN MACCHINARIO MA ON (ME.codiceInstallazione = MA.codiceInstallazione) WHERE ME.codiceImpianto = ? AND MF.siglaProvincia = ?;
+        JOIN MACCHINARIO MA ON (ME.codiceInstallazione = MA.codiceInstallazione) WHERE ME.codiceImpianto = ? AND ME.siglaProvincia = ?;
     """;
 
     public static String LISTA_MACCHINARI_IMPIANTO_BIOGAS = """
         SELECT MB.codiceInstallazione, MA.dataInstallazione, MA.azienda, MA.nomeModello FROM MACC_BIOGAS MB
-        JOIN MACCHINARIO MA ON (MB.codiceInstallazione = MA.codiceInstallazione) WHERE MB.codiceImpianto = ? AND MF.siglaProvincia = ?;
+        JOIN MACCHINARIO MA ON (MB.codiceInstallazione = MA.codiceInstallazione) WHERE MB.codiceImpianto = ? AND MB.siglaProvincia = ?;
     """;
 
     public static String GET_REGIONE_BY_USR = """
@@ -128,8 +128,17 @@ public class SQLResponsabili {
         INSERT INTO MONITORAGGIO (usernameAddetto, codiceImpianto, siglaProvincia) VALUES (?, ?, ?);
     """;
 
-    public static String GET_PROVINCIE_FROM_REGIONE = """
+    public static String GET_PROVINCE_FROM_REGIONE = """
         SELECT P.sigla FROM PROVINCIA P WHERE P.regione = ?;
+    """;
+
+    public static String GET_CODICI_IMPIANTI_FROM_PROVINCIA = """
+        SELECT I.codiceImpianto FROM IMPIANTO I WHERE I.siglaProvincia = ?;        
+    """;
+
+    public static String GET_INFO_IMPIANTO_FROM_PROVINCIA_CODICE = """
+        SELECT I.indirizzo, I.area, I.tipologia FROM IMPIANTO I
+        WHERE I.siglaProvincia = ? AND I.codiceImpianto = ?;         
     """;
 }
 

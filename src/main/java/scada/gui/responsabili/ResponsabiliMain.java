@@ -12,6 +12,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
@@ -36,6 +37,7 @@ public class ResponsabiliMain extends StageController {
     public TextField textUserAddetto;
     public ComboBox<String> comboProvinciaAssegnazione;
     public ComboBox<Integer> comboCodiceAssegnazione;
+    public TextArea textInfoImpianto;
     public static ResponsabiliMain newInstance(String username) {
         return GuiConstructor.createInstance("/responsabili/ResponsabileDashboard.fxml", (ResponsabiliMain instance, Stage stage)-> {
             instance.stage = stage;
@@ -126,7 +128,7 @@ public class ResponsabiliMain extends StageController {
                 });
                 return row ;
             });
-            instance.loadImpiantiGestione();
+            instance.loadImpianti();
             /* FINE TABPANE GESTIONE IMPIANTI E MACCHINARI */
             /* TABPANE GESTIONE ADDETTI E IMPIANTI ASSEGNATI */
             TableColumn<AddettoRecord, String> colonnaUsernameAddetto = new TableColumn<>("Username");
@@ -179,17 +181,6 @@ public class ResponsabiliMain extends StageController {
                     if (! row.isEmpty() && event.getButton()==MouseButton.PRIMARY && event.getClickCount() == 1) {
                         AddettoRecord clickedRow = row.getItem();
                         instance.textUserAddetto.setText(clickedRow.getUsername());
-                        try(PreparedStatement stmnt = DAO.getDB().prepareStatement(SQLResponsabili.GET_PROVINCIE_FROM_REGIONE))
-                        {
-                            stmnt.setString(1, instance.regione);
-                            ResultSet response = stmnt.executeQuery();
-                            while(response.next()) {
-                                /* FIXME TROVARE COME COMPILARE COMBOBOX */
-                                //sigle.add(response.getString("sigla"));
-                            }
-                        }catch(SQLException e) {
-                            e.printStackTrace();
-                        }
                         try(PreparedStatement stmnt = DAO.getDB().prepareStatement(SQLResponsabili.IMPIANTI_ASSEGNATI_A)) {
                             stmnt.setString(1, clickedRow.getUsername());
                             ResultSet response = stmnt.executeQuery();
@@ -207,13 +198,14 @@ public class ResponsabiliMain extends StageController {
                             e.printStackTrace();
                         }
                     }
+                    instance.loadComboBoxProvinceAssegnazione();
                     });
                     return row;
                 });
         });
     }
 
-    private void loadImpiantiGestione() {
+    private void loadImpianti() {
         tabellaImpiantiGestione.getItems().clear();
         try (PreparedStatement stmntImpianti = DAO.getDB().prepareStatement(SQLResponsabili.IMPIANTI_REGIONALI)) {
             stmntImpianti.setString(1, this.regione);
@@ -226,7 +218,7 @@ public class ResponsabiliMain extends StageController {
                  false,
                  result.getInt("tipologia")
                 );
-                System.out.println(impianto.getCodice());
+                /* COMPILAZIONE TABELLA GESTIONE IMPIANTI */
                 tabellaImpiantiGestione.getItems().add(impianto);
             }
         } catch (SQLException e) {
@@ -234,9 +226,42 @@ public class ResponsabiliMain extends StageController {
         }
     }
 
+    private void loadComboBoxProvinceAssegnazione() {
+        this.comboProvinciaAssegnazione.setDisable(false);
+        this.comboProvinciaAssegnazione.getItems().clear();
+        if(!textUserAddetto.getText().isEmpty()) {
+            try (PreparedStatement stmntImpianti = DAO.getDB().prepareStatement(SQLResponsabili.GET_PROVINCE_FROM_REGIONE)) {
+                stmntImpianti.setString(1, this.regione);
+                ResultSet result = stmntImpianti.executeQuery();
+                while(result.next()){
+                    /* COMPILAZIONE COMBOBOX ASSEGNAZIONE PROVINCE */
+                    this.comboProvinciaAssegnazione.getItems().add(result.getString("sigla"));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void loadComboBoxCodiciAssegnazione() {
+        comboCodiceAssegnazione.getItems().clear();
+        if(!comboProvinciaAssegnazione.getSelectionModel().getSelectedItem().isEmpty()) {
+            try (PreparedStatement stmntImpianti = DAO.getDB().prepareStatement(SQLResponsabili.GET_CODICI_IMPIANTI_FROM_PROVINCIA)) {
+                stmntImpianti.setString(1, comboProvinciaAssegnazione.getSelectionModel().getSelectedItem());
+                ResultSet result = stmntImpianti.executeQuery();
+                while(result.next()){
+                    /* COMPILAZIONE COMBOBOX ASSEGNAZIONE CODICI */
+                    comboCodiceAssegnazione.getItems().add(result.getInt("codiceImpianto"));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void openImpiantoCreate() {
         ImpiantoCreateController impiantoCreator = ImpiantoCreateController.newInstance(this.regione);
-        impiantoCreator.closingCallback = () -> loadImpiantiGestione();
+        impiantoCreator.closingCallback = () -> loadImpianti();
         impiantoCreator.getStage().show();
     }
 
@@ -266,8 +291,38 @@ public class ResponsabiliMain extends StageController {
         return;
     }
 
-    public void filterByProvinciaAssegnazione() {
+    public void unlockComboCodiceImpianto() {
+        if(!comboProvinciaAssegnazione.getSelectionModel().getSelectedItem().isEmpty()) {
+            comboCodiceAssegnazione.setDisable(false);
+            loadComboBoxCodiciAssegnazione();
+        }
+        else {
+            comboCodiceAssegnazione.setDisable(true);
+            comboCodiceAssegnazione.getItems().clear();
+        }
         return;
+    }
+
+    public void compileInfoImpianto() {
+        /* FIXME FIND A WAY TO CHECK IF ONE CODICE IMPIANTO IS SELECTED */
+        textInfoImpianto.clear();
+        Integer codice = comboCodiceAssegnazione.getSelectionModel().getSelectedItem();
+        String provincia = comboProvinciaAssegnazione.getSelectionModel().getSelectedItem();
+        try (PreparedStatement stmntInfoImpianto = DAO.getDB().prepareStatement(SQLResponsabili.GET_INFO_IMPIANTO_FROM_PROVINCIA_CODICE)) {
+            stmntInfoImpianto.setString(1, provincia);
+            stmntInfoImpianto.setInt(2, codice);
+            ResultSet result = stmntInfoImpianto.executeQuery();
+            String infoString = "";
+            while(result.next()){
+               infoString += result.getString("indirizzo") + "\n";
+               infoString += Float.toString(result.getFloat("area")) + "\n";
+               /* FIXME MAKE JOIN TO SHOW THE TYPE DESCRIPTION */
+               infoString += Integer.toString(result.getInt("tipologia")) + "\n";
+               textInfoImpianto.setText(infoString);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /* FINESTRA GESTIONE INTERVENTI */
