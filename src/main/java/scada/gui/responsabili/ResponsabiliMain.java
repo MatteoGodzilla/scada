@@ -4,9 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableListBase;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
@@ -14,6 +13,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
@@ -37,7 +37,8 @@ public class ResponsabiliMain extends StageController {
     public TextField textUserAddetto;
     public ComboBox<String> comboProvinciaAssegnazione;
     public ComboBox<Integer> comboCodiceAssegnazione;
-    public TextArea textInfoImpianto;
+    public TextArea textInfoImpiantoAssegnazione;
+    public Button buttonAssegnaImpianto;
     public static ResponsabiliMain newInstance(String username) {
         return GuiConstructor.createInstance("/responsabili/ResponsabileDashboard.fxml", (ResponsabiliMain instance, Stage stage)-> {
             instance.stage = stage;
@@ -158,28 +159,15 @@ public class ResponsabiliMain extends StageController {
             instance.tabellaImpiantiAssegnazione.getColumns().add(colonnaIndirizzoImpiantoAssegnazione);
             instance.tabellaImpiantiAssegnazione.getColumns().add(colonnaAreaImpiantoAssegnazione);
             instance.tabellaImpiantiAssegnazione.getColumns().add(colonnaTipologiaImpiantoAssegnazione);
-
-            try (PreparedStatement stmntImpianti = DAO.getDB().prepareStatement(SQLResponsabili.ADDETTI_PER_REGIONE)) {
-                stmntImpianti.setString(1, instance.regione);
-                ResultSet result = stmntImpianti.executeQuery();
-                while(result.next()){
-                    AddettoRecord addetto = new AddettoRecord(result.getString("username"),
-                    result.getString("nome"),
-                    result.getString("cognome")
-                    );
-                    instance.tabellaAddettiAssegnazione.getItems().add(addetto);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
             instance.tabellaAddettiAssegnazione.setRowFactory(listaImpianti -> {
                 /* PULISCI TABELLA IMPIANTI */
                 instance.tabellaImpiantiAssegnazione.getItems().clear();
                 /* PROCEDURA DI RIEMPIMENTO TABELLA IMPIANTI ASSEGNATI AD ADDETTO */
                 TableRow<AddettoRecord> row = new TableRow<>();
                 row.setOnMouseClicked(event -> {
-                    if (! row.isEmpty() && event.getButton()==MouseButton.PRIMARY && event.getClickCount() == 1) {
+                    if (! row.isEmpty() && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
                         AddettoRecord clickedRow = row.getItem();
+                        instance.tabellaImpiantiAssegnazione.getItems().clear();
                         instance.textUserAddetto.setText(clickedRow.getUsername());
                         try(PreparedStatement stmnt = DAO.getDB().prepareStatement(SQLResponsabili.IMPIANTI_ASSEGNATI_A)) {
                             stmnt.setString(1, clickedRow.getUsername());
@@ -202,6 +190,7 @@ public class ResponsabiliMain extends StageController {
                     });
                     return row;
                 });
+                instance.loadAddetti();
         });
     }
 
@@ -226,6 +215,23 @@ public class ResponsabiliMain extends StageController {
         }
     }
 
+    public void loadAddetti() {
+        this.tabellaAddettiAssegnazione.getItems().clear();
+        this.tabellaImpiantiAssegnazione.getItems().clear();
+        try (PreparedStatement stmntImpianti = DAO.getDB().prepareStatement(SQLResponsabili.ADDETTI_PER_REGIONE)) {
+            stmntImpianti.setString(1, this.regione);
+            ResultSet result = stmntImpianti.executeQuery();
+            while(result.next()){
+                AddettoRecord addetto = new AddettoRecord(result.getString("username"),
+                result.getString("nome"),
+                result.getString("cognome")
+                );
+                this.tabellaAddettiAssegnazione.getItems().add(addetto);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     private void loadComboBoxProvinceAssegnazione() {
         this.comboProvinciaAssegnazione.setDisable(false);
         this.comboProvinciaAssegnazione.getItems().clear();
@@ -288,12 +294,37 @@ public class ResponsabiliMain extends StageController {
     /* FINESTRA ASSEGNAZIONE IMPIANTI AD ADDETTI*/
     /*TODO*/
     public void assignImpiantoToAddetto() {
-        /* LITERALLY ONE QUERY AND ONE REFRESH OF THE TABLE, NEED THE USERNAME OF THE CLICKED ROW */
-        return;
+        try (PreparedStatement stmntAssegnazione = DAO.getDB().prepareStatement(SQLResponsabili.ASSEGNA_IMPIANTO_A)) {
+            stmntAssegnazione.setString(1, this.textUserAddetto.getText());
+            stmntAssegnazione.setInt(2, this.comboCodiceAssegnazione.getSelectionModel().getSelectedItem());
+            stmntAssegnazione.setString(3, this.comboProvinciaAssegnazione.getSelectionModel().getSelectedItem());
+            Integer result = stmntAssegnazione.executeUpdate();
+            if(result != 0) {
+                DAO.getDB().commit();
+            }
+            else {
+                DAO.getDB().rollback();
+                Alert errorMessage = new Alert(AlertType.ERROR);
+                errorMessage.setContentText("Assegnazione dell'impianto fallita.");
+            }
+            /* refresh tabella addetti e pulizia impianti addetto*/
+            this.loadAddetti();
+            /* pulizia combobox */
+            this.comboProvinciaAssegnazione.getItems().clear();
+            this.comboCodiceAssegnazione.getItems().clear();
+            this.textInfoImpiantoAssegnazione.clear();
+            /* bloccaggio bottone e combobox */
+            this.comboProvinciaAssegnazione.setDisable(true);
+            this.comboCodiceAssegnazione.setDisable(true);
+            this.buttonAssegnaImpianto.setDisable(true);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void unlockComboCodiceImpianto() {
-        if(!comboProvinciaAssegnazione.getSelectionModel().getSelectedItem().isEmpty()) {
+        String provincia = comboProvinciaAssegnazione.getSelectionModel().getSelectedItem();
+        if(provincia != null) {
             comboCodiceAssegnazione.setDisable(false);
             loadComboBoxCodiciAssegnazione();
         }
@@ -305,24 +336,26 @@ public class ResponsabiliMain extends StageController {
     }
 
     public void compileInfoImpianto() {
-        /* FIXME FIND A WAY TO CHECK IF ONE CODICE IMPIANTO IS SELECTED */
-        textInfoImpianto.clear();
-        Integer codice = comboCodiceAssegnazione.getSelectionModel().getSelectedItem();
-        String provincia = comboProvinciaAssegnazione.getSelectionModel().getSelectedItem();
-        try (PreparedStatement stmntInfoImpianto = DAO.getDB().prepareStatement(SQLResponsabili.GET_INFO_IMPIANTO_FROM_PROVINCIA_CODICE)) {
-            stmntInfoImpianto.setString(1, provincia);
-            stmntInfoImpianto.setInt(2, codice);
-            ResultSet result = stmntInfoImpianto.executeQuery();
-            String infoString = "";
-            while(result.next()){
-               infoString += result.getString("indirizzo") + "\n";
-               infoString += Float.toString(result.getFloat("area")) + "\n";
-               /* FIXME MAKE JOIN TO SHOW THE TYPE DESCRIPTION */
-               infoString += Integer.toString(result.getInt("tipologia")) + "\n";
-               textInfoImpianto.setText(infoString);
+        textInfoImpiantoAssegnazione.clear();
+        Integer codice = this.comboCodiceAssegnazione.getSelectionModel().getSelectedItem();
+        String provincia = this.comboProvinciaAssegnazione.getSelectionModel().getSelectedItem();
+        if(codice != null && provincia != null) {
+            try (PreparedStatement stmntInfoImpianto = DAO.getDB().prepareStatement(SQLResponsabili.GET_INFO_IMPIANTO_FROM_PROVINCIA_CODICE)) {
+                stmntInfoImpianto.setString(1, provincia);
+                stmntInfoImpianto.setInt(2, codice);
+                ResultSet result = stmntInfoImpianto.executeQuery();
+                String infoString = "";
+                while(result.next()){
+                   infoString += "Indirizzo di locazione: " + result.getString("indirizzo") + "\n";
+                   infoString += "Area occupata: " + Float.toString(result.getFloat("area")) + "\n";
+                   /* FIXME MAKE JOIN TO SHOW THE TYPE DESCRIPTION */
+                   infoString += "Tipologia dell'impianto: " + Integer.toString(result.getInt("tipologia")) + "\n";
+                   textInfoImpiantoAssegnazione.setText(infoString);
+                }
+                this.buttonAssegnaImpianto.setDisable(false);
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
