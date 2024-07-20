@@ -5,6 +5,10 @@ public class SQLCreazioneImpianto {
         SELECT codice FROM TIPOLOGIA;
     """;
 
+    public static String IMPIANTI_IN_PROVINCIA = """
+        SELECT I.codiceImpianto FROM IMPIANTO I WHERE I.siglaProvincia = ?;
+    """;
+
     public static String CREAZIONE_IMPIANTO = """
         INSERT INTO IMPIANTO (siglaProvincia, indirizzo, area, tipologia)
         VALUES (?, ?, ?, ?);

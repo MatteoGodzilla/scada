@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import scada.dao.DAO;
 import scada.dao.Impianto;
 import scada.dao.InterventiTipologia;
+import scada.dao.SQLCreazioneImpianto;
 import scada.dao.SQLResponsabili;
 import scada.dao.Tipologia;
 import scada.gui.fxml.GuiConstructor;
@@ -68,34 +69,57 @@ public class InterventoImpiantoCreateController extends StageController {
         });
     }
 
+    public void filterCodiciImpianto() {
+        String provincia = this.comboProvincia.getSelectionModel().getSelectedItem();
+        if(provincia != null) {
+             this.comboCodiceImpianto.setDisable(false);
+             this.comboCodiceImpianto.getItems().clear();
+             try (PreparedStatement statementCodici = DAO.getDB().prepareStatement(SQLCreazioneImpianto.IMPIANTI_IN_PROVINCIA)) {
+                statementCodici.setString(1, provincia);
+                ResultSet result = statementCodici.executeQuery();
+                while (result.next()) {
+                    this.comboCodiceImpianto.getItems().add(result.getInt("I.codiceImpianto"));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     /**
      * Inserisce le informazioni dell'impianto
      */
     public void showImpiantoInfo() {
-        impianto = Impianto.findFromCodiceProvincia(this.comboCodiceImpianto.getSelectionModel().getSelectedItem(), this.comboProvincia.getSelectionModel().getSelectedItem());
-        if(impianto == null){
-            textImpiantoInfo.setText("Nessuna informazione aggiuntiva");
+        Integer codice = this.comboCodiceImpianto.getSelectionModel().getSelectedItem();
+        String provincia = this.comboProvincia.getSelectionModel().getSelectedItem();
+        if(codice != null && provincia != null) {
+            impianto = Impianto.findFromCodiceProvincia(codice, provincia);
+            if(impianto == null){
+                textImpiantoInfo.setText("Nessuna informazione aggiuntiva");
+            } else {
+                StringBuilder builder = new StringBuilder();
+                builder.append("Codice Impianto:");
+                builder.append(impianto.getCodice());
+                builder.append('\n');
+                builder.append("Provincia:");
+                builder.append(impianto.getProvincia());
+                builder.append('\n');
+                builder.append("Indirizzo:");
+                builder.append(impianto.getIndirizzo());
+                builder.append('\n');
+                builder.append("Area:");
+                builder.append(impianto.getArea());
+                builder.append('\n');
+                builder.append("Uomo In Sito:");
+                builder.append(impianto.isUomoInSito() ? "Presente" : "Assente");
+                builder.append('\n');
+                builder.append("Tipologia:");
+                builder.append(Tipologia.fromCode(impianto.getTipologia()));
+                builder.append('\n');
+                textImpiantoInfo.setText(builder.toString());
+            }
         } else {
-            StringBuilder builder = new StringBuilder();
-            builder.append("Codice Impianto:");
-            builder.append(impianto.getCodice());
-            builder.append('\n');
-            builder.append("Provincia:");
-            builder.append(impianto.getProvincia());
-            builder.append('\n');
-            builder.append("Indirizzo:");
-            builder.append(impianto.getIndirizzo());
-            builder.append('\n');
-            builder.append("Area:");
-            builder.append(impianto.getArea());
-            builder.append('\n');
-            builder.append("Uomo In Sito:");
-            builder.append(impianto.isUomoInSito() ? "Presente" : "Assente");
-            builder.append('\n');
-            builder.append("Tipologia:");
-            builder.append(Tipologia.fromCode(impianto.getTipologia()));
-            builder.append('\n');
-            textImpiantoInfo.setText(builder.toString());
+            this.textImpiantoInfo.setText("Nessuna informazione aggiuntiva");
         }
     }
 
