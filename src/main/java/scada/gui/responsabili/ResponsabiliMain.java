@@ -44,7 +44,6 @@ public class ResponsabiliMain extends StageController {
     /* CAMPI GESTIONE INTERVENTI */
     public TableView<InterventiRecord> tabellaInterventi;
     public TextArea textNoteInterventi;
-    //TODO:public ComboBox<TipologiaRecord> comboTipologiaInterventi;
     public ComboBox<String> comboTecniciIncaricati;
     public CheckBox checkInterventiCompletati;
 
@@ -152,6 +151,7 @@ public class ResponsabiliMain extends StageController {
                 return row;
             });
             instance.loadAddetti();
+            instance.loadComboTecnici();
             /* FINE TABPANE GESTIONE ADDETTI E IMPIANTI ASSEGNATI */
             /* INIZIO TABPANE GESTIONE INTERVENTI */
             TableColumn<InterventiRecord, String> colonnaCodiceIntervento = new TableColumn<>("Codice intervento");
@@ -182,6 +182,8 @@ public class ResponsabiliMain extends StageController {
             instance.loadInterventi();
         });
     }
+
+   
 
     /* METODI CONTROLLER E UTILITY FINESTRA GESTIONE IMPIANTI E MACCHINARI */
     private void loadImpianti() {
@@ -427,6 +429,20 @@ public class ResponsabiliMain extends StageController {
             e.printStackTrace();
         }
     }
+
+    private void loadComboTecnici() {
+        this.comboTecniciIncaricati.getItems().clear();
+        try (PreparedStatement stmntTecnici = DAO.getDB().prepareStatement(SQLResponsabili.LISTA_TECNICI_REGIONALI)) {
+            stmntTecnici.setString(1, this.regione);
+            ResultSet result = stmntTecnici.executeQuery();
+            while(result.next()){
+                this.comboTecniciIncaricati.getItems().add(result.getString("username"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void loadInterventi() {
         this.loadInterventiGeneric(SQLResponsabili.INTERVENTI);
     }
@@ -447,18 +463,36 @@ public class ResponsabiliMain extends StageController {
     }
 
     private void loadInterventiPerTecnico() {
-        this.loadInterventiGeneric(SQLResponsabili.INTERVENTI_PER_TECNICO);
+        this.loadInterventiGenericWithTwoParameters(SQLResponsabili.INTERVENTI_PER_TECNICO);
     }
 
+    private void loadInterventiGenericWithTwoParameters(String query) {
+        this.tabellaInterventi.getItems().clear();
+        try (PreparedStatement stmntInterventi = DAO.getDB().prepareStatement(query)) {
+            stmntInterventi.setString(1, this.username);
+            stmntInterventi.setString(2, this.comboTecniciIncaricati.getSelectionModel().getSelectedItem());
+            ResultSet result = stmntInterventi.executeQuery();
+            while(result.next()){
+                InterventiRecord intervento = new InterventiRecord(result.getInt("codice"),
+                    result.getBoolean("completato"),
+                    result.getString("usernameTecnico"),
+                    result.getString("descrizione"),
+                    result.getString("note")
+                );
+                this.tabellaInterventi.getItems().add(intervento);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     private void loadInterventiCompletatiPerTecnico() {
-        this.loadInterventiGeneric(SQLResponsabili.INTERVENTI_COMPLETATI_PER_TECNICO);
+        this.loadInterventiGenericWithTwoParameters(SQLResponsabili.INTERVENTI_COMPLETATI_PER_TECNICO);
     }
 
-    /*TODO*/
-    public void showOnlyCompletedInterventi() {
-        return;
+    public void refreshTableInterventi() {
+        this.loadInterventi();
+        this.checkInterventiCompletati.setSelected(false);
     }
-
     /**
      * Apre la finestra di creazione di un intervento per un impianto
      */

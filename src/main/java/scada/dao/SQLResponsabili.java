@@ -46,7 +46,7 @@ public class SQLResponsabili {
 
     public static String INTERVENTI_PER_TECNICO = """
         SELECT I.codice, I.note, I.completato, I.usernameTecnico, T.descrizione FROM INTERVENTO I
-        JOIN INT_TIPO T ON (I.tipo = T.tipo) WHERE I.usernameResponsabile = ? AND WHERE I.usernameTecnico = ?;
+        JOIN INT_TIPO T ON (I.tipo = T.tipo) WHERE I.usernameResponsabile = ? AND I.usernameTecnico = ?;
     """;
 
     public static String INTERVENTI_COMPLETATI_PER_TECNICO = """
@@ -82,7 +82,7 @@ public class SQLResponsabili {
 
     public static String LISTA_TECNICI_REGIONALI = """
         SELECT T.username FROM USR_TECNICO T WHERE T.siglaProvincia IN
-        (SELECT P.siglaProvincia FROM PROVINCIA P WHERE P.regione = ?);
+        (SELECT P.sigla FROM PROVINCIA P WHERE P.regione = ?);
     """;
 
     public static String IMPIANTI_REGIONALI = """
