@@ -500,6 +500,7 @@ public class ResponsabiliMain extends StageController {
      */
     public void openInterventiImpiantocreate() {
         InterventoImpiantoCreateController intImpianto = InterventoImpiantoCreateController.newInstance(regione, username);
+        intImpianto.onCloseRunnable = () -> this.refreshTableInterventi();
         intImpianto.getStage().show();
     }
 
@@ -507,7 +508,8 @@ public class ResponsabiliMain extends StageController {
      * Apre la finestra di creazione di un intervento per un macchinario
      */
     public void openInterventiMacchinarioCreate() {
-        InterventoMacchinarioCreateController intMacc = InterventoMacchinarioCreateController.newInstance(regione, username);
-        intMacc.getStage().show();
+        InterventoMacchinarioCreateController interventoMacchinarioCreator = InterventoMacchinarioCreateController.newInstance(regione, username);
+        interventoMacchinarioCreator.onCloseRunnable = () -> this.refreshTableInterventi();
+        interventoMacchinarioCreator.getStage().show();
     }
 }

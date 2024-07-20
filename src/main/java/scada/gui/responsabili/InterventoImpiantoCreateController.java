@@ -16,7 +16,7 @@ import scada.gui.fxml.GuiConstructor;
 import scada.gui.fxml.StageController;
 
 public class InterventoImpiantoCreateController extends StageController {
-
+    public Runnable onCloseRunnable;
     public ComboBox<Integer> comboTipologia;
     public ComboBox<String> comboProvincia;
     public ComboBox<Integer> comboCodiceImpianto;
@@ -30,7 +30,7 @@ public class InterventoImpiantoCreateController extends StageController {
             instance.stage = stage;
             instance.regione = regione;
             instance.username = username;
-            //Aggiunge le tipologie di intevento alla combobox
+            //Aggiunge le tipologie di intervento alla combobox
             try (PreparedStatement statement = DAO.getDB().prepareStatement(SQLResponsabili.LISTA_INTERVENTO_TIPI)) {
                 ResultSet result = statement.executeQuery();
                 while (result.next()) {
@@ -129,6 +129,8 @@ public class InterventoImpiantoCreateController extends StageController {
                 System.out.println("INSERIMENTO DI INTERVENTO RIUSCITO!!!");
                 DAO.getDB().commit();
             }
+            this.onCloseRunnable.run();
+            this.stage.hide();
         } catch (SQLException e) {
             e.printStackTrace();
         }

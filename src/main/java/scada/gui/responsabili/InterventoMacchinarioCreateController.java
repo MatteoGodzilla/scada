@@ -17,7 +17,7 @@ import scada.gui.fxml.GuiConstructor;
 import scada.gui.fxml.StageController;
 
 public class InterventoMacchinarioCreateController extends StageController {
-
+    public Runnable onCloseRunnable;
     public ComboBox<Integer> comboTipologia;
     public ComboBox<Integer> comboCodiceInstallazione;
     public TextArea textMacchinarioInfo;
@@ -141,6 +141,8 @@ public class InterventoMacchinarioCreateController extends StageController {
                 System.out.println("INSERIMENTO DI INTERVENTO RIUSCITO!!!");
                 DAO.getDB().commit();
             }
+            onCloseRunnable.run();
+            this.stage.hide();
         } catch (SQLException e) {
             e.printStackTrace();
         }
