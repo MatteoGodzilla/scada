@@ -108,14 +108,6 @@ public class SQLResponsabili {
         INSERT INTO IMPIANTO (siglaProvincia, indirizzo, area, tipologia) VALUES (?, ?, ?, ?);
     """;
 
-    public static String CREAZIONE_BIOGAS = """
-        INSERT INTO MACC_BIOGAS (codiceImpianto, siglaProvincia, codiceInstallazione, codiceInterno, kwhOttimo, kgBatteri, kgUmido) VALUES (?, ?, ?, ?, ?, ?, ?);
-    """;
-
-    public static String CREAZIONE_EOLICO = """
-        INSERT INTO MACC_EOLICO (codiceImpianto, siglaProvincia, codiceInstallazione, codiceInterno) VALUES (?, ?, ?, ?);
-    """;
-
     public static String CREAZIONE_MACCHINARIO = """
         INSERT INTO MACCHINARIO (dataInstallazione, tipologia, azienda, nomeModello, durataGaranzia, status) VALUES (?, ?, ?, ?, ?, ?);
     """;
@@ -129,12 +121,12 @@ public class SQLResponsabili {
     """;
 
     public static String GET_CODICI_IMPIANTI_FROM_PROVINCIA = """
-        SELECT I.codiceImpianto FROM IMPIANTO I WHERE I.siglaProvincia = ?;        
+        SELECT I.codiceImpianto FROM IMPIANTO I WHERE I.siglaProvincia = ?;
     """;
 
     public static String GET_INFO_IMPIANTO_FROM_PROVINCIA_CODICE = """
         SELECT I.indirizzo, I.area, I.tipologia FROM IMPIANTO I
-        WHERE I.siglaProvincia = ? AND I.codiceImpianto = ?;         
+        WHERE I.siglaProvincia = ? AND I.codiceImpianto = ?;
     """;
 }
 
