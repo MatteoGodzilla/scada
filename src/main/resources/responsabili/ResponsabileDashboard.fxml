@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.stage.Stage?>
 
-<Stage minHeight="600.0" minWidth="800.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.responsabili.ResponsabiliMain">
+<Stage minHeight="600.0" minWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.responsabili.ResponsabiliMain">
     <scene>
         <Scene>
             <AnchorPane prefHeight="600.0" prefWidth="800.0">
@@ -161,6 +161,8 @@
                                              <Label layoutX="7.0" layoutY="478.0" text="Richiedi intervento per:" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="7.0" />
                                              <Button layoutY="503.0" mnemonicParsing="false" onAction="#openInterventiImpiantocreate" text="IMPIANTO" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" />
                                              <Button layoutX="-13.0" layoutY="529.0" mnemonicParsing="false" onAction="#openInterventiMacchinarioCreate" text="MACCHINARIO" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" />
+                                             <Label layoutX="7.0" layoutY="163.0" text="Note" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="170.0" />
+                                             <TextArea editable="false" layoutX="7.0" layoutY="188.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="105.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="195.0" />
                                           </children>
                                        </AnchorPane>
                                     </children>

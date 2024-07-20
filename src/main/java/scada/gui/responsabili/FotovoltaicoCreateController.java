@@ -38,8 +38,8 @@ public class FotovoltaicoCreateController extends StageController {
     public TextField textCostoGaranzia;
     public TextArea textDescrizioneGaranzia;
 
-    public Spinner<Integer> spinCelle;
-    public Spinner<Float> spinAngoloPannello;
+    public TextField textCelle;
+    public TextField textAngoloPannello;
     public TextField textKWHMassimi;
     public Button btnInstallation;
 
@@ -130,8 +130,8 @@ public class FotovoltaicoCreateController extends StageController {
         textDescrizioneGaranzia.setText(info.description);
         textCostoGaranzia.setText((float)(info.price)/100 + "");
 
-        spinCelle.setDisable(false);
-        spinAngoloPannello.setDisable(false);
+        textCelle.setDisable(false);
+        textAngoloPannello.setDisable(false);
         textKWHMassimi.setDisable(false);
         btnInstallation.setDisable(false);
     }
@@ -164,9 +164,9 @@ public class FotovoltaicoCreateController extends StageController {
             stmt3.setString(2, impianto.getProvincia());
             stmt3.setInt(3, codiceInstallazione);
             stmt3.setInt(4, codiceInterno);
-            stmt3.setInt(5, Integer.parseInt(spinCelle.getEditor().getText()));
+            stmt3.setInt(5, Integer.parseInt(textCelle.getText()));
             stmt3.setFloat(6, Float.parseFloat(textKWHMassimi.getText()));
-            stmt3.setFloat(7, Float.parseFloat(spinAngoloPannello.getEditor().getText()));
+            stmt3.setFloat(7, Float.parseFloat(textAngoloPannello.getText()));
 
             if(stmt3.executeUpdate() > 0){
                 DAO.getDB().commit();

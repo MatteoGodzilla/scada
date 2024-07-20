@@ -10,7 +10,6 @@ import java.util.Map;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Spinner;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -38,8 +37,8 @@ public class BiogasCreateController extends StageController {
     public TextField textCostoGaranzia;
     public TextArea textDescrizioneGaranzia;
 
-    public Spinner<Integer> spinKGBatteri;
-    public Spinner<Integer> spinKGUmido;
+    public TextField textKGBatteri;
+    public TextField textKGUmido;
     public TextField textKWHOttimali;
     public Button btnInstallation;
 
@@ -132,8 +131,8 @@ public class BiogasCreateController extends StageController {
         textDescrizioneGaranzia.setText(info.description);
         textCostoGaranzia.setText((float)(info.price)/100 + "");
 
-        spinKGBatteri.setDisable(false);
-        spinKGUmido.setDisable(false);
+        textKGBatteri.setDisable(false);
+        textKGUmido.setDisable(false);
         textKWHOttimali.setDisable(false);
         btnInstallation.setDisable(false);
     }
@@ -167,8 +166,8 @@ public class BiogasCreateController extends StageController {
             stmt3.setInt(3, codiceInstallazione);
             stmt3.setInt(4, codiceInterno);
             stmt3.setFloat(5, Float.parseFloat(textKWHOttimali.getText()));
-            stmt3.setFloat(6, Float.parseFloat(spinKGBatteri.getEditor().getText()));
-            stmt3.setFloat(7, Float.parseFloat(spinKGUmido.getEditor().getText()));
+            stmt3.setFloat(6, Float.parseFloat(textKGBatteri.getText()));
+            stmt3.setFloat(7, Float.parseFloat(textKGUmido.getText()));
 
             if(stmt3.executeUpdate() > 0){
                 DAO.getDB().commit();

@@ -246,15 +246,17 @@ public class ResponsabiliMain extends StageController {
         switch(selected.getTipologia()) {
             case 1: /* FOTOVOLTAICO */
                 FotovoltaicoCreateController fotovoltaicoCreator = FotovoltaicoCreateController.newInstance(selected.getCodice(), selected.getProvincia());
-                fotovoltaicoCreator.onCloseRunnable = () -> this.loadMacchinariDaImpianto(this.tabellaImpiantiGestione.getSelectionModel().getSelectedItem());
+                fotovoltaicoCreator.onCloseRunnable = () -> loadMacchinariDaImpianto(selected);
                 fotovoltaicoCreator.getStage().show();
                 break;
             case 2: /* EOLICO */
                 EolicoCreateController eolicoCreator = EolicoCreateController.newInstance(selected.getCodice(), selected.getProvincia());
+                eolicoCreator.onCloseRunnable = () -> loadMacchinariDaImpianto(selected);
                 eolicoCreator.getStage().show();
                 break;
-            case 3:
+            case 3: /* BIOGAS */
                 BiogasCreateController biogasCreator = BiogasCreateController.newInstance(selected.getCodice(), selected.getProvincia());
+                biogasCreator.onCloseRunnable = () -> loadMacchinariDaImpianto(selected);
                 biogasCreator.getStage().show();
                 break;
         }
