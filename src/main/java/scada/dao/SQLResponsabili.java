@@ -35,7 +35,7 @@ public class SQLResponsabili {
     """;
 
     public static String CREAZIONE_INTERVENTO_IMPIANTO = """
-        INSERT INTO INT_IMPIANTO (codiceImpianto, codiceIntervento, siglaProvincia) VALUES (?, ?, ?);
+        INSERT INTO INT_IMPIANTO (codiceIntervento, codiceImpianto, siglaProvincia) VALUES (?, ?, ?);
     """;
 
     public static String INTERVENTI_COMPLETATI = """
@@ -127,7 +127,10 @@ public class SQLResponsabili {
     public static String GET_INFO_IMPIANTO_FROM_PROVINCIA_CODICE = """
         SELECT I.indirizzo, I.area, I.tipologia FROM IMPIANTO I
         WHERE I.siglaProvincia = ? AND I.codiceImpianto = ?;
+        WHERE I.siglaProvincia = ? AND I.codiceImpianto = ?;
+    """;
+
+    public static String LISTA_INTERVENTO_TIPI = """
+        SELECT T.tipo FROM INT_TIPO T;
     """;
 }
-
-

@@ -339,13 +339,20 @@ public class ResponsabiliMain extends StageController {
     public void showOnlyCompletedInterventi() {
         return;
     }
-    /*TODO*/
+
+    /**
+     * Apre la finestra di creazione di un intervento per un impianto
+     */
     public void openInterventiImpiantocreate() {
-        return;
+        InterventoImpiantoCreateController intImpianto = InterventoImpiantoCreateController.newInstance(regione, username);
+        intImpianto.getStage().show();
     }
 
-    /*TODO*/
+    /**
+     * Apre la finestra di creazione di un intervento per un macchinario
+     */
     public void openInterventiMacchinarioCreate() {
-        return;
+        InterventoMacchinarioCreateController intMacc = InterventoMacchinarioCreateController.newInstance();
+        intMacc.getStage().show();
     }
 }
