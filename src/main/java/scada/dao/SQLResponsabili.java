@@ -85,10 +85,10 @@ public class SQLResponsabili {
         (SELECT P.sigla FROM PROVINCIA P WHERE P.regione = ?);
     """;
 
-    public static String IMPIANTI_REGIONALI = """
+    public static String IMPIANTI_REGIONALI_ATTIVI = """
         SELECT I.codiceImpianto, I.siglaProvincia, I.indirizzo, I.area, I.tipologia FROM IMPIANTO I
         WHERE I.siglaProvincia IN (SELECT P.sigla FROM PROVINCIA P
-        WHERE P.regione = ?);
+        WHERE P.regione = ?) AND I.inOperazione = 1;
     """;
 
     public static String IMPIANTI_NON_ASSEGNATI_A = """

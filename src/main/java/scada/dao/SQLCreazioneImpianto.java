@@ -9,4 +9,10 @@ public class SQLCreazioneImpianto {
         INSERT INTO IMPIANTO (siglaProvincia, indirizzo, area, tipologia)
         VALUES (?, ?, ?, ?);
     """;
+
+    public static String DISMISSIONE_IMPIANTO = """
+        UPDATE IMPIANTO I 
+        SET inOperazione = 0
+        WHERE I.codiceImpianto = ? AND  I.siglaProvincia = ?;
+    """;
 }

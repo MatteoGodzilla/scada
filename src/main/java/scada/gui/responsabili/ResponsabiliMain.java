@@ -10,6 +10,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
@@ -22,6 +23,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -32,6 +35,7 @@ import scada.dao.DAO;
 import scada.dao.Impianto;
 import scada.dao.InterventiRecord;
 import scada.dao.Macchinario;
+import scada.dao.SQLCreazioneImpianto;
 import scada.dao.SQLResponsabili;
 import scada.dao.Tipologia;
 
@@ -204,7 +208,7 @@ public class ResponsabiliMain extends StageController {
     /* METODI CONTROLLER E UTILITY FINESTRA GESTIONE IMPIANTI E MACCHINARI */
     private void loadImpianti() {
         tabellaImpiantiGestione.getItems().clear();
-        try (PreparedStatement stmntImpianti = DAO.getDB().prepareStatement(SQLResponsabili.IMPIANTI_REGIONALI)) {
+        try (PreparedStatement stmntImpianti = DAO.getDB().prepareStatement(SQLResponsabili.IMPIANTI_REGIONALI_ATTIVI)) {
             stmntImpianti.setString(1, this.regione);
             ResultSet result = stmntImpianti.executeQuery();
             while(result.next()){
@@ -284,6 +288,29 @@ public class ResponsabiliMain extends StageController {
         }
     }
 
+    public void deleteImpianto(KeyEvent event) {
+        if( event.getCode() == KeyCode.DELETE) {
+            Impianto impianto = this.tabellaImpiantiGestione.getSelectionModel().getSelectedItem();
+            Alert confirm = new Alert(AlertType.CONFIRMATION);
+            confirm.setHeaderText("In questo modo metterai in dismissione l'impianto, sei sicuro?");
+            confirm.showAndWait();
+            if(confirm.getResult() == ButtonType.OK) {
+                try (PreparedStatement stmntDismissioneImpianti = DAO.getDB().prepareStatement(SQLCreazioneImpianto.DISMISSIONE_IMPIANTO)) {
+                    stmntDismissioneImpianti.setInt(1, impianto.getCodice());
+                    stmntDismissioneImpianti.setString(2, impianto.getProvincia());
+                    if(stmntDismissioneImpianti.executeUpdate() > 0) {
+                        DAO.getDB().commit();
+                    } else {
+                        DAO.getDB().rollback();
+                    }
+                    this.loadImpianti();
+                    this.tabellaMacchinariGestione.getItems().clear();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
     /* METODI CONTROLLER E UTILITY FINESTRA ASSEGNAZIONE IMPIANTI AD ADDETTI*/
     private void loadAddetti() {
         this.tabellaAddettiAssegnazione.getItems().clear();

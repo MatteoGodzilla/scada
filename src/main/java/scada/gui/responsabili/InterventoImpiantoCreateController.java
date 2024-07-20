@@ -50,7 +50,7 @@ public class InterventoImpiantoCreateController extends StageController {
                 e.printStackTrace();
             }
             //Aggiunge i codici degli impianti di quella regione
-            try (PreparedStatement statement2 = DAO.getDB().prepareStatement(SQLResponsabili.IMPIANTI_REGIONALI)) {
+            try (PreparedStatement statement2 = DAO.getDB().prepareStatement(SQLResponsabili.IMPIANTI_REGIONALI_ATTIVI)) {
                 statement2.setString(1, instance.regione);
                 ResultSet result2 = statement2.executeQuery();
                 while (result2.next()) {
