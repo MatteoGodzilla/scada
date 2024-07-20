@@ -104,10 +104,6 @@ public class SQLResponsabili {
         SELECT G.durataAnni, G.descrizione, G.costo FROM GARANZIA G WHERE G.azienda = ? AND G.nomeModello = ?;
     """;
 
-    public static String CREAZIONE_IMPIANTO = """
-        INSERT INTO IMPIANTO (siglaProvincia, indirizzo, area, tipologia) VALUES (?, ?, ?, ?);
-    """;
-
     public static String CREAZIONE_MACCHINARIO = """
         INSERT INTO MACCHINARIO (dataInstallazione, tipologia, azienda, nomeModello, durataGaranzia, status) VALUES (?, ?, ?, ?, ?, ?);
     """;

@@ -235,7 +235,7 @@ public class ResponsabiliMain extends StageController {
 
     public void openImpiantoCreate() {
         ImpiantoCreateController impiantoCreator = ImpiantoCreateController.newInstance(this.regione);
-        impiantoCreator.closingCallback = () -> loadImpianti();
+        impiantoCreator.onCloseRunnable = () -> loadImpianti();
         impiantoCreator.getStage().show();
     }
 
