@@ -76,7 +76,7 @@ public class InterventoMacchinarioCreateController extends StageController {
      * Inserisce le informazioni del macchinario
      */
     public void showMacchinarioInfo() {
-        macchinario = Macchinario.findFromInstCode(this.comboCodiceInstallazione.getValue());
+        macchinario = Macchinario.findFromInstCode(this.comboCodiceInstallazione.getSelectionModel().getSelectedItem());
         if(macchinario == null){
             textMacchinarioInfo.setText("Nessuna informazione aggiuntiva");
         } else {
@@ -114,7 +114,7 @@ public class InterventoMacchinarioCreateController extends StageController {
         int codice = 0;
         try (PreparedStatement statement = DAO.getDB().prepareStatement(SQLResponsabili.CREAZIONE_INTERVENTI, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, this.username);
-            statement.setInt(2, this.comboTipologia.getValue());
+            statement.setInt(2, this.comboTipologia.getSelectionModel().getSelectedItem());
             int res = statement.executeUpdate();
             if (res == 0) {
                 System.out.println("INSERIMENTO DI INTERVENTO FALLITO!!!");
@@ -132,7 +132,7 @@ public class InterventoMacchinarioCreateController extends StageController {
         //Aggiunto l'intervento a INT_MACCHINARIO
         try (PreparedStatement statement1 = DAO.getDB().prepareStatement(SQLResponsabili.CREAZIONE_INTERVENTO_MACCHINARIO)) {
             statement1.setInt(1, codice);
-            statement1.setInt(2, this.comboCodiceInstallazione.getValue());
+            statement1.setInt(2, this.comboCodiceInstallazione.getSelectionModel().getSelectedItem());
             int res1 = statement1.executeUpdate();
             if (res1 == 0) {
                 System.out.println("INSERIMENTO DI INTERVENTO FALLITO!!!");
