@@ -183,7 +183,7 @@ public class ResponsabiliMain extends StageController {
         });
     }
 
-   
+
 
     /* METODI CONTROLLER E UTILITY FINESTRA GESTIONE IMPIANTI E MACCHINARI */
     private void loadImpianti() {
@@ -507,7 +507,7 @@ public class ResponsabiliMain extends StageController {
      * Apre la finestra di creazione di un intervento per un macchinario
      */
     public void openInterventiMacchinarioCreate() {
-        InterventoMacchinarioCreateController intMacc = InterventoMacchinarioCreateController.newInstance();
+        InterventoMacchinarioCreateController intMacc = InterventoMacchinarioCreateController.newInstance(regione, username);
         intMacc.getStage().show();
     }
 }

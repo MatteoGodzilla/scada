@@ -5,12 +5,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import scada.dao.DAO;
+import scada.dao.Impianto;
 import scada.dao.SQLResponsabili;
+import scada.dao.Tipologia;
 import scada.gui.fxml.GuiConstructor;
 import scada.gui.fxml.StageController;
 
@@ -18,9 +19,11 @@ public class InterventoImpiantoCreateController extends StageController {
 
     public ComboBox<Integer> comboTipologia;
     public ComboBox<String> comboProvincia;
-    public ComboBox<Integer> comboCodiciInstallazione;
+    public ComboBox<Integer> comboCodiceImpianto;
+    public TextArea textImpiantoInfo;
     private String regione;
     private String username;
+    private Impianto impianto;
 
     public static InterventoImpiantoCreateController newInstance(String regione, String username){
         return GuiConstructor.createInstance("/responsabili/InterventiImpiantoCreate.fxml",(InterventoImpiantoCreateController instance, Stage stage) ->{
@@ -51,16 +54,43 @@ public class InterventoImpiantoCreateController extends StageController {
                 statement2.setString(1, instance.regione);
                 ResultSet result2 = statement2.executeQuery();
                 while (result2.next()) {
-                    instance.comboCodiciInstallazione.getItems().add(result2.getInt("I.codiceImpianto"));
+                    instance.comboCodiceImpianto.getItems().add(result2.getInt("I.codiceImpianto"));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         });
     }
-    /*TODO*/
+
+    /**
+     * Inserisce le informazioni dell'impianto
+     */
     public void showImpiantoInfo() {
-        return;
+        impianto = Impianto.findFromCodiceProvincia(this.comboCodiceImpianto.getValue(), this.comboProvincia.getValue());
+        if(impianto == null){
+            textImpiantoInfo.setText("Nessuna informazione aggiuntiva");
+        } else {
+            StringBuilder builder = new StringBuilder();
+            builder.append("Codice Impianto:");
+            builder.append(impianto.getCodice());
+            builder.append('\n');
+            builder.append("Provincia:");
+            builder.append(impianto.getProvincia());
+            builder.append('\n');
+            builder.append("Indirizzo:");
+            builder.append(impianto.getIndirizzo());
+            builder.append('\n');
+            builder.append("Area:");
+            builder.append(impianto.getArea());
+            builder.append('\n');
+            builder.append("Uomo In Sito:");
+            builder.append(impianto.isUomoInSito() ? "Presente" : "Assente");
+            builder.append('\n');
+            builder.append("Tipologia:");
+            builder.append(Tipologia.fromCode(impianto.getTipologia()));
+            builder.append('\n');
+            textImpiantoInfo.setText(builder.toString());
+        }
     }
 
     /**
@@ -72,9 +102,6 @@ public class InterventoImpiantoCreateController extends StageController {
         try (PreparedStatement statement = DAO.getDB().prepareStatement(SQLResponsabili.CREAZIONE_INTERVENTI, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, this.username);
             statement.setInt(2, this.comboTipologia.getValue());
-            var cod = statement.getGeneratedKeys();
-            cod.next();
-            codice = cod.getInt(1);
             int res = statement.executeUpdate();
             if (res == 0) {
                 System.out.println("INSERIMENTO DI INTERVENTO FALLITO!!!");
@@ -83,13 +110,16 @@ public class InterventoImpiantoCreateController extends StageController {
                 System.out.println("INSERIMENTO DI INTERVENTO RIUSCITO!!!");
                 DAO.getDB().commit();
             }
+            var cod = statement.getGeneratedKeys();
+            cod.next();
+            codice = cod.getInt(1);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         //Aggiungo l'intervento a INT_IMPIANTO
         try (PreparedStatement statement1 = DAO.getDB().prepareStatement(SQLResponsabili.CREAZIONE_INTERVENTO_IMPIANTO)) {
             statement1.setInt(1, codice);
-            statement1.setInt(2, this.comboCodiciInstallazione.getValue());
+            statement1.setInt(2, this.comboCodiceImpianto.getValue());
             statement1.setString(3, this.comboProvincia.getValue());
             int res1 = statement1.executeUpdate();
             if (res1 == 0) {

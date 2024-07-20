@@ -31,7 +31,7 @@ public class SQLResponsabili {
     """;
 
     public static String CREAZIONE_INTERVENTO_MACCHINARIO = """
-        INSERT INTO INT_MACCHINARIO (codiceInstallazione, codiceIntervento) VALUES (?, ?);
+        INSERT INTO INT_MACCHINARIO (codiceIntervento, codiceInstallazione) VALUES (?, ?);
     """;
 
     public static String CREAZIONE_INTERVENTO_IMPIANTO = """
@@ -151,7 +151,7 @@ public class SQLResponsabili {
         WHERE MB.siglaProvincia IN (SELECT P.sigla FROM PROVINCIA P WHERE P.regione = ?);
     """;
 
-    public static String LISTA_MACCHINARI_EOLICO_PER_REGIONE = """
+    public static String LISTA_MACCHINARI_EOLICI_PER_REGIONE = """
         SELECT MA.codiceInstallazione FROM MACCHINARIO MA
         JOIN MACC_EOLICO ME ON (MA.codiceInstallazione = ME.codiceInstallazione)
         WHERE ME.siglaProvincia IN (SELECT P.sigla FROM PROVINCIA P WHERE P.regione = ?);
