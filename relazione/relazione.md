@@ -629,17 +629,21 @@ VALUES (<usernameResponsabile>, <tipo>)
 <ins>Visualizzare lo storico di tutti gli interventi</ins>
 
 ```SQL
-SELECT I.codice, I.tipo, T.descrizione FROM INTERVENTO I
+SELECT I.codice, I.note, I.completato, I.usernameTecnico, T.descrizione
+FROM INTERVENTO I
 JOIN INT_TIPO T ON (I.tipo = T.tipo)
+WHERE I.usernameResponsabile = <usernameResponsabile>
 ```
 
 <ins>Visualizzazione delle note di fine intervento scritte dai tecnici</ins>
 
 Questa operazione viene svolta insieme alla visualizzazione dei parametri generali di un intervento.
 ```SQL
-SELECT I.codice, I.tipo, T.descrizione, I.note FROM INTERVENTO I
+SELECT I.codice, I.note, I.completato, I.usernameTecnico, T.descrizione
+FROM INTERVENTO I
 JOIN INT_TIPO T ON (I.tipo = T.tipo)
-WHERE completato = 1
+WHERE I.completato = 1
+AND I.usernameResponsabile = <usernameResponsabile>
 ```
 
 <ins>Assegnazione del controllo di un impianto agli addetti SCADA</ins>
@@ -710,7 +714,7 @@ Schermata 1: Gestione Impianti
 4. Bottone per l'apertura della finestra dedicata per l'inserimento di un nuovo macchinario all'interno dell'impianto
 
 Schermata 2: Assegnazione del controllo impianto agli addetti SCADA
-![Screenshot Responsabili 2]()
+![Screenshot Responsabili 2](Screenshot_responsabile_2.png)
 
 Schermata 3: Gestione degli interventi
-![Screenshot Responsabili 3]()
+![Screenshot Responsabili 3](Screenshot_responsabile_3.png)
