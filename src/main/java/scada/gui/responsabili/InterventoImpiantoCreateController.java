@@ -66,7 +66,7 @@ public class InterventoImpiantoCreateController extends StageController {
      * Inserisce le informazioni dell'impianto
      */
     public void showImpiantoInfo() {
-        impianto = Impianto.findFromCodiceProvincia(this.comboCodiceImpianto.getValue(), this.comboProvincia.getValue());
+        impianto = Impianto.findFromCodiceProvincia(this.comboCodiceImpianto.getSelectionModel().getSelectedItem(), this.comboProvincia.getSelectionModel().getSelectedItem());
         if(impianto == null){
             textImpiantoInfo.setText("Nessuna informazione aggiuntiva");
         } else {
@@ -101,7 +101,7 @@ public class InterventoImpiantoCreateController extends StageController {
         int codice = 0;
         try (PreparedStatement statement = DAO.getDB().prepareStatement(SQLResponsabili.CREAZIONE_INTERVENTI, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, this.username);
-            statement.setInt(2, this.comboTipologia.getValue());
+            statement.setInt(2, this.comboTipologia.getSelectionModel().getSelectedItem());
             int res = statement.executeUpdate();
             if (res == 0) {
                 System.out.println("INSERIMENTO DI INTERVENTO FALLITO!!!");
@@ -119,8 +119,8 @@ public class InterventoImpiantoCreateController extends StageController {
         //Aggiungo l'intervento a INT_IMPIANTO
         try (PreparedStatement statement1 = DAO.getDB().prepareStatement(SQLResponsabili.CREAZIONE_INTERVENTO_IMPIANTO)) {
             statement1.setInt(1, codice);
-            statement1.setInt(2, this.comboCodiceImpianto.getValue());
-            statement1.setString(3, this.comboProvincia.getValue());
+            statement1.setInt(2, this.comboCodiceImpianto.getSelectionModel().getSelectedItem());
+            statement1.setString(3, this.comboProvincia.getSelectionModel().getSelectedItem());
             int res1 = statement1.executeUpdate();
             if (res1 == 0) {
                 System.out.println("INSERIMENTO DI INTERVENTO FALLITO!!!");
