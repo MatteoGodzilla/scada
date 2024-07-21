@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.stage.Stage?>
 
-<Stage title="Addetto SCADA" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.addetti.Addetto">
+<Stage minHeight="600.0" minWidth="800.0" title="Addetto SCADA" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scada.gui.addetti.Addetto">
     <scene>
         <Scene fx:id="sceneAddetto">
             <AnchorPane prefHeight="629.0" prefWidth="639.0">
