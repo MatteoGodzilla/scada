@@ -56,31 +56,34 @@ public class Login extends StageController {
             }
             statement.setString(1, username.getText());
             ResultSet hashResponse = statement.executeQuery();
-            hashResponse.next();
+            if(!hashResponse.next()){
+                error.setText("Username/Password invalida");
+                return;
+            }
             String hash = hashResponse.getString("password");
             Result r = BCrypt.verifyer().verify(password.getText().toCharArray(), hash);
-            if(r.verified){
-                switch (type.getSelectionModel().getSelectedIndex()) {
-                    case 0:
-                        //open window Tecnici
-                        TecniciMain tecnici = TecniciMain.newInstance(username.getText());
-                        tecnici.getStage().show();
-                        break;
-                    case 1:
-                        //open window Addetti
-                        Addetto newWindow = Addetto.newInstance(username.getText());
-                        newWindow.getStage().show();
-                        break;
-                    case 2:
-                        //open window Responsabili
-                        ResponsabiliMain responsabili = ResponsabiliMain.newInstance(username.getText());
-                        responsabili.getStage().show();
-                        break;
-                }
-                stage.hide();
-            } else {
+            if(!r.verified){
                 error.setText("Username/Password invalida");
+                return;
             }
+            switch (type.getSelectionModel().getSelectedIndex()) {
+                case 0:
+                    //open window Tecnici
+                    TecniciMain tecnici = TecniciMain.newInstance(username.getText());
+                    tecnici.getStage().show();
+                    break;
+                case 1:
+                    //open window Addetti
+                    Addetto newWindow = Addetto.newInstance(username.getText());
+                    newWindow.getStage().show();
+                    break;
+                case 2:
+                    //open window Responsabili
+                    ResponsabiliMain responsabili = ResponsabiliMain.newInstance(username.getText());
+                    responsabili.getStage().show();
+                    break;
+            }
+            stage.hide();
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             e.printStackTrace();
