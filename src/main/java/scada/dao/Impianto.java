@@ -50,9 +50,9 @@ public class Impianto {
             statement.setInt(1, codice);
             statement.setString(2, provincia);
             ResultSet result = statement.executeQuery();
-            result.next();
-            return new Impianto(result.getInt(1), result.getString(2), result.getString(3),
-                result.getFloat(4), result.getBoolean(5), result.getInt(6));
+            if(result.next())
+                return new Impianto(result.getInt(1), result.getString(2), result.getString(3),
+                    result.getFloat(4), result.getBoolean(5), result.getInt(6));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -77,13 +77,13 @@ public class Impianto {
                 }
             stmt.setInt(1, macchinario.getCodiceInstallazione());
             ResultSet result = stmt.executeQuery();
-            result.next();
-            return new Impianto(result.getInt(1), result.getString(2), result.getString(3),
-                result.getFloat(4), result.getBoolean(5), result.getInt(6));
+            if(result.next())
+                return new Impianto(result.getInt(1), result.getString(2), result.getString(3),
+                    result.getFloat(4), result.getBoolean(5), result.getInt(6));
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
         }
+        return null;
     }
 
     public static Impianto refresh(Impianto i){

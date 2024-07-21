@@ -162,12 +162,13 @@ public class TecniciMain extends StageController {
                 try (var macc_stmt = DAO.getDB().prepareStatement(SQLTecnici.INT_MACCHINARIO)) {
                     macc_stmt.setInt(1, id_int);
                     ResultSet macc = macc_stmt.executeQuery();
-                    macc.next();
-                    int inst_code = macc.getInt(1);
-                    Macchinario macchinario = Macchinario.findFromInstCode(inst_code);
-                    Impianto impianto = Impianto.findFromMacchinario(macchinario);
-                    if(impianto.getProvincia().equals(provincia))
-                        return new TecniciMainRowData(id_int, type_int, desc_int, impianto, macchinario);
+                    if(macc.next()){
+                        int inst_code = macc.getInt(1);
+                        Macchinario macchinario = Macchinario.findFromInstCode(inst_code);
+                        Impianto impianto = Impianto.findFromMacchinario(macchinario);
+                        if(impianto.getProvincia().equals(provincia))
+                            return new TecniciMainRowData(id_int, type_int, desc_int, impianto, macchinario);
+                    }
                 } catch (SQLException e){
                     e.printStackTrace();
                 }
@@ -178,12 +179,13 @@ public class TecniciMain extends StageController {
                     //Controllo preventivo
                     macc_stmt.setInt(1, id_int);
                     ResultSet macc = macc_stmt.executeQuery();
-                    macc.next();
-                    int inst_code = macc.getInt(1);
-                    Macchinario macchinario = Macchinario.findFromInstCode(inst_code);
-                    Impianto impianto = Impianto.findFromMacchinario(macchinario);
-                    if(impianto.getProvincia().equals(provincia))
-                        return new TecniciMainRowData(id_int, type_int, desc_int, impianto, macchinario);
+                    if(macc.next()){
+                        int inst_code = macc.getInt(1);
+                        Macchinario macchinario = Macchinario.findFromInstCode(inst_code);
+                        Impianto impianto = Impianto.findFromMacchinario(macchinario);
+                        if(impianto.getProvincia().equals(provincia))
+                            return new TecniciMainRowData(id_int, type_int, desc_int, impianto, macchinario);
+                    }
                 } catch (SQLException e){
                     e.printStackTrace();
                 }
@@ -193,10 +195,11 @@ public class TecniciMain extends StageController {
                 try (var imp_stmt = DAO.getDB().prepareStatement(SQLTecnici.INT_IMPIANTO)) {
                     imp_stmt.setInt(1, id_int);
                     ResultSet imp = imp_stmt.executeQuery();
-                    imp.next();
-                    Impianto impianto = Impianto.findFromCodiceProvincia(imp.getInt(1), imp.getString(2));
-                    if(impianto.getProvincia().equals(provincia))
-                        return new TecniciMainRowData(id_int, type_int, desc_int, impianto, null);
+                    if(imp.next()){
+                        Impianto impianto = Impianto.findFromCodiceProvincia(imp.getInt(1), imp.getString(2));
+                        if(impianto.getProvincia().equals(provincia))
+                            return new TecniciMainRowData(id_int, type_int, desc_int, impianto, null);
+                    }
                 } catch (SQLException e){
                     e.printStackTrace();
                 }
